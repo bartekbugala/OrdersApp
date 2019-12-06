@@ -3,9 +3,10 @@ import axios from 'axios';
 
 //// Initial state
 const initialState = {
-  logo: { path: '/images/duck_it_logo.svg', alt: 'Creativity' },
-  sortParam: 'default',
-  menuLinks: [{ path: '/', title: 'Home' }],
+  menuLinks: [
+    { path: '/', title: 'Home' },
+    { path: '/', title: 'Home' }
+  ],
   data: [],
   singleProduct: {},
   updateRequest: {

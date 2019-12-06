@@ -3,7 +3,11 @@ import React from 'react';
 const Logo = () => {
   return (
     <span className="header-logo">
-      <img src="/images/abo.svg" alt="Lista zamówień" />
+      <img
+        src="/images/abo.svg"
+        style={{ width: '100px' }}
+        alt="Lista zamówień"
+      />
     </span>
   );
 };
