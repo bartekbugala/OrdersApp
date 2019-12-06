@@ -4,17 +4,77 @@ import axios from 'axios';
 //// Initial state
 const initialState = {
   menuLinks: [
-    { path: '/', title: 'Home' },
-    { path: '/', title: 'Home' }
+    { path: '/', title: 'Bieżące' },
+    { path: '/', title: 'Zrealizowane' },
+    { path: '/', title: 'Anulowane' },
+    { path: '/', title: 'Wszystkie' },
+    { path: '/', title: 'Statystyki' }
+  ],
+  allProductions: [
+    {
+      id: '1234',
+      orderNumber: 100,
+      clientName: 'Bud-Mar-Rem',
+      downpayment: '11-05-2019',
+      productionTerm: 21,
+      finalpayment: false,
+      salesperson: 'BB',
+      type: 'S',
+      core: 'St',
+      thickness: 100,
+      color: '9002',
+      m2: 12000
+    },
+    {
+      id: '12345',
+      orderNumber: 102,
+      clientName: 'Bud-Mar-Rem SP. Z oo i świnia',
+      downpayment: '11-05-2019',
+      productionTerm: 48,
+      finalpayment: true,
+      salesperson: 'BB',
+      type: 'SP-L',
+      core: 'XPS',
+      thickness: 25,
+      color: 'biały',
+      m2: 20.44
+    },
+    {
+      id: '123456',
+      orderNumber: 103,
+      clientName: 'Bud-Mar-Rem SP. Z oo i świnia',
+      downpayment: '11-05-2019',
+      productionTerm: 48,
+      finalpayment: true,
+      salesperson: 'BB',
+      type: 'SP-L',
+      core: 'XPS',
+      thickness: 25,
+      color: 'biały',
+      m2: 20.44
+    },
+    {
+      id: '1234567',
+      orderNumber: 104,
+      clientName: 'Bud-Mar-Rem',
+      downpayment: '11-05-2019',
+      productionTerm: 21,
+      finalpayment: false,
+      salesperson: 'BB',
+      type: 'S',
+      core: 'Wm',
+      thickness: 100,
+      color: '9002',
+      m2: 12000
+    }
   ],
   data: [],
-  singleProduct: {},
   updateRequest: {
     pending: false,
     error: null,
     success: null
   },
-  productsPerPage: 10,
+  ordersPerPage: 10,
   presentPage: 1,
   request: {
     pending: false,
@@ -25,6 +85,7 @@ const initialState = {
 
 //// Selectors
 export const getMenuLinks = ({ orders }) => orders.menuLinks;
+export const getAllProductions = ({ orders }) => orders.allProductions;
 
 //// Thunks
 /* export const loadOrdersRequest = () => {
