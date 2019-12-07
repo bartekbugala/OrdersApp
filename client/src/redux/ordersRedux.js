@@ -68,7 +68,6 @@ const initialState = {
       m2: 12000
     }
   ],
-  data: [],
   updateRequest: {
     pending: false,
     error: null,
