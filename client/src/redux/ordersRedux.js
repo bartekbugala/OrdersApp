@@ -93,7 +93,23 @@ export const getFinishedProductions = ({ orders }) =>
   orders.finishedProductions;
 
 //// Thunks
-//
+/*
+currentProductions.filter(
+  el => el.id === action.payload.id
+)*/
+export const currentToFinished = (currArr, id) => {
+  console.log(id, currArr);
+  return dispatch => {
+    const movedIndex = currArr
+      .map(e => {
+        return e.id;
+      })
+      .indexOf(id);
+    const payload = currArr[movedIndex];
+    const currArrNew = currArr.filter(el => el.id !== id);
+    dispatch(finishProduction(payload, currArrNew));
+  };
+};
 /* export const loadOrdersRequest = () => {
   return async dispatch => {
     dispatch(startRequest());
@@ -126,6 +142,8 @@ const reducerName = 'orders';
 const createActionName = name => `app/${reducerName}/${name}`;
 
 // action exports
+export const FINISH_PRODUCTION = createActionName('FINISH_PRODUCTION');
+
 export const LOAD_ORDERS = createActionName('LOAD_ORDERS');
 
 export const START_REQUEST = createActionName('START_REQUEST');
@@ -136,6 +154,12 @@ export const START_UPDATE_REQUEST = createActionName('START_UPDATE_REQUEST');
 export const END_UPDATE_REQUEST = createActionName('END_UPDATE_REQUEST');
 export const RESET_UPDATE_REQUEST = createActionName('RESET_UPDATE_REQUEST');
 export const ERROR_UPDATE_REQUEST = createActionName('ERROR_UPDATE_REQUEST');
+
+export const finishProduction = (payload, currArrNew) => ({
+  payload,
+  currArrNew,
+  type: FINISH_PRODUCTION
+});
 
 export const loadOrders = payload => ({ payload, type: LOAD_ORDERS });
 
@@ -155,6 +179,12 @@ export const errorUpdateRequest = error => ({
 //// Reducer
 export default function reducer(statePart = initialState, action = {}) {
   switch (action.type) {
+    case FINISH_PRODUCTION:
+      return {
+        ...statePart,
+        finishedProductions: [...statePart.finishedProductions, action.payload],
+        currentProductions: action.currArrNew
+      };
     case LOAD_ORDERS:
       return { ...statePart, data: action.payload };
     case START_REQUEST:

@@ -24,6 +24,10 @@ import { AiOutlineColumnHeight } from 'react-icons/ai';
 import './CurrentProductions.scss';
 
 class CurrentProductions extends React.Component {
+  finishHandler = id => {
+    const { currentToFinished, currentProductions } = this.props;
+    currentToFinished(currentProductions, id);
+  };
   render() {
     const { currentProductions } = this.props;
     return (
@@ -103,6 +107,9 @@ class CurrentProductions extends React.Component {
                       <MdEdit />
                     </button>
                     <button
+                      onClick={() => {
+                        this.finishHandler(production.id);
+                      }}
                       type="button"
                       className="btn btn-success btn-rounded btn-sm ml-1">
                       <GiFactory />
