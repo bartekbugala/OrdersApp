@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
-import { getAllProductions } from '../../../redux/ordersRedux';
+import { getCurrentProductions } from '../../../redux/ordersRedux';
 import CurrentProductions from './CurrentProductions';
 
 const mapStateToProps = state => ({
-  allProductions: getAllProductions(state)
+  currentProductions: getCurrentProductions(state)
 });
 
 export default connect(mapStateToProps)(CurrentProductions);

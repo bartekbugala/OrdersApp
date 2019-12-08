@@ -21,11 +21,11 @@ import {
 import { FaUserTie } from 'react-icons/fa';
 import { AiOutlineColumnHeight } from 'react-icons/ai';
 
-import './CurrentProductions.scss';
+import './FinishedProductions.scss';
 
-class CurrentProductions extends React.Component {
+class FinishedProductions extends React.Component {
   render() {
-    const { currentProductions } = this.props;
+    const { finishedProductions } = this.props;
     return (
       <form>
         <table className="table table-bordered table-responsive-md table-striped table-hover text-center">
@@ -65,7 +65,7 @@ class CurrentProductions extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {currentProductions.map(production => {
+            {finishedProductions.map(production => {
               let panelWidth = 0;
               if (production.type === 'D') {
                 panelWidth = 1;
@@ -107,11 +107,11 @@ class CurrentProductions extends React.Component {
                       className="btn btn-success btn-rounded btn-sm ml-1">
                       <GiFactory />
                     </button>
-                    {/* <button
+                    <button
                       type="button"
                       className="btn btn-primary btn-rounded btn-sm ml-1">
                       <MdLocalShipping />
-                    </button> */}
+                    </button>
                     <button
                       type="button"
                       className="btn btn-danger btn-rounded btn-sm ml-1">
@@ -148,4 +148,4 @@ class CurrentProductions extends React.Component {
     );
   }
 }
-export default CurrentProductions;
+export default FinishedProductions;

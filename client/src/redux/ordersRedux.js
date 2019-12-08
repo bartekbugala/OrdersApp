@@ -4,13 +4,13 @@ import axios from 'axios';
 //// Initial state
 const initialState = {
   menuLinks: [
-    { path: '/', title: 'Bieżące' },
-    { path: '/', title: 'Zrealizowane' },
+    { path: '/current', title: 'Bieżące' },
+    { path: '/finished', title: 'Zrealizowane' },
     { path: '/', title: 'Anulowane' },
     { path: '/', title: 'Wszystkie' },
     { path: '/', title: 'Statystyki' }
   ],
-  allProductions: [
+  currentProductions: [
     {
       id: '1234',
       orderNumber: 100,
@@ -24,20 +24,6 @@ const initialState = {
       thickness: 100,
       color: '9002',
       m2: 12000
-    },
-    {
-      id: '12345',
-      orderNumber: 102,
-      clientName: 'Bud-Mar-Rem SP. Z oo i świnia',
-      downpayment: '11-05-2019',
-      productionTerm: 48,
-      finalpayment: true,
-      salesperson: 'BB',
-      type: 'SP-L',
-      core: 'XPS',
-      thickness: 25,
-      color: 'biały',
-      m2: 20.44
     },
     {
       id: '123456',
@@ -68,6 +54,24 @@ const initialState = {
       m2: 12000
     }
   ],
+  finishedProductions: [
+    {
+      id: '12345',
+      finished: true,
+      delivered: false,
+      orderNumber: 102,
+      clientName: 'Bud-Mar-Rem SP. Z oo i świnia',
+      downpayment: '11-05-2019',
+      productionTerm: 48,
+      finalpayment: true,
+      salesperson: 'BB',
+      type: 'SP-L',
+      core: 'XPS',
+      thickness: 25,
+      color: 'biały',
+      m2: 20.44
+    }
+  ],
   updateRequest: {
     pending: false,
     error: null,
@@ -84,9 +88,12 @@ const initialState = {
 
 //// Selectors
 export const getMenuLinks = ({ orders }) => orders.menuLinks;
-export const getAllProductions = ({ orders }) => orders.allProductions;
+export const getCurrentProductions = ({ orders }) => orders.currentProductions;
+export const getFinishedProductions = ({ orders }) =>
+  orders.finishedProductions;
 
 //// Thunks
+//
 /* export const loadOrdersRequest = () => {
   return async dispatch => {
     dispatch(startRequest());
