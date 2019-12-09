@@ -42,7 +42,7 @@ const initialState = {
     {
       id: '1234567',
       orderNumber: 104,
-      clientName: 'Bud-Mar-Rem',
+      clientName: 'Ojeje',
       downpayment: '11-05-2019',
       productionTerm: 21,
       finalpayment: false,
@@ -60,7 +60,7 @@ const initialState = {
       finished: true,
       delivered: false,
       orderNumber: 102,
-      clientName: 'Bud-Mar-Rem SP. Z oo i świnia',
+      clientName: 'XXXXXa',
       downpayment: '11-05-2019',
       productionTerm: 48,
       finalpayment: true,
