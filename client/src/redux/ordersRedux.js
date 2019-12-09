@@ -4,17 +4,80 @@ import axios from 'axios';
 //// Initial state
 const initialState = {
   menuLinks: [
-    { path: '/', title: 'Home' },
-    { path: '/', title: 'Home' }
+    { path: '/current', title: 'Bieżące' },
+    { path: '/finished', title: 'Zrealizowane' },
+    { path: '/', title: 'Anulowane' },
+    { path: '/', title: 'Wszystkie' },
+    { path: '/', title: 'Statystyki' }
   ],
-  data: [],
-  singleProduct: {},
+  currentProductions: [
+    {
+      id: '1234',
+      orderNumber: 100,
+      clientName: 'Bud-Mar-Rem',
+      downpayment: '11-05-2019',
+      productionTerm: 21,
+      finalpayment: false,
+      salesperson: 'BB',
+      type: 'S',
+      core: 'St',
+      thickness: 100,
+      color: '9002',
+      m2: 12000
+    },
+    {
+      id: '123456',
+      orderNumber: 103,
+      clientName: 'Bud-Mar-Rem SP. Z oo i świnia',
+      downpayment: '11-05-2019',
+      productionTerm: 48,
+      finalpayment: true,
+      salesperson: 'BB',
+      type: 'SP-L',
+      core: 'XPS',
+      thickness: 25,
+      color: 'biały',
+      m2: 20.44
+    },
+    {
+      id: '1234567',
+      orderNumber: 104,
+      clientName: 'Ojeje',
+      downpayment: '11-05-2019',
+      productionTerm: 21,
+      finalpayment: false,
+      salesperson: 'BB',
+      type: 'S',
+      core: 'Wm',
+      thickness: 100,
+      color: '9002',
+      m2: 12000
+    }
+  ],
+  finishedProductions: [
+    {
+      id: '12345',
+      finished: true,
+      delivered: false,
+      orderNumber: 102,
+      clientName: 'XXXXXa',
+      downpayment: '11-05-2019',
+      productionTerm: 48,
+      finalpayment: true,
+      salesperson: 'BB',
+      type: 'SP-L',
+      core: 'XPS',
+      thickness: 25,
+      color: 'biały',
+      m2: 20.44
+    }
+  ],
   updateRequest: {
     pending: false,
     error: null,
     success: null
   },
-  productsPerPage: 10,
+  ordersPerPage: 10,
   presentPage: 1,
   request: {
     pending: false,
@@ -25,8 +88,28 @@ const initialState = {
 
 //// Selectors
 export const getMenuLinks = ({ orders }) => orders.menuLinks;
+export const getCurrentProductions = ({ orders }) => orders.currentProductions;
+export const getFinishedProductions = ({ orders }) =>
+  orders.finishedProductions;
 
 //// Thunks
+/*
+currentProductions.filter(
+  el => el.id === action.payload.id
+)*/
+export const currentToFinished = (currArr, id) => {
+  console.log(id, currArr);
+  return dispatch => {
+    const movedIndex = currArr
+      .map(e => {
+        return e.id;
+      })
+      .indexOf(id);
+    const payload = currArr[movedIndex];
+    const currArrNew = currArr.filter(el => el.id !== id);
+    dispatch(finishProduction(payload, currArrNew));
+  };
+};
 /* export const loadOrdersRequest = () => {
   return async dispatch => {
     dispatch(startRequest());
@@ -59,6 +142,8 @@ const reducerName = 'orders';
 const createActionName = name => `app/${reducerName}/${name}`;
 
 // action exports
+export const FINISH_PRODUCTION = createActionName('FINISH_PRODUCTION');
+
 export const LOAD_ORDERS = createActionName('LOAD_ORDERS');
 
 export const START_REQUEST = createActionName('START_REQUEST');
@@ -69,6 +154,12 @@ export const START_UPDATE_REQUEST = createActionName('START_UPDATE_REQUEST');
 export const END_UPDATE_REQUEST = createActionName('END_UPDATE_REQUEST');
 export const RESET_UPDATE_REQUEST = createActionName('RESET_UPDATE_REQUEST');
 export const ERROR_UPDATE_REQUEST = createActionName('ERROR_UPDATE_REQUEST');
+
+export const finishProduction = (payload, currArrNew) => ({
+  payload,
+  currArrNew,
+  type: FINISH_PRODUCTION
+});
 
 export const loadOrders = payload => ({ payload, type: LOAD_ORDERS });
 
@@ -88,6 +179,12 @@ export const errorUpdateRequest = error => ({
 //// Reducer
 export default function reducer(statePart = initialState, action = {}) {
   switch (action.type) {
+    case FINISH_PRODUCTION:
+      return {
+        ...statePart,
+        finishedProductions: [...statePart.finishedProductions, action.payload],
+        currentProductions: action.currArrNew
+      };
     case LOAD_ORDERS:
       return { ...statePart, data: action.payload };
     case START_REQUEST:
