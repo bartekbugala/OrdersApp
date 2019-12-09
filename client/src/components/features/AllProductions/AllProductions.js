@@ -20,10 +20,19 @@ import {
 } from 'react-icons/io';
 import { FaUserTie } from 'react-icons/fa';
 import { AiOutlineColumnHeight } from 'react-icons/ai';
-
+import formatDate from '../../../utils/formatDate';
+import daysLeft from '../../../utils/productionTerm';
 import './AllProductions.scss';
 
 class AllProductions extends React.Component {
+  componentDidMount() {
+    const { loadAllProductions } = this.props;
+    loadAllProductions();
+  }
+  finishHandler = id => {
+    const { currentToFinished, allProductions } = this.props;
+    currentToFinished(allProductions, id);
+  };
   render() {
     const { allProductions } = this.props;
     return (
@@ -73,11 +82,18 @@ class AllProductions extends React.Component {
                 panelWidth = 1.175;
               }
               return (
-                <tr key={production.orderNumber}>
+                <tr key={production.id}>
                   <td className="pt-3-half">{production.orderNumber}</td>
                   <td className="pt-3-half">{production.clientName}</td>
-                  <td className="pt-3-half">{production.downpayment}</td>
-                  <td className="pt-3-half">{production.productionTerm}</td>
+                  <td className="pt-3-half">
+                    {formatDate(production.downpayment)}
+                  </td>
+                  <td className="pt-3-half">
+                    {daysLeft(
+                      formatDate(production.downpayment),
+                      production.productionTerm
+                    )}
+                  </td>
                   <td className="pt-3-half">
                     {production.finalpayment ? (
                       <MdAttachMoney className="text-success" />
@@ -95,7 +111,7 @@ class AllProductions extends React.Component {
                       ? Math.ceil(production.m2 / panelWidth)
                       : ''}
                   </td>
-                  <td className="pt-3-half">{production.salesperson}</td>
+                  <td className="pt-3-half">{production.csa}</td>
                   <td className="pt-3-half">
                     <button
                       type="button"
@@ -103,6 +119,9 @@ class AllProductions extends React.Component {
                       <MdEdit />
                     </button>
                     <button
+                      onClick={() => {
+                        this.finishHandler(production.id);
+                      }}
                       type="button"
                       className="btn btn-success btn-rounded btn-sm ml-1">
                       <GiFactory />

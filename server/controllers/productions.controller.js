@@ -1,0 +1,109 @@
+// import model
+const Production = require('../models/productions.model');
+const uuid = require('uuid');
+
+// get all productions
+exports.getProductions = async (req, res) => {
+  try {
+    res.status(200).json(await Production.find());
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+// get single production
+exports.getSingleProduction = async (req, res) => {
+  try {
+    res.status(200).json(await Production.findOne({ id: req.params.id }));
+  } catch (err) {
+    res.status(500).res.json(err);
+  }
+};
+
+// get productions by range
+exports.getProductionsByRange = async function(req, res) {
+  try {
+    let { startAt, limit, sortParam } = req.params;
+
+    startAt = parseInt(startAt);
+    limit = parseInt(limit);
+    const productions = await Production.find()
+      .sort(sortParam)
+      .collation({ locale: 'pl', strength: 1 })
+      .skip(startAt)
+      .limit(limit);
+    // return total amount of documents in collection
+    const amount = await Production.countDocuments();
+
+    // response: productions within range and total amount of productions
+    res.status(200).json({ productions, amount });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+//add new production
+exports.addProduction = async (req, res) => {
+  try {
+    const { name, price, img, amount, description, tag } = req.body;
+    let newProduction = new Production();
+    newProduction.name = name;
+    newProduction.price = price;
+    newProduction.img = img;
+    newProduction.amount = amount;
+    newProduction.description = description;
+    newProduction.tag = tag;
+    newProduction.id = uuid();
+
+    const productionSaved = await newProduction.save();
+    res.status(200).json(productionSaved);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+exports.editProduction = async (req, res) => {
+  try {
+    const { name, price, img, amount, description, tag } = req.body;
+    const productionUpdated = await Production.findOneAndUpdate(
+      { id: req.params.id },
+      {
+        name: name,
+        price: price,
+        img: img,
+        amount: amount,
+        description: description,
+        tag: tag
+      }
+    );
+    res.status(200).json(productionUpdated);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+exports.removeOneAmount = async (req, res) => {
+  try {
+    const productionUpdated = await Production.findOneAndUpdate(
+      { id: req.params.id },
+      { $inc: { amount: -1 } }
+    );
+    res.status(200).json(productionUpdated);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+exports.deleteProduction = async (req, res) => {
+  try {
+    const productionDeleted = await Production.findOneAndDelete({
+      id: req.params.id
+    });
+    if (productionDeleted === null) {
+      let noProduction = { error: 'already removed or not in database' };
+      res.status(404).json(noProduction);
+    } else res.status(200).json(productionDeleted);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};

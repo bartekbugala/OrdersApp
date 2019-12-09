@@ -1,5 +1,5 @@
 import axios from 'axios';
-//import { API_URL } from '../config';
+import { API_URL } from '../config';
 
 //// Initial state
 const initialState = {
@@ -10,68 +10,9 @@ const initialState = {
     { path: '/', title: 'Wszystkie' },
     { path: '/', title: 'Statystyki' }
   ],
-  currentProductions: [
-    {
-      id: '1234',
-      orderNumber: 100,
-      clientName: 'Bud-Mar-Rem',
-      downpayment: '11-05-2019',
-      productionTerm: 21,
-      finalpayment: false,
-      salesperson: 'BB',
-      type: 'S',
-      core: 'St',
-      thickness: 100,
-      color: '9002',
-      m2: 12000
-    },
-    {
-      id: '123456',
-      orderNumber: 103,
-      clientName: 'Bud-Mar-Rem SP. Z oo i świnia',
-      downpayment: '11-05-2019',
-      productionTerm: 48,
-      finalpayment: true,
-      salesperson: 'BB',
-      type: 'SP-L',
-      core: 'XPS',
-      thickness: 25,
-      color: 'biały',
-      m2: 20.44
-    },
-    {
-      id: '1234567',
-      orderNumber: 104,
-      clientName: 'Ojeje',
-      downpayment: '11-05-2019',
-      productionTerm: 21,
-      finalpayment: false,
-      salesperson: 'BB',
-      type: 'S',
-      core: 'Wm',
-      thickness: 100,
-      color: '9002',
-      m2: 12000
-    }
-  ],
-  finishedProductions: [
-    {
-      id: '12345',
-      finished: true,
-      delivered: false,
-      orderNumber: 102,
-      clientName: 'XXXXXa',
-      downpayment: '11-05-2019',
-      productionTerm: 48,
-      finalpayment: true,
-      salesperson: 'BB',
-      type: 'SP-L',
-      core: 'XPS',
-      thickness: 25,
-      color: 'biały',
-      m2: 20.44
-    }
-  ],
+  allProductions: [],
+  currentProductions: [],
+  finishedProductions: [],
   updateRequest: {
     pending: false,
     error: null,
@@ -88,15 +29,12 @@ const initialState = {
 
 //// Selectors
 export const getMenuLinks = ({ orders }) => orders.menuLinks;
+export const getAllProductions = ({ orders }) => orders.allProductions;
 export const getCurrentProductions = ({ orders }) => orders.currentProductions;
 export const getFinishedProductions = ({ orders }) =>
   orders.finishedProductions;
 
 //// Thunks
-/*
-currentProductions.filter(
-  el => el.id === action.payload.id
-)*/
 export const currentToFinished = (currArr, id) => {
   console.log(id, currArr);
   return dispatch => {
@@ -110,19 +48,20 @@ export const currentToFinished = (currArr, id) => {
     dispatch(finishProduction(payload, currArrNew));
   };
 };
-/* export const loadOrdersRequest = () => {
+
+export const loadProductionsRequest = () => {
   return async dispatch => {
     dispatch(startRequest());
     try {
-      let res = await axios.get(`${API_URL}/orders`);
-      dispatch(loadOrders(res.data));
+      let res = await axios.get(`${API_URL}/productions`);
+      dispatch(loadProductions(res.data));
       dispatch(endRequest());
     } catch (e) {
       dispatch(errorRequest(e.message));
     }
   };
 };
-
+/*
 export const loadSingleOrderRequest = id => {
   return async dispatch => {
     dispatch(startRequest());
@@ -144,7 +83,7 @@ const createActionName = name => `app/${reducerName}/${name}`;
 // action exports
 export const FINISH_PRODUCTION = createActionName('FINISH_PRODUCTION');
 
-export const LOAD_ORDERS = createActionName('LOAD_ORDERS');
+export const LOAD_PRODUCTIONS = createActionName('LOAD_PRODUCTIONS');
 
 export const START_REQUEST = createActionName('START_REQUEST');
 export const END_REQUEST = createActionName('END_REQUEST');
@@ -161,7 +100,7 @@ export const finishProduction = (payload, currArrNew) => ({
   type: FINISH_PRODUCTION
 });
 
-export const loadOrders = payload => ({ payload, type: LOAD_ORDERS });
+export const loadProductions = payload => ({ payload, type: LOAD_PRODUCTIONS });
 
 export const startRequest = () => ({ type: START_REQUEST });
 export const endRequest = () => ({ type: END_REQUEST });
@@ -185,8 +124,8 @@ export default function reducer(statePart = initialState, action = {}) {
         finishedProductions: [...statePart.finishedProductions, action.payload],
         currentProductions: action.currArrNew
       };
-    case LOAD_ORDERS:
-      return { ...statePart, data: action.payload };
+    case LOAD_PRODUCTIONS:
+      return { ...statePart, allProductions: action.payload };
     case START_REQUEST:
       return {
         ...statePart,
