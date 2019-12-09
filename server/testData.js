@@ -5,22 +5,57 @@ const loadTestData = async () => {
   const productions = [
     {
       id: uuid(),
-      name: 'Yellow Duck',
-      price: 10000,
-      img: '/images/classic_yellow_duck.jpg',
-      tag: 'Must Have',
-      amount: 1,
-      description:
-        'Classic rubber yellow duck. The so called dummy mentor. It patiently listens to everything you say. It helps you memorising, and supports the learning process. Comes in warm yellow color.'
+      orderNumber: '100',
+      clientName: 'Bud-Rem-Mar',
+      downpayment: '2019-12-01',
+      productionTerm: 21,
+      finalpayment: '',
+      finished: false,
+      csa: 'BB',
+      type: 'D',
+      core: 'St',
+      thickness: 100,
+      color: 9006,
+      m2: 5248.212
+    },
+    {
+      id: uuid(),
+      orderNumber: '101',
+      clientName: 'Bud-Rem-Mar',
+      downpayment: '2019-12-01',
+      productionTerm: 14,
+      finalpayment: '',
+      finished: false,
+      csa: 'BB',
+      type: 'D',
+      core: 'St',
+      thickness: 100,
+      color: 9006,
+      m2: 5248.212
+    },
+    {
+      id: uuid(),
+      orderNumber: '101',
+      clientName: 'Bud-Rem-Mar',
+      downpayment: '2019-12-01',
+      productionTerm: 14,
+      finalpayment: '',
+      finished: false,
+      csa: 'BB',
+      type: 'D',
+      core: 'St',
+      thickness: 100,
+      color: 9006,
+      m2: 5248.212
     }
   ];
 
   try {
-    let counter = await Product.countDocuments();
+    let counter = await Production.countDocuments();
     if (counter === 0) {
       console.log('No products. Loading test data...');
       await Production.create(productions);
-      console.log('Products have been successfully loaded');
+      console.log('Test Productions have been successfully loaded');
     }
   } catch (err) {
     console.log("Couldn't load test data", err);

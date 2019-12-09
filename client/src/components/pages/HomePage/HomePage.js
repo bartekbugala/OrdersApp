@@ -1,9 +1,13 @@
 import React from 'react';
-//import CurrentProductions from '../../features/CurrentProductions/CurrentProductionsContainer';
+import AllProductions from '../../features/AllProductions/AllProductionsContainer';
 
 class HomePage extends React.Component {
   render() {
-    return <section>{/* <CurrentProductions /> */}</section>;
+    return (
+      <section>
+        <AllProductions />
+      </section>
+    );
   }
 }
 export default HomePage;
