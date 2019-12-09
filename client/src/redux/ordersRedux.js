@@ -35,10 +35,6 @@ export const getFinishedProductions = ({ orders }) =>
   orders.finishedProductions;
 
 //// Thunks
-/*
-currentProductions.filter(
-  el => el.id === action.payload.id
-)*/
 export const currentToFinished = (currArr, id) => {
   console.log(id, currArr);
   return dispatch => {

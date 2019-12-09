@@ -20,7 +20,8 @@ import {
 } from 'react-icons/io';
 import { FaUserTie } from 'react-icons/fa';
 import { AiOutlineColumnHeight } from 'react-icons/ai';
-
+import formatDate from '../../../utils/formatDate';
+import daysLeft from '../../../utils/productionTerm';
 import './AllProductions.scss';
 
 class AllProductions extends React.Component {
@@ -81,11 +82,18 @@ class AllProductions extends React.Component {
                 panelWidth = 1.175;
               }
               return (
-                <tr key={production.orderNumber}>
+                <tr key={production.id}>
                   <td className="pt-3-half">{production.orderNumber}</td>
                   <td className="pt-3-half">{production.clientName}</td>
-                  <td className="pt-3-half">{production.downpayment}</td>
-                  <td className="pt-3-half">{production.productionTerm}</td>
+                  <td className="pt-3-half">
+                    {formatDate(production.downpayment)}
+                  </td>
+                  <td className="pt-3-half">
+                    {daysLeft(
+                      formatDate(production.downpayment),
+                      production.productionTerm
+                    )}
+                  </td>
                   <td className="pt-3-half">
                     {production.finalpayment ? (
                       <MdAttachMoney className="text-success" />
