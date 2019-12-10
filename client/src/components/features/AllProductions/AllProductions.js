@@ -1,28 +1,14 @@
 import React from 'react';
-import {
-  MdLocalShipping,
-  MdEdit,
-  MdDelete,
-  MdAttachMoney,
-  MdMoneyOff,
-  MdLayers
-} from 'react-icons/md';
-import {
-  GiFactory,
-  GiCalendar,
-  GiPayMoney,
-  GiReceiveMoney
-} from 'react-icons/gi';
-import {
-  IoMdSettings,
-  IoMdAddCircleOutline,
-  IoMdColorPalette
-} from 'react-icons/io';
-import { FaUserTie } from 'react-icons/fa';
-import { AiOutlineColumnHeight } from 'react-icons/ai';
+import { MdAttachMoney, MdMoneyOff } from 'react-icons/md';
+import { IoMdAddCircleOutline } from 'react-icons/io';
 import formatDate from '../../../utils/formatDate';
-import daysLeft from '../../../utils/productionTerm';
+import countDaysLeft from '../../../utils/countDaysLeft';
+import TheadOrderlist from '../../common/Table/TheadOrderlist/TheadOrderlist';
 import './AllProductions.scss';
+import EditButton from '../../common/Buttons/EditButton/EditButton';
+import ProduceButton from '../../common/Buttons/ProduceButton/ProduceButton';
+import TransportButton from '../../common/Buttons/TransportButton/TransportButton';
+import DeleteButton from '../../common/Buttons/DeleteButton/DeleteButton';
 
 class AllProductions extends React.Component {
   componentDidMount() {
@@ -38,41 +24,7 @@ class AllProductions extends React.Component {
     return (
       <form>
         <table className="table table-bordered table-responsive-md table-striped table-hover text-center">
-          <thead>
-            <tr>
-              <th className="text-center">Nr</th>
-              <th className="text-center">Kontrahent</th>
-              <th className="text-center">
-                <GiPayMoney />
-              </th>
-              <th className="text-center">
-                <GiCalendar />
-              </th>
-              <th className="text-center">
-                <GiReceiveMoney />
-              </th>
-              <th className="text-center">Typ</th>
-              <th className="text-center">
-                <MdLayers />
-              </th>
-              <th className="text-center">
-                <AiOutlineColumnHeight />
-              </th>
-              <th className="text-center">
-                <IoMdColorPalette />
-              </th>
-              <th className="text-center">
-                m<sup>2</sup>
-              </th>
-              <th className="text-center">m</th>
-              <th className="text-center">
-                <FaUserTie />
-              </th>
-              <th className="text-center">
-                <IoMdSettings />
-              </th>
-            </tr>
-          </thead>
+          <TheadOrderlist />
           <tbody>
             {allProductions.map(production => {
               let panelWidth = 0;
@@ -81,6 +33,21 @@ class AllProductions extends React.Component {
               } else if (production.type === 'S') {
                 panelWidth = 1.175;
               }
+              let daysLeft = countDaysLeft(
+                formatDate(production.downpayment),
+                production.productionTerm
+              );
+              let daysLeftClass = 'text-default';
+              switch (true) {
+                case daysLeft <= 7 && daysLeft > 2:
+                  daysLeftClass = 'text-warning';
+                  break;
+                case daysLeft < 3:
+                  daysLeftClass = 'text-danger';
+                  break;
+                /*                 default:
+                  daysLeftClass = 'text-success'; */
+              }
               return (
                 <tr key={production.id}>
                   <td className="pt-3-half">{production.orderNumber}</td>
@@ -88,12 +55,7 @@ class AllProductions extends React.Component {
                   <td className="pt-3-half">
                     {formatDate(production.downpayment)}
                   </td>
-                  <td className="pt-3-half">
-                    {daysLeft(
-                      formatDate(production.downpayment),
-                      production.productionTerm
-                    )}
-                  </td>
+                  <td className={`pt-3-half ${daysLeftClass}`}>{daysLeft}</td>
                   <td className="pt-3-half">
                     {production.finalpayment ? (
                       <MdAttachMoney className="text-success" />
@@ -113,29 +75,14 @@ class AllProductions extends React.Component {
                   </td>
                   <td className="pt-3-half">{production.csa}</td>
                   <td className="pt-3-half">
-                    <button
-                      type="button"
-                      className="btn btn-warning btn-rounded btn-sm">
-                      <MdEdit />
-                    </button>
-                    <button
-                      onClick={() => {
+                    <EditButton />
+                    <ProduceButton
+                      clickHandler={() => {
                         this.finishHandler(production.id);
                       }}
-                      type="button"
-                      className="btn btn-success btn-rounded btn-sm ml-1">
-                      <GiFactory />
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-primary btn-rounded btn-sm ml-1">
-                      <MdLocalShipping />
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-danger btn-rounded btn-sm ml-1">
-                      <MdDelete />
-                    </button>
+                    />
+                    <TransportButton />
+                    <DeleteButton />
                   </td>
                 </tr>
               );
