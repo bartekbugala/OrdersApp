@@ -1,6 +1,5 @@
 import React from 'react';
 import { MdAttachMoney, MdMoneyOff } from 'react-icons/md';
-import { IoMdAddCircleOutline } from 'react-icons/io';
 import formatDate from '../../../utils/formatDate';
 import countDaysLeft from '../../../utils/countDaysLeft';
 import TheadOrderlist from '../../common/Table/TheadOrderlist/TheadOrderlist';
@@ -9,12 +8,35 @@ import EditButton from '../../common/Buttons/EditButton/EditButton';
 import ProduceButton from '../../common/Buttons/ProduceButton/ProduceButton';
 import TransportButton from '../../common/Buttons/TransportButton/TransportButton';
 import DeleteButton from '../../common/Buttons/DeleteButton/DeleteButton';
+import AddRowButton from '../../common/Buttons/AddRowButton/AddRowButton';
 
 class AllProductions extends React.Component {
+  state = {
+    newProduction: {
+      clientName: '',
+      color: '',
+      core: '',
+      csa: '',
+      downpayment: '',
+      finalpayment: null,
+      finished: false,
+      m2: '',
+      orderNumber: '',
+      productionTerm: null,
+      thickness: null,
+      type: ''
+    }
+  };
   componentDidMount() {
     const { loadAllProductions } = this.props;
     loadAllProductions();
   }
+  handleChange = e => {
+    const { newProduction } = this.state;
+    this.setState({
+      newProduction: { ...newProduction, [e.target.name]: e.target.value }
+    });
+  };
   finishHandler = id => {
     const { currentToFinished, allProductions } = this.props;
     currentToFinished(allProductions, id);
@@ -27,6 +49,7 @@ class AllProductions extends React.Component {
           <TheadOrderlist />
           <tbody>
             {allProductions.map(production => {
+              console.log(production);
               let panelWidth = 0;
               if (production.type === 'D') {
                 panelWidth = 1;
@@ -45,27 +68,35 @@ class AllProductions extends React.Component {
                 case daysLeft < 3:
                   daysLeftClass = 'text-danger';
                   break;
-                /*                 default:
-                  daysLeftClass = 'text-success'; */
+                default:
+                  daysLeftClass = 'text-default';
               }
               return (
-                <tr key={production.id}>
-                  <td className="pt-3-half">{production.orderNumber}</td>
-                  <td className="pt-3-half">{production.clientName}</td>
-                  <td className="pt-3-half">
-                    {formatDate(production.downpayment)}
+                <tr key={production.id} className="list-production">
+                  <td className="pt-3-half short-column">
+                    {production.orderNumber}
                   </td>
-                  <td className={`pt-3-half ${daysLeftClass}`}>{daysLeft}</td>
-                  <td className="pt-3-half">
+                  <td className="pt-3-half name-column">
+                    {production.clientName}
+                  </td>
+                  <td className="pt-3-half date-column">
+                    {formatDate(production.downpayment, true)}
+                  </td>
+                  <td className={`pt-3-half short-column ${daysLeftClass}`}>
+                    {daysLeft}
+                  </td>
+                  <td className="pt-3-half short-column">
                     {production.finalpayment ? (
                       <MdAttachMoney className="text-success" />
                     ) : (
                       <MdMoneyOff className="text-danger" />
                     )}
                   </td>
-                  <td className="pt-3-half">{production.type}</td>
-                  <td className="pt-3-half">{production.core}</td>
-                  <td className="pt-3-half">{production.thickness}</td>
+                  <td className="pt-3-half short-column">{production.type}</td>
+                  <td className="pt-3-half short-column">{production.core}</td>
+                  <td className="pt-3-half short-column">
+                    {production.thickness}
+                  </td>
                   <td className="pt-3-half">{production.color}</td>
                   <td className="pt-3-half">{production.m2}</td>
                   <td className="pt-3-half">
@@ -73,39 +104,67 @@ class AllProductions extends React.Component {
                       ? Math.ceil(production.m2 / panelWidth)
                       : ''}
                   </td>
-                  <td className="pt-3-half">{production.csa}</td>
-                  <td className="pt-3-half">
-                    <EditButton />
-                    <ProduceButton
-                      clickHandler={() => {
-                        this.finishHandler(production.id);
-                      }}
-                    />
-                    <TransportButton />
-                    <DeleteButton />
+                  <td className="pt-3-half short-column">{production.csa}</td>
+                  <td className="list-buttons">
+                    <span className="buttons-nowrap">
+                      <EditButton />
+                      <ProduceButton
+                        clickHandler={() => {
+                          this.finishHandler(production.id);
+                        }}
+                      />
+                      <TransportButton />
+                      <DeleteButton />
+                    </span>
                   </td>
                 </tr>
               );
             })}
-            <tr>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half">
-                <span className="mb-3 mr-2">
-                  <span role="button" className="text-success">
-                    <IoMdAddCircleOutline />
-                  </span>
-                </span>
+            <tr className="new-production">
+              <td className="form-td">
+                <input />
+              </td>
+              <td className="form-td">
+                <input />
+              </td>
+              <td className="form-td">
+                <input />
+              </td>
+              <td className="form-td">
+                <input />
+              </td>
+              <td className="form-td">
+                <input />
+              </td>
+              <td className="form-td">
+                <input />
+              </td>
+              <td className="form-td">
+                <input />
+              </td>
+              <td className="form-td">
+                <input />
+              </td>
+              <td className="form-td">
+                <input />
+              </td>
+              <td className="form-td">
+                <input />
+              </td>
+              <td className="form-td">
+                <input />
+              </td>
+              <td className="form-td">
+                <input />
+              </td>
+
+              {/* <td className="pt-3-half"></td> */}
+              <td className="form-btn">
+                <AddRowButton
+                  clickHandler={() => {
+                    console.log(this);
+                  }}
+                />
               </td>
             </tr>
           </tbody>

@@ -1,5 +1,30 @@
-[contenteditable='true']:empty:before {
-  content: attr(placeholder);
-  display: block;
-  color: #aaa;
+.buttons-nowrap {
+  display: flex;
+  flex-wrap: nowrap;
+}
+.short-column {
+  width: 3%;
+}
+.name-column {
+  min-width: 300px;
+}
+.date-column {
+  width: 70px;
+}
+.new-production {
+  .form-td {
+    padding: 0;
+  }
+  .form-btn {
+    padding: 0.5rem;
+  }
+
+  input {
+    display: inline-flex;
+    padding: 0.75rem;
+    margin: 0;
+    border: 0;
+    width: 100%;
+    min-height: 100%;
+  }
 }
