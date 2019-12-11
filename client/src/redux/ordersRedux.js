@@ -61,6 +61,18 @@ export const loadProductionsRequest = () => {
     }
   };
 };
+
+export const addProductionRequest = production => {
+  return async dispatch => {
+    dispatch(startRequest());
+    try {
+      await axios.post(`${API_URL}/productions/add`, production);
+      dispatch(endRequest());
+    } catch (e) {
+      dispatch(errorRequest(JSON.stringify(e)));
+    }
+  };
+};
 /*
 export const loadSingleOrderRequest = id => {
   return async dispatch => {

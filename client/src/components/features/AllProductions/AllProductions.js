@@ -18,12 +18,12 @@ class AllProductions extends React.Component {
       core: '',
       csa: '',
       downpayment: '',
-      finalpayment: null,
+      finalpayment: false,
       finished: false,
       m2: '',
       orderNumber: '',
-      productionTerm: null,
-      thickness: null,
+      productionTerm: '',
+      thickness: '',
       type: ''
     }
   };
@@ -37,19 +37,26 @@ class AllProductions extends React.Component {
       newProduction: { ...newProduction, [e.target.name]: e.target.value }
     });
   };
+  handleForm = e => {
+    e.preventDefault();
+    const { addProduction } = this.props;
+    const { newProduction } = this.state;
+    addProduction(newProduction);
+  };
   finishHandler = id => {
     const { currentToFinished, allProductions } = this.props;
     currentToFinished(allProductions, id);
   };
   render() {
+    const { handleChange } = this;
     const { allProductions } = this.props;
+    const { newProduction } = this.state;
     return (
-      <form>
+      <form onSubmit={this.handleForm}>
         <table className="table table-bordered table-responsive-md table-striped table-hover text-center">
           <TheadOrderlist />
           <tbody>
             {allProductions.map(production => {
-              console.log(production);
               let panelWidth = 0;
               if (production.type === 'D') {
                 panelWidth = 1;
@@ -93,11 +100,12 @@ class AllProductions extends React.Component {
                     )}
                   </td>
                   <td className="pt-3-half short-column">{production.type}</td>
+                  <td className="pt-3-half">{production.color}</td>
                   <td className="pt-3-half short-column">{production.core}</td>
                   <td className="pt-3-half short-column">
                     {production.thickness}
                   </td>
-                  <td className="pt-3-half">{production.color}</td>
+
                   <td className="pt-3-half">{production.m2}</td>
                   <td className="pt-3-half">
                     {panelWidth !== 0
@@ -122,49 +130,88 @@ class AllProductions extends React.Component {
             })}
             <tr className="new-production">
               <td className="form-td">
-                <input />
+                <input
+                  name="orderNumber"
+                  onChange={handleChange}
+                  value={newProduction.orderNumber}
+                />
               </td>
               <td className="form-td">
-                <input />
+                <input
+                  name="clientName"
+                  onChange={handleChange}
+                  value={newProduction.clientName}
+                />
               </td>
               <td className="form-td">
-                <input />
+                <input
+                  name="downpayment"
+                  onChange={handleChange}
+                  value={newProduction.downpayment}
+                />
               </td>
               <td className="form-td">
-                <input />
+                <input
+                  name="productionTerm"
+                  onChange={handleChange}
+                  value={newProduction.productionTerm}
+                />
               </td>
               <td className="form-td">
-                <input />
+                <input
+                  name="finalpayment"
+                  onChange={handleChange}
+                  type="checkbox"
+                  value={newProduction.finalpayment}
+                />
               </td>
               <td className="form-td">
-                <input />
+                <input
+                  name="type"
+                  onChange={handleChange}
+                  value={newProduction.type}
+                />
               </td>
               <td className="form-td">
-                <input />
+                <input
+                  name="color"
+                  onChange={handleChange}
+                  value={newProduction.color}
+                />
               </td>
               <td className="form-td">
-                <input />
+                <input
+                  name="core"
+                  onChange={handleChange}
+                  value={newProduction.core}
+                />
               </td>
               <td className="form-td">
-                <input />
+                <input
+                  name="thickness"
+                  onChange={handleChange}
+                  value={newProduction.thickness}
+                />
               </td>
               <td className="form-td">
-                <input />
+                <input
+                  name="m2"
+                  onChange={handleChange}
+                  value={newProduction.m2}
+                />
               </td>
+              <td className="form-td"></td>
               <td className="form-td">
-                <input />
-              </td>
-              <td className="form-td">
-                <input />
+                <input
+                  name="csa"
+                  onChange={handleChange}
+                  value={newProduction.csa}
+                />
               </td>
 
               {/* <td className="pt-3-half"></td> */}
               <td className="form-btn">
-                <AddRowButton
-                  clickHandler={() => {
-                    console.log(this);
-                  }}
-                />
+                <AddRowButton type="submit" /* clickHandler={() => {} }*/ />
               </td>
             </tr>
           </tbody>

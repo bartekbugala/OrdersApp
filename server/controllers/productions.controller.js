@@ -45,15 +45,35 @@ exports.getProductionsByRange = async function(req, res) {
 //add new production
 exports.addProduction = async (req, res) => {
   try {
-    const { name, price, img, amount, description, tag } = req.body;
+    const {
+      orderNumber,
+      clientName,
+      downpayment,
+      productionTerm,
+      finalpayment,
+      type,
+      color,
+      core,
+      thickness,
+      m2,
+      csa,
+      finished
+    } = req.body;
+
     let newProduction = new Production();
-    newProduction.name = name;
-    newProduction.price = price;
-    newProduction.img = img;
-    newProduction.amount = amount;
-    newProduction.description = description;
-    newProduction.tag = tag;
     newProduction.id = uuid();
+    newProduction.orderNumber = orderNumber;
+    newProduction.clientName = clientName;
+    newProduction.downpayment = downpayment;
+    newProduction.productionTerm = productionTerm;
+    newProduction.finalpayment = finalpayment || false;
+    newProduction.type = type;
+    newProduction.color = color;
+    newProduction.core = core;
+    newProduction.thickness = thickness;
+    newProduction.m2 = m2;
+    newProduction.csa = csa;
+    newProduction.finished = finished || false;
 
     const productionSaved = await newProduction.save();
     res.status(200).json(productionSaved);

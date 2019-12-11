@@ -22,13 +22,13 @@ const TheadOrderlist = () => (
       </th>
       <th className="text-center">Typ</th>
       <th className="text-center">
+        <IoMdColorPalette />
+      </th>
+      <th className="text-center">
         <MdLayers />
       </th>
       <th className="text-center">
         <AiOutlineColumnHeight />
-      </th>
-      <th className="text-center">
-        <IoMdColorPalette />
       </th>
       <th className="text-center">
         m<sup>2</sup>

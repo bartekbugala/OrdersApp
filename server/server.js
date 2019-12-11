@@ -26,11 +26,11 @@ app.use((req, res, next) => {
 app.use('/api', productionsRoutes);
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, '../client/build')));
+/* app.use(express.static(path.join(__dirname, '../client/build')));
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + '../client/build/index.html'));
-});
+}); */
 
 // mongoDB - connect backend code with db
 mongoose.connect(config.MONGO_URL, { useNewUrlParser: true });
