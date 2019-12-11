@@ -24,6 +24,6 @@ router.route('/productions/:id').put(ProductionsController.removeOneAmount);
 router.route('/productions/:id').delete(ProductionsController.deleteProduction);
 
 // add productions
-router.route('/productions').post(ProductionsController.addProduction);
+router.route('/productions/add').post(ProductionsController.addProduction);
 
 module.exports = router;

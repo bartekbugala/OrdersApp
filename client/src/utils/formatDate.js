@@ -1,8 +1,8 @@
-export default function formatDate(dateToFormat) {
+export default function formatDate(dateToFormat, short = false) {
   let date = new Date(dateToFormat);
+  let yearPart = short ? '' : date.getFullYear() + '-';
   let formatted_date =
-    date.getFullYear() +
-    '-' +
+    yearPart +
     (date.getMonth() + 1 < 10
       ? '0' + date.getMonth() + 1
       : date.getMonth() + 1) +

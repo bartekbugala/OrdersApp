@@ -1,78 +1,60 @@
 import React from 'react';
-import {
-  MdLocalShipping,
-  MdEdit,
-  MdDelete,
-  MdAttachMoney,
-  MdMoneyOff,
-  MdLayers
-} from 'react-icons/md';
-import {
-  GiFactory,
-  GiCalendar,
-  GiPayMoney,
-  GiReceiveMoney
-} from 'react-icons/gi';
-import {
-  IoMdSettings,
-  IoMdAddCircleOutline,
-  IoMdColorPalette
-} from 'react-icons/io';
-import { FaUserTie } from 'react-icons/fa';
-import { AiOutlineColumnHeight } from 'react-icons/ai';
+import { MdAttachMoney, MdMoneyOff } from 'react-icons/md';
 import formatDate from '../../../utils/formatDate';
-import daysLeft from '../../../utils/productionTerm';
+import countDaysLeft from '../../../utils/countDaysLeft';
+import TheadOrderlist from '../../common/Table/TheadOrderlist/TheadOrderlist';
 import './AllProductions.scss';
+import EditButton from '../../common/Buttons/EditButton/EditButton';
+import ProduceButton from '../../common/Buttons/ProduceButton/ProduceButton';
+import TransportButton from '../../common/Buttons/TransportButton/TransportButton';
+import DeleteButton from '../../common/Buttons/DeleteButton/DeleteButton';
+import AddRowButton from '../../common/Buttons/AddRowButton/AddRowButton';
 
 class AllProductions extends React.Component {
+  state = {
+    newProduction: {
+      clientName: '',
+      color: '',
+      core: '',
+      csa: '',
+      downpayment: '',
+      finalpayment: false,
+      finished: false,
+      m2: '',
+      orderNumber: '',
+      productionTerm: '',
+      thickness: '',
+      type: ''
+    }
+  };
   componentDidMount() {
     const { loadAllProductions } = this.props;
     loadAllProductions();
   }
+  handleChange = e => {
+    const { newProduction } = this.state;
+    this.setState({
+      newProduction: { ...newProduction, [e.target.name]: e.target.value }
+    });
+  };
+  handleForm = e => {
+    e.preventDefault();
+    const { addProduction } = this.props;
+    const { newProduction } = this.state;
+    addProduction(newProduction);
+  };
   finishHandler = id => {
     const { currentToFinished, allProductions } = this.props;
     currentToFinished(allProductions, id);
   };
   render() {
+    const { handleChange } = this;
     const { allProductions } = this.props;
+    const { newProduction } = this.state;
     return (
-      <form>
+      <form onSubmit={this.handleForm}>
         <table className="table table-bordered table-responsive-md table-striped table-hover text-center">
-          <thead>
-            <tr>
-              <th className="text-center">Nr</th>
-              <th className="text-center">Kontrahent</th>
-              <th className="text-center">
-                <GiPayMoney />
-              </th>
-              <th className="text-center">
-                <GiCalendar />
-              </th>
-              <th className="text-center">
-                <GiReceiveMoney />
-              </th>
-              <th className="text-center">Typ</th>
-              <th className="text-center">
-                <MdLayers />
-              </th>
-              <th className="text-center">
-                <AiOutlineColumnHeight />
-              </th>
-              <th className="text-center">
-                <IoMdColorPalette />
-              </th>
-              <th className="text-center">
-                m<sup>2</sup>
-              </th>
-              <th className="text-center">m</th>
-              <th className="text-center">
-                <FaUserTie />
-              </th>
-              <th className="text-center">
-                <IoMdSettings />
-              </th>
-            </tr>
-          </thead>
+          <TheadOrderlist />
           <tbody>
             {allProductions.map(production => {
               let panelWidth = 0;
@@ -81,84 +63,155 @@ class AllProductions extends React.Component {
               } else if (production.type === 'S') {
                 panelWidth = 1.175;
               }
+              let daysLeft = countDaysLeft(
+                formatDate(production.downpayment),
+                production.productionTerm
+              );
+              let daysLeftClass = 'text-default';
+              switch (true) {
+                case daysLeft <= 7 && daysLeft > 2:
+                  daysLeftClass = 'text-warning';
+                  break;
+                case daysLeft < 3:
+                  daysLeftClass = 'text-danger';
+                  break;
+                default:
+                  daysLeftClass = 'text-default';
+              }
               return (
-                <tr key={production.id}>
-                  <td className="pt-3-half">{production.orderNumber}</td>
-                  <td className="pt-3-half">{production.clientName}</td>
-                  <td className="pt-3-half">
-                    {formatDate(production.downpayment)}
+                <tr key={production.id} className="list-production">
+                  <td className="pt-3-half short-column">
+                    {production.orderNumber}
                   </td>
-                  <td className="pt-3-half">
-                    {daysLeft(
-                      formatDate(production.downpayment),
-                      production.productionTerm
-                    )}
+                  <td className="pt-3-half name-column">
+                    {production.clientName}
                   </td>
-                  <td className="pt-3-half">
+                  <td className="pt-3-half date-column">
+                    {formatDate(production.downpayment, true)}
+                  </td>
+                  <td className={`pt-3-half short-column ${daysLeftClass}`}>
+                    {daysLeft}
+                  </td>
+                  <td className="pt-3-half short-column">
                     {production.finalpayment ? (
                       <MdAttachMoney className="text-success" />
                     ) : (
                       <MdMoneyOff className="text-danger" />
                     )}
                   </td>
-                  <td className="pt-3-half">{production.type}</td>
-                  <td className="pt-3-half">{production.core}</td>
-                  <td className="pt-3-half">{production.thickness}</td>
+                  <td className="pt-3-half short-column">{production.type}</td>
                   <td className="pt-3-half">{production.color}</td>
+                  <td className="pt-3-half short-column">{production.core}</td>
+                  <td className="pt-3-half short-column">
+                    {production.thickness}
+                  </td>
+
                   <td className="pt-3-half">{production.m2}</td>
                   <td className="pt-3-half">
                     {panelWidth !== 0
                       ? Math.ceil(production.m2 / panelWidth)
                       : ''}
                   </td>
-                  <td className="pt-3-half">{production.csa}</td>
-                  <td className="pt-3-half">
-                    <button
-                      type="button"
-                      className="btn btn-warning btn-rounded btn-sm">
-                      <MdEdit />
-                    </button>
-                    <button
-                      onClick={() => {
-                        this.finishHandler(production.id);
-                      }}
-                      type="button"
-                      className="btn btn-success btn-rounded btn-sm ml-1">
-                      <GiFactory />
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-primary btn-rounded btn-sm ml-1">
-                      <MdLocalShipping />
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-danger btn-rounded btn-sm ml-1">
-                      <MdDelete />
-                    </button>
+                  <td className="pt-3-half short-column">{production.csa}</td>
+                  <td className="list-buttons">
+                    <span className="buttons-nowrap">
+                      <EditButton />
+                      <ProduceButton
+                        clickHandler={() => {
+                          this.finishHandler(production.id);
+                        }}
+                      />
+                      <TransportButton />
+                      <DeleteButton />
+                    </span>
                   </td>
                 </tr>
               );
             })}
-            <tr>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half">
-                <span className="mb-3 mr-2">
-                  <span role="button" className="text-success">
-                    <IoMdAddCircleOutline />
-                  </span>
-                </span>
+            <tr className="new-production">
+              <td className="form-td">
+                <input
+                  name="orderNumber"
+                  onChange={handleChange}
+                  value={newProduction.orderNumber}
+                />
+              </td>
+              <td className="form-td">
+                <input
+                  name="clientName"
+                  onChange={handleChange}
+                  value={newProduction.clientName}
+                />
+              </td>
+              <td className="form-td">
+                <input
+                  name="downpayment"
+                  onChange={handleChange}
+                  value={newProduction.downpayment}
+                />
+              </td>
+              <td className="form-td">
+                <input
+                  name="productionTerm"
+                  onChange={handleChange}
+                  value={newProduction.productionTerm}
+                />
+              </td>
+              <td className="form-td">
+                <input
+                  name="finalpayment"
+                  onChange={handleChange}
+                  type="checkbox"
+                  value={newProduction.finalpayment}
+                />
+              </td>
+              <td className="form-td">
+                <input
+                  name="type"
+                  onChange={handleChange}
+                  value={newProduction.type}
+                />
+              </td>
+              <td className="form-td">
+                <input
+                  name="color"
+                  onChange={handleChange}
+                  value={newProduction.color}
+                />
+              </td>
+              <td className="form-td">
+                <input
+                  name="core"
+                  onChange={handleChange}
+                  value={newProduction.core}
+                />
+              </td>
+              <td className="form-td">
+                <input
+                  name="thickness"
+                  onChange={handleChange}
+                  value={newProduction.thickness}
+                />
+              </td>
+              <td className="form-td">
+                <input
+                  name="m2"
+                  onChange={handleChange}
+                  value={newProduction.m2}
+                />
+              </td>
+              <td className="form-td"></td>
+              <td className="form-td">
+                <input
+                  name="csa"
+                  onChange={handleChange}
+                  value={newProduction.csa}
+                />
+              </td>
+
+              {/* <td className="pt-3-half"></td> */}
+              <td className="form-btn">
+                <AddRowButton type="submit" /* clickHandler={() => {} }*/ />
               </td>
             </tr>
           </tbody>

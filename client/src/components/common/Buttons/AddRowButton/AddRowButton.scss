@@ -1,0 +1,17 @@
+span {
+  .btn-add-row {
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    position: relative;
+    &:hover {
+      cursor: pointer;
+    }
+    .btn-icon {
+      font-size: 18px;
+      position: absolute;
+      top: 18%;
+      left: 20%;
+    }
+  }
+}

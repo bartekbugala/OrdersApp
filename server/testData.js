@@ -21,9 +21,9 @@ const loadTestData = async () => {
     {
       id: uuid(),
       orderNumber: '101',
-      clientName: 'Bud-Rem-Mar',
-      downpayment: '2019-12-01',
-      productionTerm: 14,
+      clientName: 'A-Bud-Rem-Mar',
+      downpayment: '2019-12-10',
+      productionTerm: 1,
       finalpayment: '',
       finished: false,
       csa: 'BB',
@@ -31,14 +31,14 @@ const loadTestData = async () => {
       core: 'St',
       thickness: 100,
       color: 9006,
-      m2: 5248.212
+      m2: 248.212
     },
     {
       id: uuid(),
       orderNumber: '101',
-      clientName: 'Bud-Rem-Mar',
+      clientName: 'X-Bud-Rem-Mar',
       downpayment: '2019-12-01',
-      productionTerm: 14,
+      productionTerm: 0,
       finalpayment: '',
       finished: false,
       csa: 'BB',
