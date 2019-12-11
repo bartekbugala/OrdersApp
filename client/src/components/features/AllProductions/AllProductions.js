@@ -1,7 +1,11 @@
 import React from 'react';
 import { MdAttachMoney, MdMoneyOff } from 'react-icons/md';
+// utils
 import formatDate from '../../../utils/formatDate';
 import countDaysLeft from '../../../utils/countDaysLeft';
+import currentFromSquareMeters from '../../../utils/currentFromSquareMeters';
+
+// components
 import TheadOrderlist from '../../common/Table/TheadOrderlist/TheadOrderlist';
 import EditButton from '../../common/Buttons/EditButton/EditButton';
 import ProduceButton from '../../common/Buttons/ProduceButton/ProduceButton';
@@ -13,8 +17,9 @@ import Spinner from '../../common/Spinner/Spinner';
 import './AllProductions.scss';
 
 class AllProductions extends React.Component {
-  state = {
-    newProduction: {
+  constructor(props) {
+    super(props);
+    let initialNewProduction = {
       clientName: '',
       color: '',
       core: '',
@@ -28,7 +33,8 @@ class AllProductions extends React.Component {
       thickness: '',
       type: ''
     }
-  };
+    this.state = { newProduction: initialNewProduction }
+  }
 
   componentDidMount() {
     const { loadAllProductions, resetRequest } = this.props;
@@ -52,7 +58,7 @@ class AllProductions extends React.Component {
     e.preventDefault();
     const { addProduction } = this.props;
     const { newProduction } = this.state;
-    addProduction(newProduction);
+    addProduction(newProduction).then(this.setState({ newProduction: {} }));
 
   };
   finishHandler = id => {
@@ -75,12 +81,6 @@ class AllProductions extends React.Component {
             <TheadOrderlist />
             <tbody>
               {allProductions.map(production => {
-                let panelWidth = 0;
-                if (production.type === 'D') {
-                  panelWidth = 1;
-                } else if (production.type === 'S') {
-                  panelWidth = 1.175;
-                }
                 let daysLeft = countDaysLeft(
                   formatDate(production.downpayment),
                   production.productionTerm
@@ -126,9 +126,7 @@ class AllProductions extends React.Component {
 
                     <td className="pt-3-half">{production.m2}</td>
                     <td className="pt-3-half">
-                      {panelWidth !== 0
-                        ? Math.ceil(production.m2 / panelWidth)
-                        : ''}
+                      {currentFromSquareMeters(production.type, production.m2)}
                     </td>
                     <td className="pt-3-half short-column">{production.csa}</td>
                     <td className="list-buttons">
