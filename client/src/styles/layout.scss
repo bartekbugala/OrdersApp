@@ -1,0 +1,13 @@
+header,
+main,
+footer {
+  margin: 0 auto;
+  padding: 0 10px;
+  max-width: 1170px;
+  justify-content: space-between;
+}
+
+header,
+footer {
+  display: flex;
+}

@@ -30,6 +30,7 @@ const initialState = {
 //// Selectors
 export const getMenuLinks = ({ orders }) => orders.menuLinks;
 export const getAllProductions = ({ orders }) => orders.allProductions;
+export const getUpdateRequest = ({ orders }) => orders.updateRequest;
 export const getCurrentProductions = ({ orders }) => orders.currentProductions;
 export const getFinishedProductions = ({ orders }) =>
   orders.finishedProductions;
@@ -64,12 +65,12 @@ export const loadProductionsRequest = () => {
 
 export const addProductionRequest = production => {
   return async dispatch => {
-    dispatch(startRequest());
+    dispatch(startUpdateRequest());
     try {
       await axios.post(`${API_URL}/productions/add`, production);
-      dispatch(endRequest());
+      dispatch(endUpdateRequest());
     } catch (e) {
-      dispatch(errorRequest(JSON.stringify(e)));
+      dispatch(errorUpdateRequest(JSON.stringify(e)));
     }
   };
 };
