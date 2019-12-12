@@ -50,9 +50,10 @@ exports.addProduction = async (req, res) => {
       clientName,
       downpayment,
       productionTerm,
-      finalpayment,
+      finalPayment,
       type,
-      color,
+      colorOutside,
+      colorInside,
       core,
       thickness,
       m2,
@@ -66,9 +67,10 @@ exports.addProduction = async (req, res) => {
     newProduction.clientName = clientName;
     newProduction.downpayment = downpayment;
     newProduction.productionTerm = productionTerm;
-    newProduction.finalpayment = finalpayment || false;
+    newProduction.finalpayment = finalPayment || false;
     newProduction.type = type;
-    newProduction.color = color;
+    newProduction.colorOutside = colorOutside;
+    newProduction.colorInside = colorInside;
     newProduction.core = core;
     newProduction.thickness = thickness;
     newProduction.m2 = m2;
