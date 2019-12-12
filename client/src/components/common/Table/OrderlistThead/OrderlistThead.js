@@ -2,11 +2,15 @@ import React from 'react';
 
 import { MdLayers } from 'react-icons/md';
 import { GiCalendar, GiPayMoney, GiReceiveMoney } from 'react-icons/gi';
-import { IoMdSettings, IoMdColorPalette } from 'react-icons/io';
+import {
+  IoMdSettings,
+  IoMdColorPalette,
+  IoIosColorPalette
+} from 'react-icons/io';
 import { FaUserTie } from 'react-icons/fa';
 import { AiOutlineColumnHeight } from 'react-icons/ai';
 
-import '../../../../styles/global.scss'
+import '../../../../styles/global.scss';
 
 const OrderlistThead = () => (
   <thead>
@@ -25,6 +29,9 @@ const OrderlistThead = () => (
       <th className="text-center">Typ</th>
       <th className="text-center">
         <IoMdColorPalette />
+      </th>
+      <th className="text-center">
+        <IoIosColorPalette />
       </th>
       <th className="text-center">
         <MdLayers />

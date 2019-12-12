@@ -21,31 +21,31 @@ class AllProductions extends React.Component {
     super(props);
     let initialNewProduction = {
       clientName: '',
-      color: '',
+      colorOutside: '',
+      colorInside: '',
       core: '',
       csa: '',
-      downpayment: '',
-      finalpayment: false,
+      downpayment: new Date(),
+      finalPayment: false,
       finished: false,
       m2: '',
       orderNumber: '',
       productionTerm: '',
       thickness: '',
       type: ''
-    }
-    this.state = { newProduction: initialNewProduction }
+    };
+    this.state = { newProduction: initialNewProduction };
   }
 
   componentDidMount() {
     const { loadAllProductions, resetRequest } = this.props;
     loadAllProductions();
     resetRequest();
-  };
+  }
 
   componentDidUpdate() {
     const { loadAllProductions } = this.props;
     loadAllProductions();
-
   }
 
   handleChange = e => {
@@ -55,34 +55,51 @@ class AllProductions extends React.Component {
     });
   };
 
+  handleDateChange = date => {
+    const { newProduction } = this.state;
+    this.setState({
+      newProduction: { ...newProduction, downpayment: date }
+    });
+  };
+
+  handleDateSelect = date => {
+    const { newProduction } = this.state;
+    this.setState({
+      newProduction: { ...newProduction, downpayment: date }
+    });
+  };
+
   handleForm = e => {
     e.preventDefault();
     const { addProduction } = this.props;
-    const { newProduction } = this.state;
-    addProduction(newProduction).then(this.setState({ newProduction: {} }));
-
+    const { newProduction, startDate } = this.state;
+    this.setState({ ...newProduction, downpayment: startDate })
+      .then(addProduction(newProduction))
+      .then(this.setState({ newProduction: {} }));
   };
   finishHandler = id => {
     const { currentToFinished, allProductions } = this.props;
     currentToFinished(allProductions, id);
   };
   render() {
-    const { handleChange } = this;
+    const { handleChange, handleDateSelect, handleDateChange } = this;
     const { allProductions, updateRequest } = this.props;
-    const { newProduction } = this.state;
-    const tdClass = ''
+    const { newProduction, startDate } = this.state;
+    const tdClass = '';
 
-    if (updateRequest.error) return <Alert variant="error">{`${updateRequest.error}`}</Alert>;
-    /*     if (updateRequest.success) return <Alert variant="success">Post has been updated!</Alert>; */
-    else if (updateRequest.pending) return <Spinner />;
+    if (updateRequest.error)
+      return <Alert variant="error">{`${updateRequest.error}`}</Alert>;
+    /*     if (updateRequest.success) return <Alert variant="success">Post has been updated!</Alert>; */ else if (
+      updateRequest.pending
+    )
+      return <Spinner />;
     else
-
       return (
         <form onSubmit={this.handleForm}>
           <OrderListTable>
             {allProductions.map(production => {
               let daysLeft = countDaysLeft(
-                formatDate(production.downpayment),
+                production.downpayment,
                 production.productionTerm
               );
               let daysLeftClass = 'text-default';
@@ -105,21 +122,26 @@ class AllProductions extends React.Component {
                     {cutText(production.clientName, 25)}
                   </td>
                   <td className={`${tdClass} date-column`}>
-                    {formatDate(production.downpayment, true)}
+                    {formatDate(production.downpayment)}
                   </td>
                   <td className={`${tdClass} short-column ${daysLeftClass}`}>
                     {daysLeft}
                   </td>
                   <td className={`${tdClass} short-column`}>
-                    {production.finalpayment ? (
+                    {production.finalPayment === true ? (
                       <MdAttachMoney className="text-success" />
                     ) : (
-                        <MdMoneyOff className="text-danger" />
-                      )}
+                      <MdMoneyOff className="text-danger" />
+                    )}
                   </td>
-                  <td className={`${tdClass} short-column`}>{production.type}</td>
-                  <td className={`${tdClass}`}>{production.color}</td>
-                  <td className={`${tdClass} short-column`}>{production.core}</td>
+                  <td className={`${tdClass} short-column`}>
+                    {production.type}
+                  </td>
+                  <td className={`${tdClass}`}>{production.colorOutside}</td>
+                  <td className={`${tdClass}`}>{production.colorInside}</td>
+                  <td className={`${tdClass} short-column`}>
+                    {production.core}
+                  </td>
                   <td className={`${tdClass} short-column`}>
                     {production.thickness}
                   </td>
@@ -128,7 +150,9 @@ class AllProductions extends React.Component {
                   <td className={`${tdClass}`}>
                     {currentFromSquareMeters(production.type, production.m2)}
                   </td>
-                  <td className={`${tdClass} short-column`}>{production.csa}</td>
+                  <td className={`${tdClass} short-column`}>
+                    {production.csa}
+                  </td>
                   <td className="list-buttons noprint">
                     <span className="buttons-nowrap">
                       <EditButton />
@@ -144,7 +168,13 @@ class AllProductions extends React.Component {
                 </tr>
               );
             })}
-            <OrderlistTrAdd handleChange={handleChange} newProduction={newProduction} />
+            <OrderlistTrAdd
+              handleChange={handleChange}
+              newProduction={newProduction}
+              handleDateChange={handleDateChange}
+              handleDateSelect={handleDateSelect}
+              startDate={startDate}
+            />
           </OrderListTable>
         </form>
       );
