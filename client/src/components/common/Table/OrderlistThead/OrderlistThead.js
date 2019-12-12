@@ -6,7 +6,9 @@ import { IoMdSettings, IoMdColorPalette } from 'react-icons/io';
 import { FaUserTie } from 'react-icons/fa';
 import { AiOutlineColumnHeight } from 'react-icons/ai';
 
-const TheadOrderlist = () => (
+import '../../../../styles/global.scss'
+
+const OrderlistThead = () => (
   <thead>
     <tr>
       <th className="text-center">Nr</th>
@@ -37,11 +39,11 @@ const TheadOrderlist = () => (
       <th className="text-center">
         <FaUserTie />
       </th>
-      <th className="text-center">
+      <th className="text-center noprint">
         <IoMdSettings />
       </th>
     </tr>
   </thead>
 );
 
-export default TheadOrderlist;
+export default OrderlistThead;

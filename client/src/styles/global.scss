@@ -1,8 +1,10 @@
-@import './settings.scss';
-@import './normalize.scss';
-@import './layout.scss';
+@import "./settings.scss";
+@import "./normalize.scss";
+@import "./layout.scss";
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -18,8 +20,16 @@ body {
   overflow-y: scroll;
 }
 
-a, a:hover, a:visited {
+a,
+a:hover,
+a:visited {
   text-decoration: none;
 }
 
-@import './typography.scss';
+@import "./typography.scss";
+
+@media print {
+  .noprint {
+    visibility: hidden;
+  }
+}
