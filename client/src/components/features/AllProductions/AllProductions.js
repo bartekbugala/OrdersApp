@@ -1,5 +1,6 @@
 import React from 'react';
 import { MdAttachMoney, MdMoneyOff } from 'react-icons/md';
+import { PropTypes } from 'prop-types';
 // utils
 import formatDate from '../../../utils/formatDate';
 import countDaysLeft from '../../../utils/countDaysLeft';
@@ -25,16 +26,16 @@ class AllProductions extends React.Component {
       colorInside: '',
       core: '',
       csa: '',
-      downpayment: new Date(),
+      downpayment: null,
       finalPayment: false,
       finished: false,
-      m2: '',
+      m2: null,
       orderNumber: '',
       productionTerm: '',
-      thickness: '',
+      thickness: null,
       type: ''
     };
-    this.state = { newProduction: initialNewProduction };
+    this.state = { newProduction: initialNewProduction, startDate: new Date() };
   }
 
   componentDidMount() {
@@ -72,10 +73,8 @@ class AllProductions extends React.Component {
   handleForm = e => {
     e.preventDefault();
     const { addProduction } = this.props;
-    const { newProduction, startDate } = this.state;
-    this.setState({ ...newProduction, downpayment: startDate })
-      .then(addProduction(newProduction))
-      .then(this.setState({ newProduction: {} }));
+    const { newProduction } = this.state;
+    addProduction(newProduction).then(this.setState({ newProduction: {} }));
   };
   finishHandler = id => {
     const { currentToFinished, allProductions } = this.props;
@@ -85,7 +84,7 @@ class AllProductions extends React.Component {
     const { handleChange, handleDateSelect, handleDateChange } = this;
     const { allProductions, updateRequest } = this.props;
     const { newProduction, startDate } = this.state;
-    const tdClass = '';
+    const tdClass = 'td-class';
 
     if (updateRequest.error)
       return <Alert variant="error">{`${updateRequest.error}`}</Alert>;
@@ -153,7 +152,7 @@ class AllProductions extends React.Component {
                   <td className={`${tdClass} short-column`}>
                     {production.csa}
                   </td>
-                  <td className="list-buttons noprint">
+                  <td className={`${tdClass} list-buttons noprint`}>
                     <span className="buttons-nowrap">
                       <EditButton />
                       <ProduceButton
@@ -181,3 +180,26 @@ class AllProductions extends React.Component {
   }
 }
 export default AllProductions;
+
+AllProductions.propTypes = {
+  updateRequest: PropTypes.object.isRequired,
+  allProductions: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      orderNumber: PropTypes.string.isRequired,
+      clientName: PropTypes.string.isRequired,
+      downpayment: PropTypes.object.isRequired,
+      productionTerm: PropTypes.number.isRequired,
+      finalPayment: PropTypes.bool.isRequired,
+      finished: PropTypes.bool.isRequired,
+      type: PropTypes.string.isRequired,
+      colorOutside: PropTypes.string.isRequired,
+      colorInside: PropTypes.string.isRequired,
+      core: PropTypes.string.isRequired,
+      thickness: PropTypes.number.isRequired,
+      m2: PropTypes.number.isRequired,
+      csa: PropTypes.string.isRequired
+    })
+  ),
+  loadPostsByPage: PropTypes.func.isRequired
+};

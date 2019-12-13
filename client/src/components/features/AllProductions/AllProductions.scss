@@ -1,4 +1,4 @@
-@import "../../../styles/global.scss";
+@import '../../../styles/global.scss';
 
 .buttons-nowrap {
   display: flex;
@@ -27,5 +27,15 @@
     border: 0;
     width: 100%;
     min-height: 100%;
+  }
+}
+.list-production {
+  .td-class {
+    padding: 2px;
+  }
+}
+.list-buttons {
+  .btn {
+    padding: 2px 4px;
   }
 }
