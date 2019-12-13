@@ -35,7 +35,7 @@ class AllProductions extends React.Component {
       thickness: null,
       type: ''
     };
-    this.state = { newProduction: initialNewProduction, startDate: new Date() };
+    this.state = { allProductions: this.props.allProductions, newProduction: initialNewProduction, startDate: new Date() };
   }
 
   componentDidMount() {
@@ -45,8 +45,10 @@ class AllProductions extends React.Component {
   }
 
   componentDidUpdate() {
-    const { loadAllProductions } = this.props;
-    loadAllProductions();
+    const { loadAllProductions, allProductions } = this.props;
+    if (this.state.allProductions !== allProductions) {
+      loadAllProductions();
+    }
   }
 
   handleChange = e => {
@@ -76,10 +78,17 @@ class AllProductions extends React.Component {
     const { newProduction } = this.state;
     addProduction(newProduction).then(this.setState({ newProduction: {} }));
   };
+
   finishHandler = id => {
     const { currentToFinished, allProductions } = this.props;
     currentToFinished(allProductions, id);
   };
+
+  cancelHandler = id => {
+    const { cancelProduction, loadAllProductions } = this.props;
+    cancelProduction(id).then(loadAllProductions());
+  };
+
   render() {
     const { handleChange, handleDateSelect, handleDateChange } = this;
     const { allProductions, updateRequest } = this.props;
@@ -130,8 +139,8 @@ class AllProductions extends React.Component {
                     {production.finalPayment === true ? (
                       <MdAttachMoney className="text-success" />
                     ) : (
-                      <MdMoneyOff className="text-danger" />
-                    )}
+                        <MdMoneyOff className="text-danger" />
+                      )}
                   </td>
                   <td className={`${tdClass} short-column`}>
                     {production.type}
@@ -161,7 +170,9 @@ class AllProductions extends React.Component {
                         }}
                       />
                       <TransportButton />
-                      <DeleteButton />
+                      <DeleteButton clickHandler={() => {
+                        this.cancelHandler(production.id);
+                      }} />
                     </span>
                   </td>
                 </tr>
@@ -188,7 +199,7 @@ AllProductions.propTypes = {
       id: PropTypes.string.isRequired,
       orderNumber: PropTypes.string.isRequired,
       clientName: PropTypes.string.isRequired,
-      downpayment: PropTypes.object.isRequired,
+      downpayment: PropTypes.string.isRequired,
       productionTerm: PropTypes.number.isRequired,
       finalPayment: PropTypes.bool.isRequired,
       finished: PropTypes.bool.isRequired,
@@ -201,5 +212,5 @@ AllProductions.propTypes = {
       csa: PropTypes.string.isRequired
     })
   ),
-  loadPostsByPage: PropTypes.func.isRequired
+  loadPostsByPage: PropTypes.func
 };

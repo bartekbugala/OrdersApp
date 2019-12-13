@@ -1,0 +1,41 @@
+@import '../../../styles/global.scss';
+
+.buttons-nowrap {
+  display: flex;
+  flex-wrap: nowrap;
+}
+.short-column {
+  width: 10px;
+}
+.name-column {
+  min-width: 250px;
+}
+.date-column {
+  min-width: 70px;
+}
+.new-production {
+  .form-td {
+    padding: 0;
+  }
+  .form-btn {
+    padding: 0.5rem;
+  }
+  input {
+    display: inline-flex;
+    padding: 0.75rem;
+    margin: 0;
+    border: 0;
+    width: 100%;
+    min-height: 100%;
+  }
+}
+.list-production {
+  .td-class {
+    padding: 2px;
+  }
+}
+.list-buttons {
+  .btn {
+    padding: 2px 4px;
+  }
+}

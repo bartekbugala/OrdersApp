@@ -1,26 +1,24 @@
 import { connect } from 'react-redux';
 import {
-  getAllProductions,
+  getCanceled,
   getUpdateRequest,
-  loadProductionsRequest,
-  toggleCancelProductionRequest,
-  addProductionRequest,
+  loadCanceledProductionsRequest,
   currentToFinished,
-  resetUpdateRequest
+  resetUpdateRequest,
+  toggleCancelProductionRequest
 } from '../../../redux/ordersRedux';
-import AllProductions from './AllProductions';
+import CanceledProductions from './CanceledProductions';
 
 const mapStateToProps = state => ({
-  allProductions: getAllProductions(state),
+  canceledProductions: getCanceled(state),
   updateRequest: getUpdateRequest(state),
 });
 
 const mapDispatchToProps = dispatch => ({
-  loadAllProductions: () => dispatch(loadProductionsRequest()),
-  addProduction: production => dispatch(addProductionRequest(production)),
+  loadCanceledProductions: () => dispatch(loadCanceledProductionsRequest()),
   cancelProduction: id => dispatch(toggleCancelProductionRequest(id)),
   currentToFinished: (currArr, id) => dispatch(currentToFinished(currArr, id)),
   resetRequest: () => dispatch(resetUpdateRequest())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AllProductions);
+export default connect(mapStateToProps, mapDispatchToProps)(CanceledProductions);
