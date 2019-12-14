@@ -1,8 +1,9 @@
 import React from 'react';
 import AddRowButton from '../../Buttons/AddRowButton/AddRowButton';
 import DatePicker from 'react-datepicker';
-
 import 'react-datepicker/dist/react-datepicker.css';
+
+const tdClass = 'td-class form-td';
 
 const OrderlistTrAdd = ({
   startDate,
@@ -12,21 +13,21 @@ const OrderlistTrAdd = ({
   handleDateSelect
 }) => (
   <tr className="new-production noprint">
-    <td className="form-td">
+    <td className={`${tdClass}`}>
       <input
         name="orderNumber"
         onChange={handleChange}
         value={newProduction.orderNumber}
       />
     </td>
-    <td className="form-td">
+    <td className={`${tdClass}`}>
       <input
         name="clientName"
         onChange={handleChange}
         value={newProduction.clientName}
       />
     </td>
-    <td className="form-td">
+    <td className={`${tdClass}`}>
       <DatePicker
         allowSameDay="true"
         name="downpayment"
@@ -41,17 +42,17 @@ const OrderlistTrAdd = ({
         dateFormat="dd.MM.yy"
       />
     </td>
-    <td className="form-td">
+    <td className={`${tdClass}`}>
       <input
         name="productionTerm"
         onChange={handleChange}
         value={newProduction.productionTerm}
       />
     </td>
-    <td className="form-td">
+    <td className={`${tdClass}`}>
       <input name="finalpayment" type="checkbox" value={true} />
     </td>
-    <td className="form-td">
+    <td className={`${tdClass}`}>
       <input name="type" onChange={handleChange} value={newProduction.type} />
     </td>
     <td className="form-td">
@@ -61,28 +62,28 @@ const OrderlistTrAdd = ({
         value={newProduction.colorOutside}
       />
     </td>
-    <td className="form-td">
+    <td className={`${tdClass}`}>
       <input
         name="colorInside"
         onChange={handleChange}
         value={newProduction.colorInside}
       />
     </td>
-    <td className="form-td">
+    <td className={`${tdClass}`}>
       <input name="core" onChange={handleChange} value={newProduction.core} />
     </td>
-    <td className="form-td">
+    <td className={`${tdClass}`}>
       <input
         name="thickness"
         onChange={handleChange}
         value={newProduction.thickness}
       />
     </td>
-    <td className="form-td">
+    <td className={`${tdClass}`}>
       <input name="m2" onChange={handleChange} value={newProduction.m2} />
     </td>
-    <td className="form-td"></td>
-    <td className="form-td">
+    <td className={`${tdClass}`}></td>
+    <td className={`${tdClass}`}>
       <input name="csa" onChange={handleChange} value={newProduction.csa} />
     </td>
     <td className="form-btn">

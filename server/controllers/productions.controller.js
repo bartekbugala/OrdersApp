@@ -5,11 +5,20 @@ const uuid = require('uuid');
 // get all productions
 exports.getProductions = async (req, res) => {
   try {
+    res.status(200).json(await Production.find({}));
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+exports.getCurrent = async (req, res) => {
+  try {
     res.status(200).json(await Production.find({ canceled: false }));
   } catch (err) {
     res.status(500).json(err);
   }
 };
+
 exports.getCanceled = async (req, res) => {
   try {
     res.status(200).json(await Production.find({ canceled: true }));
@@ -28,7 +37,7 @@ exports.getSingleProduction = async (req, res) => {
 };
 
 // get productions by range
-exports.getProductionsByRange = async function (req, res) {
+exports.getProductionsByRange = async function(req, res) {
   try {
     let { startAt, limit, sortParam } = req.params;
 
@@ -118,7 +127,7 @@ exports.toggleCancelProduction = async (req, res) => {
     let currentProduction = await Production.findOne({ id: req.params.id });
     const productionCanceled = await Production.findOneAndUpdate(
       { id: req.params.id },
-      { canceled: (currentProduction.canceled === false) ? true : false }
+      { canceled: currentProduction.canceled === false ? true : false }
     );
     res.status(200).json(productionCanceled);
   } catch (err) {

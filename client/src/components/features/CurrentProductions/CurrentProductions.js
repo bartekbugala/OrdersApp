@@ -1,158 +1,221 @@
 import React from 'react';
-import {
-  MdLocalShipping,
-  MdEdit,
-  MdDelete,
-  MdAttachMoney,
-  MdMoneyOff,
-  MdLayers
-} from 'react-icons/md';
-import {
-  GiFactory,
-  GiCalendar,
-  GiPayMoney,
-  GiReceiveMoney
-} from 'react-icons/gi';
-import {
-  IoMdSettings,
-  IoMdAddCircleOutline,
-  IoMdColorPalette
-} from 'react-icons/io';
-import { FaUserTie } from 'react-icons/fa';
-import { AiOutlineColumnHeight } from 'react-icons/ai';
-
+import { MdAttachMoney, MdMoneyOff } from 'react-icons/md';
+import { PropTypes } from 'prop-types';
+// utils
+import formatDate from '../../../utils/formatDate';
+import countDaysLeft from '../../../utils/countDaysLeft';
+import currentFromSquareMeters from '../../../utils/currentFromSquareMeters';
+import cutText from '../../../utils/cutText';
+// components
+import OrderListTable from '../../common/Table/OrderListTable/OrderListTable';
+import OrderlistTrAdd from '../../common/Table/OrderlistTrAdd/OrderlistTrAdd';
+import EditButton from '../../common/Buttons/EditButton/EditButton';
+import ProduceButton from '../../common/Buttons/ProduceButton/ProduceButton';
+import TransportButton from '../../common/Buttons/TransportButton/TransportButton';
+import CancelButton from '../../common/Buttons/CancelButton/CancelButton';
+import Alert from '../../common/Alert/Alert';
+import Spinner from '../../common/Spinner/Spinner';
 import './CurrentProductions.scss';
 
 class CurrentProductions extends React.Component {
+  constructor(props) {
+    super(props);
+    let initialNewProduction = {
+      clientName: '',
+      colorOutside: '',
+      colorInside: '',
+      core: '',
+      csa: '',
+      downpayment: null,
+      finalPayment: false,
+      finished: false,
+      m2: null,
+      orderNumber: '',
+      productionTerm: '',
+      thickness: null,
+      type: ''
+    };
+    this.state = {
+      currentProductions: this.props.currentProductions,
+      newProduction: initialNewProduction,
+      startDate: new Date()
+    };
+  }
+
+  componentDidMount() {
+    const { loadCurrentProductions } = this.props;
+    loadCurrentProductions().then(
+      this.setState({ currentProductions: this.props.currentProductions })
+    );
+  }
+  componentDidUpdate(props) {
+    const { loadCurrentProductions } = this.props;
+    if (props.currentProductions !== this.state.currentProductions) {
+      loadCurrentProductions().then(
+        this.setState({ currentProductions: this.props.currentProductions })
+      );
+    }
+  }
+
+  handleChange = e => {
+    const { newProduction } = this.state;
+    this.setState({
+      newProduction: { ...newProduction, [e.target.name]: e.target.value }
+    });
+  };
+
+  handleDateChange = date => {
+    const { newProduction } = this.state;
+    this.setState({
+      newProduction: { ...newProduction, downpayment: date }
+    });
+  };
+
+  handleDateSelect = date => {
+    const { newProduction } = this.state;
+    this.setState({
+      newProduction: { ...newProduction, downpayment: date }
+    });
+  };
+
+  handleForm = e => {
+    e.preventDefault();
+    const { addProduction } = this.props;
+    const { newProduction } = this.state;
+    addProduction(newProduction).then(this.setState({ newProduction: {} }));
+  };
+
   finishHandler = id => {
     const { currentToFinished, currentProductions } = this.props;
     currentToFinished(currentProductions, id);
   };
+
+  cancelHandler = id => {
+    const { cancelProduction, loadCurrentProductions } = this.props;
+    cancelProduction(id).then(loadCurrentProductions());
+  };
+
   render() {
-    const { currentProductions } = this.props;
-    return (
-      <form>
-        <table className="table table-bordered table-responsive-md table-striped table-hover text-center">
-          <thead>
-            <tr>
-              <th className="text-center">Nr</th>
-              <th className="text-center">Kontrahent</th>
-              <th className="text-center">
-                <GiPayMoney />
-              </th>
-              <th className="text-center">
-                <GiCalendar />
-              </th>
-              <th className="text-center">
-                <GiReceiveMoney />
-              </th>
-              <th className="text-center">Typ</th>
-              <th className="text-center">
-                <MdLayers />
-              </th>
-              <th className="text-center">
-                <AiOutlineColumnHeight />
-              </th>
-              <th className="text-center">
-                <IoMdColorPalette />
-              </th>
-              <th className="text-center">
-                m<sup>2</sup>
-              </th>
-              <th className="text-center">m</th>
-              <th className="text-center">
-                <FaUserTie />
-              </th>
-              <th className="text-center">
-                <IoMdSettings />
-              </th>
-            </tr>
-          </thead>
-          <tbody>
+    const { handleChange, handleDateSelect, handleDateChange } = this;
+    const { currentProductions, updateRequest } = this.props;
+    const { newProduction, startDate } = this.state;
+    const tdClass = 'td-class';
+
+    if (updateRequest.error)
+      return <Alert variant="error">{`${updateRequest.error}`}</Alert>;
+    else if (updateRequest.pending) return <Spinner />;
+    else
+      return (
+        <form onSubmit={this.handleForm}>
+          <OrderListTable tableTitle="Zamówienia Bieżące">
             {currentProductions.map(production => {
-              let panelWidth = 0;
-              if (production.type === 'D') {
-                panelWidth = 1;
-              } else if (production.type === 'S') {
-                panelWidth = 1.175;
+              let daysLeft = countDaysLeft(
+                production.downpayment,
+                production.productionTerm
+              );
+              let daysLeftClass = 'text-default';
+              switch (true) {
+                case daysLeft <= 7 && daysLeft > 2:
+                  daysLeftClass = 'text-warning';
+                  break;
+                case daysLeft < 3:
+                  daysLeftClass = 'text-danger';
+                  break;
+                default:
+                  daysLeftClass = 'text-default';
               }
               return (
-                <tr key={production.orderNumber}>
-                  <td className="pt-3-half">{production.orderNumber}</td>
-                  <td className="pt-3-half">{production.clientName}</td>
-                  <td className="pt-3-half">{production.downpayment}</td>
-                  <td className="pt-3-half">{production.productionTerm}</td>
-                  <td className="pt-3-half">
-                    {production.finalpayment ? (
+                <tr key={production.id} className="list-production">
+                  <td className={`${tdClass} short-column`}>
+                    {production.orderNumber}
+                  </td>
+                  <td className={`${tdClass} name-column`}>
+                    {cutText(production.clientName, 25)}
+                  </td>
+                  <td className={`${tdClass} date-column`}>
+                    {formatDate(production.downpayment)}
+                  </td>
+                  <td className={`${tdClass} short-column ${daysLeftClass}`}>
+                    {daysLeft}
+                  </td>
+                  <td className={`${tdClass} short-column`}>
+                    {production.finalPayment === true ? (
                       <MdAttachMoney className="text-success" />
                     ) : (
                       <MdMoneyOff className="text-danger" />
                     )}
                   </td>
-                  <td className="pt-3-half">{production.type}</td>
-                  <td className="pt-3-half">{production.core}</td>
-                  <td className="pt-3-half">{production.thickness}</td>
-                  <td className="pt-3-half">{production.color}</td>
-                  <td className="pt-3-half">{production.m2}</td>
-                  <td className="pt-3-half">
-                    {panelWidth !== 0
-                      ? Math.ceil(production.m2 / panelWidth)
-                      : ''}
+                  <td className={`${tdClass} short-column`}>
+                    {production.type}
                   </td>
-                  <td className="pt-3-half">{production.salesperson}</td>
-                  <td className="pt-3-half">
-                    <button
-                      type="button"
-                      className="btn btn-warning btn-rounded btn-sm">
-                      <MdEdit />
-                    </button>
-                    <button
-                      onClick={() => {
-                        this.finishHandler(production.id);
-                      }}
-                      type="button"
-                      className="btn btn-success btn-rounded btn-sm ml-1">
-                      <GiFactory />
-                    </button>
-                    {/* <button
-                      type="button"
-                      className="btn btn-primary btn-rounded btn-sm ml-1">
-                      <MdLocalShipping />
-                    </button> */}
-                    <button
-                      type="button"
-                      className="btn btn-danger btn-rounded btn-sm ml-1">
-                      <MdDelete />
-                    </button>
+                  <td className={`${tdClass}`}>{production.colorOutside}</td>
+                  <td className={`${tdClass}`}>{production.colorInside}</td>
+                  <td className={`${tdClass} short-column`}>
+                    {production.core}
+                  </td>
+                  <td className={`${tdClass} short-column`}>
+                    {production.thickness}
+                  </td>
+
+                  <td className={`${tdClass}`}>{production.m2}</td>
+                  <td className={`${tdClass}`}>
+                    {currentFromSquareMeters(production.type, production.m2)}
+                  </td>
+                  <td className={`${tdClass} short-column`}>
+                    {production.csa}
+                  </td>
+                  <td className={`${tdClass} list-buttons noprint`}>
+                    <span className="buttons-nowrap">
+                      <EditButton />
+                      <ProduceButton
+                        clickHandler={() => {
+                          this.finishHandler(production.id);
+                        }}
+                      />
+                      <TransportButton />
+                      <CancelButton
+                        clickHandler={() => {
+                          this.cancelHandler(production.id);
+                        }}
+                      />
+                    </span>
                   </td>
                 </tr>
               );
             })}
-            <tr>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half" contentEditable="true"></td>
-              <td className="pt-3-half">
-                <span className="mb-3 mr-2">
-                  <span role="button" className="text-success">
-                    <IoMdAddCircleOutline />
-                  </span>
-                </span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </form>
-    );
+            <OrderlistTrAdd
+              handleChange={handleChange}
+              newProduction={newProduction}
+              handleDateChange={handleDateChange}
+              handleDateSelect={handleDateSelect}
+              startDate={startDate}
+            />
+          </OrderListTable>
+        </form>
+      );
   }
 }
 export default CurrentProductions;
+
+CurrentProductions.propTypes = {
+  updateRequest: PropTypes.object.isRequired,
+  currentProductions: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      orderNumber: PropTypes.string.isRequired,
+      clientName: PropTypes.string.isRequired,
+      downpayment: PropTypes.string.isRequired,
+      productionTerm: PropTypes.number.isRequired,
+      finalPayment: PropTypes.bool.isRequired,
+      finished: PropTypes.bool.isRequired,
+      type: PropTypes.string.isRequired,
+      colorOutside: PropTypes.string.isRequired,
+      colorInside: PropTypes.string.isRequired,
+      core: PropTypes.string.isRequired,
+      thickness: PropTypes.number.isRequired,
+      m2: PropTypes.number.isRequired,
+      csa: PropTypes.string.isRequired
+    })
+  ),
+  loadPostsByPage: PropTypes.func
+};

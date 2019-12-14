@@ -14,12 +14,12 @@ class App extends React.Component {
     return (
       <MainLayout>
         <Switch>
-          <Route path="/" exact component={HomePage} />
+          <Route path="/" exact component={CurrentProductionsPage} />
           <Route path="/current" exact component={CurrentProductionsPage} />
           <Route path="/finished" exact component={FinishedProductionsPage} />
           <Route path="/canceled" exact component={CanceledProductionsPage} />
           {/* <Route path="/products/:id" exact component={SingleProduct} */} />
-          <Route path="/home" exact component={HomePage} />
+          <Route path="/home" exact component={CurrentProductionsPage} />
           {/* <Route component={NotFound} /> */}
         </Switch>
       </MainLayout>

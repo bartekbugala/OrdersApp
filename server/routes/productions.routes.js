@@ -5,7 +5,9 @@ const ProductionsController = require('../controllers/productions.controller');
 
 //get productions
 router.route('/productions').get(ProductionsController.getProductions);
-//get canceled 
+// get current
+router.route('/productions/current').get(ProductionsController.getCurrent);
+//get canceled
 router.route('/productions/canceled').get(ProductionsController.getCanceled);
 
 // get productions by range
@@ -29,5 +31,7 @@ router.route('/productions/:id').delete(ProductionsController.deleteProduction);
 router.route('/productions/add').post(ProductionsController.addProduction);
 
 // cancel production
-router.route('/productions/cancel/:id').put(ProductionsController.toggleCancelProduction);
+router
+  .route('/productions/cancel/:id')
+  .put(ProductionsController.toggleCancelProduction);
 module.exports = router;

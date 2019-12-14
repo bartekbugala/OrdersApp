@@ -33,6 +33,7 @@ export const getMenuLinks = ({ orders }) => orders.menuLinks;
 export const getAllProductions = ({ orders }) => orders.allProductions;
 export const getCanceled = ({ orders }) => orders.canceledProductions;
 export const getUpdateRequest = ({ orders }) => orders.updateRequest;
+export const getRequest = ({ orders }) => orders.updateRequest;
 export const getCurrentProductions = ({ orders }) => orders.currentProductions;
 export const getFinishedProductions = ({ orders }) =>
   orders.finishedProductions;
@@ -49,6 +50,19 @@ export const currentToFinished = (currArr, id) => {
     const payload = currArr[movedIndex];
     const currArrNew = currArr.filter(el => el.id !== id);
     dispatch(finishProduction(payload, currArrNew));
+  };
+};
+
+export const loadCurrentProductionsRequest = () => {
+  return async dispatch => {
+    dispatch(startRequest());
+    try {
+      let res = await axios.get(`${API_URL}/productions/current`);
+      dispatch(loadCurrentProductions(res.data));
+      dispatch(endRequest());
+    } catch (e) {
+      dispatch(errorRequest(e.message));
+    }
   };
 };
 
@@ -83,6 +97,17 @@ export const addProductionRequest = production => {
     dispatch(startUpdateRequest());
     try {
       await axios.post(`${API_URL}/productions/add`, production);
+      dispatch(endUpdateRequest());
+    } catch (e) {
+      dispatch(errorUpdateRequest(JSON.stringify(e)));
+    }
+  };
+};
+export const deleteProductionRequest = id => {
+  return async dispatch => {
+    dispatch(startUpdateRequest());
+    try {
+      await axios.delete(`${API_URL}/productions/${id}`);
       dispatch(endUpdateRequest());
     } catch (e) {
       dispatch(errorUpdateRequest(JSON.stringify(e)));
@@ -124,6 +149,7 @@ const createActionName = name => `app/${reducerName}/${name}`;
 export const FINISH_PRODUCTION = createActionName('FINISH_PRODUCTION');
 
 export const LOAD_PRODUCTIONS = createActionName('LOAD_PRODUCTIONS');
+export const LOAD_CURRENT = createActionName('LOAD_CURRENT');
 export const LOAD_CANCELED = createActionName('LOAD_CANCELED');
 
 export const START_REQUEST = createActionName('START_REQUEST');
@@ -142,6 +168,10 @@ export const finishProduction = (payload, currArrNew) => ({
 });
 
 export const loadProductions = payload => ({ payload, type: LOAD_PRODUCTIONS });
+export const loadCurrentProductions = payload => ({
+  payload,
+  type: LOAD_CURRENT
+});
 export const loadCanceled = payload => ({ payload, type: LOAD_CANCELED });
 
 export const startRequest = () => ({ type: START_REQUEST });
@@ -168,6 +198,8 @@ export default function reducer(statePart = initialState, action = {}) {
       };
     case LOAD_PRODUCTIONS:
       return { ...statePart, allProductions: action.payload };
+    case LOAD_CURRENT:
+      return { ...statePart, currentProductions: action.payload };
     case LOAD_CANCELED:
       return { ...statePart, canceledProductions: action.payload };
     case START_REQUEST:

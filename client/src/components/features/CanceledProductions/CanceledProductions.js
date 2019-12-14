@@ -8,10 +8,8 @@ import currentFromSquareMeters from '../../../utils/currentFromSquareMeters';
 import cutText from '../../../utils/cutText';
 // components
 import OrderListTable from '../../common/Table/OrderListTable/OrderListTable';
-import OrderlistTrAdd from '../../common/Table/OrderlistTrAdd/OrderlistTrAdd';
 import EditButton from '../../common/Buttons/EditButton/EditButton';
-import ProduceButton from '../../common/Buttons/ProduceButton/ProduceButton';
-import TransportButton from '../../common/Buttons/TransportButton/TransportButton';
+import RestoreButton from '../../common/Buttons/RestoreButton/RestoreButton';
 import DeleteButton from '../../common/Buttons/DeleteButton/DeleteButton';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
@@ -35,41 +33,44 @@ class CanceledProductions extends React.Component {
       thickness: null,
       type: ''
     };
-    this.state = { canceledProductions: this.props.canceledProductions, newProduction: initialNewProduction, startDate: new Date() };
+    this.state = {
+      canceledProductions: [],
+      newProduction: initialNewProduction,
+      startDate: new Date()
+    };
   }
 
   componentDidMount() {
-    const { loadCanceledProductions, resetRequest } = this.props;
-    loadCanceledProductions();
-    resetRequest();
+    const { loadCanceledProductions } = this.props;
+    loadCanceledProductions().then(
+      this.setState({ canceledProductions: this.props.canceledProductions })
+    );
   }
-
-  componentDidUpdate() {
-    const { loadCanceledProductions, canceledProductions } = this.props;
-    if (this.state.canceledProductions !== canceledProductions) {
-      loadCanceledProductions();
+  componentDidUpdate(props) {
+    const { loadCanceledProductions } = this.props;
+    if (props.canceledProductions !== this.state.canceledProductions) {
+      loadCanceledProductions().then(
+        this.setState({ canceledProductions: this.props.canceledProductions })
+      );
     }
   }
-
-  finishHandler = id => {
-    const { currentToFinished, allProductions } = this.props;
-    currentToFinished(allProductions, id);
-  };
-
   cancelHandler = id => {
     const { cancelProduction, loadCanceledProductions } = this.props;
     cancelProduction(id).then(loadCanceledProductions());
   };
+
+  deleteHandler = id => {
+    const { deleteProduction, loadCanceledProductions } = this.props;
+    deleteProduction(id).then(loadCanceledProductions());
+  };
+
   render() {
-    const { canceledProductions, updateRequest } = this.props;
+    const { updateRequest, request, canceledProductions } = this.props;
     const tdClass = 'td-class';
 
-    if (updateRequest.error)
+    if (updateRequest.error || request.error)
       return <Alert variant="error">{`${updateRequest.error}`}</Alert>;
-    /*     if (updateRequest.success) return <Alert variant="success">Post has been updated!</Alert>; */ else if (
-      updateRequest.pending
-    )
-      return <Spinner />;
+    else if (updateRequest.pending || request.pending) return <Spinner />;
     else
       return (
         <OrderListTable>
@@ -107,17 +108,13 @@ class CanceledProductions extends React.Component {
                   {production.finalPayment === true ? (
                     <MdAttachMoney className="text-success" />
                   ) : (
-                      <MdMoneyOff className="text-danger" />
-                    )}
+                    <MdMoneyOff className="text-danger" />
+                  )}
                 </td>
-                <td className={`${tdClass} short-column`}>
-                  {production.type}
-                </td>
+                <td className={`${tdClass} short-column`}>{production.type}</td>
                 <td className={`${tdClass}`}>{production.colorOutside}</td>
                 <td className={`${tdClass}`}>{production.colorInside}</td>
-                <td className={`${tdClass} short-column`}>
-                  {production.core}
-                </td>
+                <td className={`${tdClass} short-column`}>{production.core}</td>
                 <td className={`${tdClass} short-column`}>
                   {production.thickness}
                 </td>
@@ -126,21 +123,20 @@ class CanceledProductions extends React.Component {
                 <td className={`${tdClass}`}>
                   {currentFromSquareMeters(production.type, production.m2)}
                 </td>
-                <td className={`${tdClass} short-column`}>
-                  {production.csa}
-                </td>
+                <td className={`${tdClass} short-column`}>{production.csa}</td>
                 <td className={`${tdClass} list-buttons noprint`}>
                   <span className="buttons-nowrap">
                     <EditButton />
-                    <ProduceButton
+                    <RestoreButton
                       clickHandler={() => {
-                        this.finishHandler(production.id);
+                        this.cancelHandler(production.id);
                       }}
                     />
-                    <TransportButton />
-                    <DeleteButton clickHandler={() => {
-                      this.cancelHandler(production.id);
-                    }} />
+                    <DeleteButton
+                      clickHandler={() => {
+                        this.deleteHandler(production.id);
+                      }}
+                    />
                   </span>
                 </td>
               </tr>
@@ -150,6 +146,7 @@ class CanceledProductions extends React.Component {
       );
   }
 }
+
 export default CanceledProductions;
 
 CanceledProductions.propTypes = {
@@ -172,5 +169,5 @@ CanceledProductions.propTypes = {
       csa: PropTypes.string.isRequired
     })
   ),
-  loadPostsByPage: PropTypes.func.isRequired
+  loadPostsByPage: PropTypes.func
 };
