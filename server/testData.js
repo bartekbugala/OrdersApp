@@ -34,7 +34,7 @@ const loadTestData = async () => {
       core: 'St',
       thickness: 100,
       colorOutside: '9006',
-      colorInside: 'biały',
+      colorInside: 'standard',
       m2: 248.212
     },
     {

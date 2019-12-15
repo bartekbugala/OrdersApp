@@ -2,15 +2,18 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import Auth from './components/access/Auth/Auth';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 
 const Root = () => (
   <Provider store={store}>
-    <Router>
-      <App />
-    </Router>
+    <Auth>
+      <Router>
+        <App />
+      </Router>
+    </Auth>
   </Provider>
 );
 
