@@ -135,6 +135,19 @@ exports.toggleCancelProduction = async (req, res) => {
   }
 };
 
+exports.toggleFinishProduction = async (req, res) => {
+  try {
+    let currentProduction = await Production.findOne({ id: req.params.id });
+    const productionFinished = await Production.findOneAndUpdate(
+      { id: req.params.id },
+      { finished: currentProduction.finished === false ? true : false }
+    );
+    res.status(200).json(productionFinished);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
 exports.removeOneAmount = async (req, res) => {
   try {
     const productionUpdated = await Production.findOneAndUpdate(

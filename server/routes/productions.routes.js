@@ -35,3 +35,9 @@ router
   .route('/productions/cancel/:id')
   .put(ProductionsController.toggleCancelProduction);
 module.exports = router;
+
+// finish production
+router
+  .route('/productions/finish/:id')
+  .put(ProductionsController.toggleFinishProduction);
+module.exports = router;
