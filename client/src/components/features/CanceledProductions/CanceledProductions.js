@@ -10,12 +10,12 @@ import cutText from '../../../utils/cutText';
 import OrderListTable from '../../common/Table/OrderListTable/OrderListTable';
 import EditButton from '../../common/Buttons/EditButton/EditButton';
 import RestoreButton from '../../common/Buttons/RestoreButton/RestoreButton';
-import TransportButton from '../../common/Buttons/TransportButton/TransportButton';
+import DeleteButton from '../../common/Buttons/DeleteButton/DeleteButton';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
-import './FinishedProductions.scss';
+import './CanceledProductions.scss';
 
-class FinishedProductions extends React.Component {
+class CanceledProductions extends React.Component {
   constructor(props) {
     super(props);
     let initialNewProduction = {
@@ -34,37 +34,38 @@ class FinishedProductions extends React.Component {
       type: ''
     };
     this.state = {
-      finishedProductions: [],
+      canceledProductions: [],
       newProduction: initialNewProduction,
       startDate: new Date()
     };
   }
 
   componentDidMount() {
-    const { loadFinishedProductions } = this.props;
-    loadFinishedProductions().then(
-      this.setState({ finishedProductions: this.props.finishedProductions })
+    const { loadCanceledProductions } = this.props;
+    loadCanceledProductions().then(
+      this.setState({ canceledProductions: this.props.canceledProductions })
     );
   }
   componentDidUpdate(props) {
-    const { loadFinishedProductions } = this.props;
-    if (props.finishedProductions !== this.state.finishedProductions) {
-      loadFinishedProductions().then(
-        this.setState({ finishedProductions: this.props.finishedProductions })
+    const { loadCanceledProductions } = this.props;
+    if (props.canceledProductions !== this.state.canceledProductions) {
+      loadCanceledProductions().then(
+        this.setState({ canceledProductions: this.props.canceledProductions })
       );
     }
   }
-  finishHandler = id => {
-    const { finishProduction, loadFinishedProductions } = this.props;
-    finishProduction(id).then(loadFinishedProductions());
+  cancelHandler = id => {
+    const { cancelProduction, loadCanceledProductions } = this.props;
+    cancelProduction(id).then(loadCanceledProductions());
   };
-  transportHandler = id => {
-    const { transportProduction, loadFinishedProductions } = this.props;
-    transportProduction(id).then(loadFinishedProductions());
+
+  deleteHandler = id => {
+    const { deleteProduction, loadCanceledProductions } = this.props;
+    deleteProduction(id).then(loadCanceledProductions());
   };
 
   render() {
-    const { updateRequest, request, finishedProductions } = this.props;
+    const { updateRequest, request, canceledProductions } = this.props;
     const tdClass = 'td-class';
 
     if (updateRequest.error || request.error)
@@ -73,7 +74,7 @@ class FinishedProductions extends React.Component {
     else
       return (
         <OrderListTable>
-          {finishedProductions.map(production => {
+          {canceledProductions.map(production => {
             let daysLeft = countDaysLeft(
               production.downpayment,
               production.productionTerm
@@ -126,14 +127,14 @@ class FinishedProductions extends React.Component {
                 <td className={`${tdClass} list-buttons noprint`}>
                   <span className="buttons-nowrap">
                     <EditButton />
-                    <TransportButton
-                      clickHandler={() => {
-                        this.transportHandler(production.id);
-                      }}
-                    />
                     <RestoreButton
                       clickHandler={() => {
-                        this.finishHandler(production.id);
+                        this.cancelHandler(production.id);
+                      }}
+                    />
+                    <DeleteButton
+                      clickHandler={() => {
+                        this.deleteHandler(production.id);
                       }}
                     />
                   </span>
@@ -146,11 +147,11 @@ class FinishedProductions extends React.Component {
   }
 }
 
-export default FinishedProductions;
+export default CanceledProductions;
 
-FinishedProductions.propTypes = {
+CanceledProductions.propTypes = {
   updateRequest: PropTypes.object.isRequired,
-  finishedProductions: PropTypes.arrayOf(
+  canceledProductions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       orderNumber: PropTypes.string.isRequired,

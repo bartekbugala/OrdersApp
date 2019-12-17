@@ -1,5 +1,1 @@
-[contenteditable='true']:empty:before {
-  content: attr(placeholder);
-  display: block;
-  color: #aaa;
-}
+@import '../../../styles/global.scss';

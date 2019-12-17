@@ -1,70 +1,138 @@
 import React from 'react';
 import { MdAttachMoney, MdMoneyOff } from 'react-icons/md';
+import { PropTypes } from 'prop-types';
+// utils
 import formatDate from '../../../utils/formatDate';
 import countDaysLeft from '../../../utils/countDaysLeft';
-import TheadOrderlist from '../../common/Table/TheadOrderlist/TheadOrderlist';
-import './AllProductions.scss';
+import currentFromSquareMeters from '../../../utils/currentFromSquareMeters';
+import cutText from '../../../utils/cutText';
+// components
+import OrderListTable from '../../common/Table/OrderListTable/OrderListTable';
+import OrderlistTrAdd from '../../common/Table/OrderlistTrAdd/OrderlistTrAdd';
 import EditButton from '../../common/Buttons/EditButton/EditButton';
 import ProduceButton from '../../common/Buttons/ProduceButton/ProduceButton';
 import TransportButton from '../../common/Buttons/TransportButton/TransportButton';
-import DeleteButton from '../../common/Buttons/DeleteButton/DeleteButton';
-import AddRowButton from '../../common/Buttons/AddRowButton/AddRowButton';
+import CancelButton from '../../common/Buttons/CancelButton/CancelButton';
+import Alert from '../../common/Alert/Alert';
+import Spinner from '../../common/Spinner/Spinner';
+import './AllProductions.scss';
 
 class AllProductions extends React.Component {
-  state = {
-    newProduction: {
+  constructor(props) {
+    super(props);
+    let initialNewProduction = {
       clientName: '',
-      color: '',
+      colorOutside: '',
+      colorInside: '',
       core: '',
       csa: '',
-      downpayment: '',
-      finalpayment: false,
+      downpayment: null,
+      finalPayment: false,
       finished: false,
-      m2: '',
+      canceled: false,
+      transported: false,
+      m2: null,
       orderNumber: '',
       productionTerm: '',
-      thickness: '',
+      thickness: null,
       type: ''
-    }
-  };
+    };
+    this.state = {
+      allProductions: this.props.allProductions,
+      newProduction: initialNewProduction,
+      startDate: new Date()
+    };
+  }
+
   componentDidMount() {
     const { loadAllProductions } = this.props;
-    loadAllProductions();
+    loadAllProductions().then(
+      this.setState({ allProductions: this.props.allProductions })
+    );
   }
+  componentDidUpdate(props) {
+    const { loadAllProductions } = this.props;
+    if (props.allProductions !== this.state.allProductions) {
+      loadAllProductions().then(
+        this.setState({ allProductions: this.props.allProductions })
+      );
+    }
+  }
+
   handleChange = e => {
     const { newProduction } = this.state;
     this.setState({
       newProduction: { ...newProduction, [e.target.name]: e.target.value }
     });
   };
+
+  handleDateChange = date => {
+    const { newProduction } = this.state;
+    this.setState({
+      newProduction: { ...newProduction, downpayment: date }
+    });
+  };
+
+  handleDateSelect = date => {
+    const { newProduction } = this.state;
+    this.setState({
+      newProduction: { ...newProduction, downpayment: date }
+    });
+  };
+
   handleForm = e => {
     e.preventDefault();
     const { addProduction } = this.props;
     const { newProduction } = this.state;
-    addProduction(newProduction);
+    addProduction(newProduction).then(this.setState({ newProduction: {} }));
   };
+
   finishHandler = id => {
-    const { currentToFinished, allProductions } = this.props;
-    currentToFinished(allProductions, id);
+    const { finishProduction, loadAllProductions } = this.props;
+    finishProduction(id).then(loadAllProductions());
   };
+
+  cancelHandler = id => {
+    const { cancelProduction, loadAllProductions } = this.props;
+    cancelProduction(id).then(loadAllProductions());
+  };
+
+  transportHandler = id => {
+    const { transportProduction, loadAllProductions } = this.props;
+    transportProduction(id).then(loadAllProductions());
+  };
+
   render() {
-    const { handleChange } = this;
-    const { allProductions } = this.props;
-    const { newProduction } = this.state;
-    return (
-      <form onSubmit={this.handleForm}>
-        <table className="table table-bordered table-responsive-md table-striped table-hover text-center">
-          <TheadOrderlist />
-          <tbody>
+    const { handleChange, handleDateSelect, handleDateChange } = this;
+    const { allProductions, updateRequest } = this.props;
+    const { newProduction, startDate } = this.state;
+    const tdClass = 'td-class';
+
+    if (updateRequest.error)
+      return <Alert variant="error">{`${updateRequest.error}`}</Alert>;
+    /*     if (updateRequest.success) return <Alert variant="success">Post has been updated!</Alert>; */ else if (
+      updateRequest.pending
+    )
+      return <Spinner />;
+    else
+      return (
+        <form onSubmit={this.handleForm}>
+          <OrderListTable>
             {allProductions.map(production => {
-              let panelWidth = 0;
-              if (production.type === 'D') {
-                panelWidth = 1;
-              } else if (production.type === 'S') {
-                panelWidth = 1.175;
+              let rowBgclass;
+              switch (true) {
+                case production.canceled === true:
+                  rowBgclass = 'row-production-canceled';
+                  break;
+                case production.transported === true:
+                  rowBgclass = 'row-production-transported';
+                  break;
+                case production.finished === true:
+                  rowBgclass = 'row-production-finished';
+                  break;
               }
               let daysLeft = countDaysLeft(
-                formatDate(production.downpayment),
+                production.downpayment,
                 production.productionTerm
               );
               let daysLeftClass = 'text-default';
@@ -79,145 +147,104 @@ class AllProductions extends React.Component {
                   daysLeftClass = 'text-default';
               }
               return (
-                <tr key={production.id} className="list-production">
-                  <td className="pt-3-half short-column">
+                <tr
+                  key={production.id}
+                  className={`list-production ${rowBgclass}`}>
+                  <td className={`${tdClass} short-column`}>
                     {production.orderNumber}
                   </td>
-                  <td className="pt-3-half name-column">
-                    {production.clientName}
+                  <td className={`${tdClass} name-column`}>
+                    {cutText(production.clientName, 25)}
                   </td>
-                  <td className="pt-3-half date-column">
-                    {formatDate(production.downpayment, true)}
+                  <td className={`${tdClass} date-column`}>
+                    {formatDate(production.downpayment)}
                   </td>
-                  <td className={`pt-3-half short-column ${daysLeftClass}`}>
+                  <td className={`${tdClass} short-column ${daysLeftClass}`}>
                     {daysLeft}
                   </td>
-                  <td className="pt-3-half short-column">
-                    {production.finalpayment ? (
+                  <td className={`${tdClass} short-column`}>
+                    {production.finalPayment === true ? (
                       <MdAttachMoney className="text-success" />
                     ) : (
                       <MdMoneyOff className="text-danger" />
                     )}
                   </td>
-                  <td className="pt-3-half short-column">{production.type}</td>
-                  <td className="pt-3-half">{production.color}</td>
-                  <td className="pt-3-half short-column">{production.core}</td>
-                  <td className="pt-3-half short-column">
+                  <td className={`${tdClass} short-column`}>
+                    {production.type}
+                  </td>
+                  <td className={`${tdClass}`}>{production.colorOutside}</td>
+                  <td className={`${tdClass}`}>{production.colorInside}</td>
+                  <td className={`${tdClass} short-column`}>
+                    {production.core}
+                  </td>
+                  <td className={`${tdClass} short-column`}>
                     {production.thickness}
                   </td>
 
-                  <td className="pt-3-half">{production.m2}</td>
-                  <td className="pt-3-half">
-                    {panelWidth !== 0
-                      ? Math.ceil(production.m2 / panelWidth)
-                      : ''}
+                  <td className={`${tdClass}`}>{production.m2}</td>
+                  <td className={`${tdClass}`}>
+                    {currentFromSquareMeters(production.type, production.m2)}
                   </td>
-                  <td className="pt-3-half short-column">{production.csa}</td>
-                  <td className="list-buttons">
+                  <td className={`${tdClass} short-column`}>
+                    {production.csa}
+                  </td>
+                  <td className={`${tdClass} list-buttons noprint`}>
                     <span className="buttons-nowrap">
                       <EditButton />
+                      {/*                       
                       <ProduceButton
                         clickHandler={() => {
                           this.finishHandler(production.id);
                         }}
                       />
-                      <TransportButton />
-                      <DeleteButton />
+                      <TransportButton
+                        clickHandler={() => {
+                          this.transportHandler(production.id);
+                        }}
+                      />
+                      <CancelButton
+                        clickHandler={() => {
+                          this.cancelHandler(production.id);
+                        }}
+                      /> */}
                     </span>
                   </td>
                 </tr>
               );
             })}
-            <tr className="new-production">
-              <td className="form-td">
-                <input
-                  name="orderNumber"
-                  onChange={handleChange}
-                  value={newProduction.orderNumber}
-                />
-              </td>
-              <td className="form-td">
-                <input
-                  name="clientName"
-                  onChange={handleChange}
-                  value={newProduction.clientName}
-                />
-              </td>
-              <td className="form-td">
-                <input
-                  name="downpayment"
-                  onChange={handleChange}
-                  value={newProduction.downpayment}
-                />
-              </td>
-              <td className="form-td">
-                <input
-                  name="productionTerm"
-                  onChange={handleChange}
-                  value={newProduction.productionTerm}
-                />
-              </td>
-              <td className="form-td">
-                <input
-                  name="finalpayment"
-                  onChange={handleChange}
-                  type="checkbox"
-                  value={newProduction.finalpayment}
-                />
-              </td>
-              <td className="form-td">
-                <input
-                  name="type"
-                  onChange={handleChange}
-                  value={newProduction.type}
-                />
-              </td>
-              <td className="form-td">
-                <input
-                  name="color"
-                  onChange={handleChange}
-                  value={newProduction.color}
-                />
-              </td>
-              <td className="form-td">
-                <input
-                  name="core"
-                  onChange={handleChange}
-                  value={newProduction.core}
-                />
-              </td>
-              <td className="form-td">
-                <input
-                  name="thickness"
-                  onChange={handleChange}
-                  value={newProduction.thickness}
-                />
-              </td>
-              <td className="form-td">
-                <input
-                  name="m2"
-                  onChange={handleChange}
-                  value={newProduction.m2}
-                />
-              </td>
-              <td className="form-td"></td>
-              <td className="form-td">
-                <input
-                  name="csa"
-                  onChange={handleChange}
-                  value={newProduction.csa}
-                />
-              </td>
-
-              {/* <td className="pt-3-half"></td> */}
-              <td className="form-btn">
-                <AddRowButton type="submit" /* clickHandler={() => {} }*/ />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </form>
-    );
+            <OrderlistTrAdd
+              handleChange={handleChange}
+              newProduction={newProduction}
+              handleDateChange={handleDateChange}
+              handleDateSelect={handleDateSelect}
+              startDate={startDate}
+            />
+          </OrderListTable>
+        </form>
+      );
   }
 }
 export default AllProductions;
+
+AllProductions.propTypes = {
+  updateRequest: PropTypes.object.isRequired,
+  allProductions: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      orderNumber: PropTypes.string.isRequired,
+      clientName: PropTypes.string.isRequired,
+      downpayment: PropTypes.string.isRequired,
+      productionTerm: PropTypes.number.isRequired,
+      finalPayment: PropTypes.bool.isRequired,
+      finished: PropTypes.bool.isRequired,
+      type: PropTypes.string.isRequired,
+      colorOutside: PropTypes.string.isRequired,
+      colorInside: PropTypes.string.isRequired,
+      core: PropTypes.string.isRequired,
+      thickness: PropTypes.number.isRequired,
+      m2: PropTypes.number.isRequired,
+      csa: PropTypes.string.isRequired
+    })
+  ),
+  loadPostsByPage: PropTypes.func
+};

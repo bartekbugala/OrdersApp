@@ -1,26 +1,26 @@
 import { connect } from 'react-redux';
 import {
-  getFinishedProductions,
-  loadFinishedProductionsRequest,
+  getCanceledProductions,
   getUpdateRequest,
   getRequest,
+  loadCanceledProductionsRequest,
+  deleteProductionRequest,
   resetUpdateRequest,
   resetRequest,
-  toggleFinishProductionRequest,
-  toggleTransportProductionRequest
+  toggleCancelProductionRequest
 } from '../../../redux/ordersRedux';
-import FinishedProductions from './FinishedProductions';
+import CanceledProductions from './CanceledProductions';
 
 const mapStateToProps = state => ({
-  finishedProductions: getFinishedProductions(state),
+  canceledProductions: getCanceledProductions(state),
   updateRequest: getUpdateRequest(state),
   request: getRequest(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-  loadFinishedProductions: () => dispatch(loadFinishedProductionsRequest()),
-  finishProduction: id => dispatch(toggleFinishProductionRequest(id)),
-  transportProduction: id => dispatch(toggleTransportProductionRequest(id)),
+  loadCanceledProductions: () => dispatch(loadCanceledProductionsRequest()),
+  cancelProduction: id => dispatch(toggleCancelProductionRequest(id)),
+  deleteProduction: id => dispatch(deleteProductionRequest(id)),
   resetRequest: () => dispatch(resetRequest()),
   resetUpdateRequest: () => dispatch(resetUpdateRequest())
 });
@@ -28,4 +28,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(FinishedProductions);
+)(CanceledProductions);

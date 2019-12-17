@@ -5,21 +5,22 @@ import { API_URL } from '../config';
 const initialState = {
   menuLinks: [
     { path: '/current', title: 'Bieżące' },
-    { path: '/finished', title: 'Zrealizowane' },
-    { path: '/', title: 'Anulowane' },
-    { path: '/', title: 'Wszystkie' },
-    { path: '/', title: 'Statystyki' }
+    { path: '/finished', title: 'Wyprodukowane' },
+    { path: '/transported', title: 'Wywiezione' },
+    { path: '/canceled', title: 'Anulowane' },
+    { path: '/all', title: 'Wszystkie' },
+    { path: '/stats', title: 'Statystyki' }
   ],
   allProductions: [],
+  canceledProductions: [],
   currentProductions: [],
   finishedProductions: [],
+  transportedProductions: [],
   updateRequest: {
     pending: false,
     error: null,
     success: null
   },
-  ordersPerPage: 10,
-  presentPage: 1,
   request: {
     pending: false,
     error: null,
@@ -29,26 +30,20 @@ const initialState = {
 
 //// Selectors
 export const getMenuLinks = ({ orders }) => orders.menuLinks;
+
 export const getAllProductions = ({ orders }) => orders.allProductions;
 export const getCurrentProductions = ({ orders }) => orders.currentProductions;
 export const getFinishedProductions = ({ orders }) =>
   orders.finishedProductions;
+export const getTransportedProductions = ({ orders }) =>
+  orders.transportedProductions;
+export const getCanceledProductions = ({ orders }) =>
+  orders.canceledProductions;
+
+export const getUpdateRequest = ({ orders }) => orders.updateRequest;
+export const getRequest = ({ orders }) => orders.updateRequest;
 
 //// Thunks
-export const currentToFinished = (currArr, id) => {
-  console.log(id, currArr);
-  return dispatch => {
-    const movedIndex = currArr
-      .map(e => {
-        return e.id;
-      })
-      .indexOf(id);
-    const payload = currArr[movedIndex];
-    const currArrNew = currArr.filter(el => el.id !== id);
-    dispatch(finishProduction(payload, currArrNew));
-  };
-};
-
 export const loadProductionsRequest = () => {
   return async dispatch => {
     dispatch(startRequest());
@@ -62,30 +57,114 @@ export const loadProductionsRequest = () => {
   };
 };
 
-export const addProductionRequest = production => {
+export const loadCurrentProductionsRequest = () => {
   return async dispatch => {
     dispatch(startRequest());
     try {
-      await axios.post(`${API_URL}/productions/add`, production);
-      dispatch(endRequest());
-    } catch (e) {
-      dispatch(errorRequest(JSON.stringify(e)));
-    }
-  };
-};
-/*
-export const loadSingleOrderRequest = id => {
-  return async dispatch => {
-    dispatch(startRequest());
-    try {
-      let res = await axios.get(`${API_URL}/orders/${id}`);
-      dispatch(loadSingleOrder(res.data));
+      let res = await axios.get(`${API_URL}/productions/current`);
+      dispatch(loadCurrentProductions(res.data));
       dispatch(endRequest());
     } catch (e) {
       dispatch(errorRequest(e.message));
     }
   };
-}; */
+};
+
+export const loadCanceledProductionsRequest = () => {
+  return async dispatch => {
+    dispatch(startRequest());
+    try {
+      let res = await axios.get(`${API_URL}/productions/canceled`);
+      dispatch(loadCanceled(res.data));
+      dispatch(endRequest());
+    } catch (e) {
+      dispatch(errorRequest(e.message));
+    }
+  };
+};
+
+export const loadFinishedProductionsRequest = () => {
+  return async dispatch => {
+    dispatch(startRequest());
+    try {
+      let res = await axios.get(`${API_URL}/productions/finished`);
+      dispatch(loadFinished(res.data));
+      dispatch(endRequest());
+    } catch (e) {
+      dispatch(errorRequest(e.message));
+    }
+  };
+};
+export const loadTransportedProductionsRequest = () => {
+  return async dispatch => {
+    dispatch(startRequest());
+    try {
+      let res = await axios.get(`${API_URL}/productions/transported`);
+      dispatch(loadTransported(res.data));
+      dispatch(endRequest());
+    } catch (e) {
+      dispatch(errorRequest(e.message));
+    }
+  };
+};
+
+export const addProductionRequest = production => {
+  return async dispatch => {
+    dispatch(startUpdateRequest());
+    try {
+      await axios.post(`${API_URL}/productions/add`, production);
+      dispatch(endUpdateRequest());
+    } catch (e) {
+      dispatch(errorUpdateRequest(JSON.stringify(e)));
+    }
+  };
+};
+
+export const deleteProductionRequest = id => {
+  return async dispatch => {
+    dispatch(startUpdateRequest());
+    try {
+      await axios.delete(`${API_URL}/productions/${id}`);
+      dispatch(endUpdateRequest());
+    } catch (e) {
+      dispatch(errorUpdateRequest(JSON.stringify(e)));
+    }
+  };
+};
+
+export const toggleCancelProductionRequest = id => {
+  return async dispatch => {
+    dispatch(startUpdateRequest());
+    try {
+      await axios.put(`${API_URL}/productions/cancel/${id}`);
+      dispatch(endUpdateRequest());
+    } catch (e) {
+      dispatch(errorUpdateRequest(JSON.stringify(e)));
+    }
+  };
+};
+export const toggleFinishProductionRequest = id => {
+  return async dispatch => {
+    dispatch(startUpdateRequest());
+    try {
+      await axios.put(`${API_URL}/productions/finish/${id}`);
+      dispatch(endUpdateRequest());
+    } catch (e) {
+      dispatch(errorUpdateRequest(JSON.stringify(e)));
+    }
+  };
+};
+export const toggleTransportProductionRequest = id => {
+  return async dispatch => {
+    dispatch(startUpdateRequest());
+    try {
+      await axios.put(`${API_URL}/productions/transport/${id}`);
+      dispatch(endUpdateRequest());
+    } catch (e) {
+      dispatch(errorUpdateRequest(JSON.stringify(e)));
+    }
+  };
+};
 
 //// Actions
 // action name creator
@@ -96,6 +175,10 @@ const createActionName = name => `app/${reducerName}/${name}`;
 export const FINISH_PRODUCTION = createActionName('FINISH_PRODUCTION');
 
 export const LOAD_PRODUCTIONS = createActionName('LOAD_PRODUCTIONS');
+export const LOAD_CURRENT = createActionName('LOAD_CURRENT');
+export const LOAD_CANCELED = createActionName('LOAD_CANCELED');
+export const LOAD_FINISHED = createActionName('LOAD_FINISHED');
+export const LOAD_TRANSPORTED = createActionName('LOAD_TRANSPORTED');
 
 export const START_REQUEST = createActionName('START_REQUEST');
 export const END_REQUEST = createActionName('END_REQUEST');
@@ -106,13 +189,14 @@ export const END_UPDATE_REQUEST = createActionName('END_UPDATE_REQUEST');
 export const RESET_UPDATE_REQUEST = createActionName('RESET_UPDATE_REQUEST');
 export const ERROR_UPDATE_REQUEST = createActionName('ERROR_UPDATE_REQUEST');
 
-export const finishProduction = (payload, currArrNew) => ({
-  payload,
-  currArrNew,
-  type: FINISH_PRODUCTION
-});
-
 export const loadProductions = payload => ({ payload, type: LOAD_PRODUCTIONS });
+export const loadCurrentProductions = payload => ({
+  payload,
+  type: LOAD_CURRENT
+});
+export const loadCanceled = payload => ({ payload, type: LOAD_CANCELED });
+export const loadFinished = payload => ({ payload, type: LOAD_FINISHED });
+export const loadTransported = payload => ({ payload, type: LOAD_TRANSPORTED });
 
 export const startRequest = () => ({ type: START_REQUEST });
 export const endRequest = () => ({ type: END_REQUEST });
@@ -130,14 +214,17 @@ export const errorUpdateRequest = error => ({
 //// Reducer
 export default function reducer(statePart = initialState, action = {}) {
   switch (action.type) {
-    case FINISH_PRODUCTION:
-      return {
-        ...statePart,
-        finishedProductions: [...statePart.finishedProductions, action.payload],
-        currentProductions: action.currArrNew
-      };
     case LOAD_PRODUCTIONS:
       return { ...statePart, allProductions: action.payload };
+    case LOAD_CURRENT:
+      return { ...statePart, currentProductions: action.payload };
+    case LOAD_CANCELED:
+      return { ...statePart, canceledProductions: action.payload };
+    case LOAD_FINISHED:
+      return { ...statePart, finishedProductions: action.payload };
+    case LOAD_TRANSPORTED:
+      return { ...statePart, transportedProductions: action.payload };
+
     case START_REQUEST:
       return {
         ...statePart,

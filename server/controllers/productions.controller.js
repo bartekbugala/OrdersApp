@@ -5,7 +5,47 @@ const uuid = require('uuid');
 // get all productions
 exports.getProductions = async (req, res) => {
   try {
-    res.status(200).json(await Production.find());
+    res.status(200).json(await Production.find({}));
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+exports.getCurrent = async (req, res) => {
+  try {
+    res
+      .status(200)
+      .json(await Production.find({ canceled: false, finished: false }));
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+exports.getCanceled = async (req, res) => {
+  try {
+    res.status(200).json(await Production.find({ canceled: true }));
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+exports.getFinished = async (req, res) => {
+  try {
+    res.status(200).json(
+      await Production.find({
+        canceled: false,
+        finished: true,
+        transported: false
+      })
+    );
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+exports.getTransported = async (req, res) => {
+  try {
+    res.status(200).json(await Production.find({ transported: true }));
   } catch (err) {
     res.status(500).json(err);
   }
@@ -50,14 +90,17 @@ exports.addProduction = async (req, res) => {
       clientName,
       downpayment,
       productionTerm,
-      finalpayment,
+      finalPayment,
       type,
-      color,
+      colorOutside,
+      colorInside,
       core,
       thickness,
       m2,
       csa,
-      finished
+      finished,
+      canceled,
+      transported
     } = req.body;
 
     let newProduction = new Production();
@@ -66,14 +109,17 @@ exports.addProduction = async (req, res) => {
     newProduction.clientName = clientName;
     newProduction.downpayment = downpayment;
     newProduction.productionTerm = productionTerm;
-    newProduction.finalpayment = finalpayment || false;
+    newProduction.finalpayment = finalPayment || false;
     newProduction.type = type;
-    newProduction.color = color;
+    newProduction.colorOutside = colorOutside;
+    newProduction.colorInside = colorInside;
     newProduction.core = core;
     newProduction.thickness = thickness;
     newProduction.m2 = m2;
     newProduction.csa = csa;
     newProduction.finished = finished || false;
+    newProduction.canceled = canceled || false;
+    newProduction.transported = transported || false;
 
     const productionSaved = await newProduction.save();
     res.status(200).json(productionSaved);
@@ -97,6 +143,45 @@ exports.editProduction = async (req, res) => {
       }
     );
     res.status(200).json(productionUpdated);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+exports.toggleCancelProduction = async (req, res) => {
+  try {
+    let currentProduction = await Production.findOne({ id: req.params.id });
+    const productionCanceled = await Production.findOneAndUpdate(
+      { id: req.params.id },
+      { canceled: currentProduction.canceled === false ? true : false }
+    );
+    res.status(200).json(productionCanceled);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+exports.toggleFinishProduction = async (req, res) => {
+  try {
+    let currentProduction = await Production.findOne({ id: req.params.id });
+    const productionFinished = await Production.findOneAndUpdate(
+      { id: req.params.id },
+      { finished: currentProduction.finished === false ? true : false }
+    );
+    res.status(200).json(productionFinished);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+exports.toggleTransportProduction = async (req, res) => {
+  try {
+    let currentProduction = await Production.findOne({ id: req.params.id });
+    const productionTransported = await Production.findOneAndUpdate(
+      { id: req.params.id },
+      { transported: currentProduction.transported === false ? true : false }
+    );
+    res.status(200).json(productionTransported);
   } catch (err) {
     res.status(500).json(err);
   }
