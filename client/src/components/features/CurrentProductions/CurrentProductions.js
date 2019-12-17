@@ -72,6 +72,15 @@ class CurrentProductions extends React.Component {
     });
   };
 
+  handleCheckBoxChange = e => {
+    const { newProduction } = this.state;
+    const target = e.target;
+    console.dir(target)
+    this.setState({
+      newProduction: { ...newProduction, finalPayment: (target.checked === true) ? true : false }
+    });
+  }
+
   handleDateSelect = date => {
     const { newProduction } = this.state;
     this.setState({
@@ -97,7 +106,7 @@ class CurrentProductions extends React.Component {
   };
 
   render() {
-    const { handleChange, handleDateSelect, handleDateChange } = this;
+    const { handleChange, handleDateSelect, handleDateChange, handleCheckBoxChange } = this;
     const { currentProductions, updateRequest } = this.props;
     const { newProduction, startDate } = this.state;
     const tdClass = 'td-class';
@@ -143,8 +152,8 @@ class CurrentProductions extends React.Component {
                     {production.finalPayment === true ? (
                       <MdAttachMoney className="text-success" />
                     ) : (
-                      <MdMoneyOff className="text-danger" />
-                    )}
+                        <MdMoneyOff className="text-danger" />
+                      )}
                   </td>
                   <td className={`${tdClass} short-column`}>
                     {production.type}
@@ -185,6 +194,7 @@ class CurrentProductions extends React.Component {
             })}
             <OrderlistTrAdd
               handleChange={handleChange}
+              handleCheckBoxChange={handleCheckBoxChange}
               newProduction={newProduction}
               handleDateChange={handleDateChange}
               handleDateSelect={handleDateSelect}

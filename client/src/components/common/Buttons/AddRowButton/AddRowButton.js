@@ -2,17 +2,17 @@ import React from 'react';
 import { IoMdAddCircleOutline } from 'react-icons/io';
 import './AddRowButton.scss';
 
-const AddRowButton = ({ clickHandler }) => (
+const AddRowButton = (/* { clickHandler } */) => (
   <span>
     <button
       className="btn btn-sm btn-success btn-add-row"
-      onClick={e => {
+      /* onClick={e => {
         e.preventDefault();
         clickHandler();
-      }}>
+      }}*/>
       <IoMdAddCircleOutline className="btn-icon" />
     </button>
-  </span>
+  </span >
 );
 
 export default AddRowButton;
