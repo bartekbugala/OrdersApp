@@ -5,14 +5,18 @@ import {
   loadProductionsRequest,
   toggleCancelProductionRequest,
   toggleFinishProductionRequest,
+  toggleTransportProductionRequest,
   addProductionRequest,
-  resetUpdateRequest
+  resetUpdateRequest,
+  resetRequest,
+  getRequest
 } from '../../../redux/ordersRedux';
 import AllProductions from './AllProductions';
 
 const mapStateToProps = state => ({
   allProductions: getAllProductions(state),
-  updateRequest: getUpdateRequest(state)
+  updateRequest: getUpdateRequest(state),
+  request: getRequest(state)
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -20,7 +24,9 @@ const mapDispatchToProps = dispatch => ({
   addProduction: production => dispatch(addProductionRequest(production)),
   cancelProduction: id => dispatch(toggleCancelProductionRequest(id)),
   finishProduction: id => dispatch(toggleFinishProductionRequest(id)),
-  resetRequest: () => dispatch(resetUpdateRequest())
+  transportProduction: id => dispatch(toggleTransportProductionRequest(id)),
+  resetRequest: () => dispatch(resetRequest()),
+  resetUpdateRequest: () => dispatch(resetUpdateRequest())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AllProductions);

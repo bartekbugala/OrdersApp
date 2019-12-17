@@ -28,6 +28,8 @@ class CurrentProductions extends React.Component {
       downpayment: null,
       finalPayment: false,
       finished: false,
+      canceled: false,
+      transported: false,
       m2: null,
       orderNumber: '',
       productionTerm: '',

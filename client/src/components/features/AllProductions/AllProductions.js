@@ -29,6 +29,8 @@ class AllProductions extends React.Component {
       downpayment: null,
       finalPayment: false,
       finished: false,
+      canceled: false,
+      transported: false,
       m2: null,
       orderNumber: '',
       productionTerm: '',
@@ -43,15 +45,17 @@ class AllProductions extends React.Component {
   }
 
   componentDidMount() {
-    const { loadAllProductions, resetRequest } = this.props;
-    loadAllProductions();
-    resetRequest();
+    const { loadAllProductions } = this.props;
+    loadAllProductions().then(
+      this.setState({ allProductions: this.props.allProductions })
+    );
   }
-
-  componentDidUpdate() {
-    const { loadAllProductions, allProductions } = this.props;
-    if (this.state.allProductions !== allProductions) {
-      loadAllProductions();
+  componentDidUpdate(props) {
+    const { loadAllProductions } = this.props;
+    if (props.allProductions !== this.state.allProductions) {
+      loadAllProductions().then(
+        this.setState({ allProductions: this.props.allProductions })
+      );
     }
   }
 
@@ -91,6 +95,11 @@ class AllProductions extends React.Component {
   cancelHandler = id => {
     const { cancelProduction, loadAllProductions } = this.props;
     cancelProduction(id).then(loadAllProductions());
+  };
+
+  transportHandler = id => {
+    const { transportProduction, loadAllProductions } = this.props;
+    transportProduction(id).then(loadAllProductions());
   };
 
   render() {
@@ -182,17 +191,22 @@ class AllProductions extends React.Component {
                   <td className={`${tdClass} list-buttons noprint`}>
                     <span className="buttons-nowrap">
                       <EditButton />
+                      {/*                       
                       <ProduceButton
                         clickHandler={() => {
                           this.finishHandler(production.id);
                         }}
                       />
-                      <TransportButton />
+                      <TransportButton
+                        clickHandler={() => {
+                          this.transportHandler(production.id);
+                        }}
+                      />
                       <CancelButton
                         clickHandler={() => {
                           this.cancelHandler(production.id);
                         }}
-                      />
+                      /> */}
                     </span>
                   </td>
                 </tr>
