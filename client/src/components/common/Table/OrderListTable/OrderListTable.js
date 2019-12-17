@@ -5,7 +5,7 @@ import OrderlistThead from '../OrderlistThead/OrderlistThead';
 
 const OrderListTable = ({ children, tableTitle }) => {
   return (
-    <table className="table table-bordered table-responsive-md table-striped table-hover text-center">
+    <table className="table table-bordered table-responsive-md table-hover text-center">
       <OrderlistThead tableTitle={tableTitle} />
       <tbody>{children}</tbody>
     </table>

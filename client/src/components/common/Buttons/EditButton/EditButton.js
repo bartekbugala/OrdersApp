@@ -1,14 +1,13 @@
 import React from 'react';
 import { MdEdit } from 'react-icons/md';
 
-const EditButton = () => (
+const EditButton = ({ clickHandler }) => (
   <button
-    className="btn btn-warning btn-rounded btn-sm"
+    className="btn btn-info btn-rounded btn-sm"
     onClick={e => {
       e.preventDefault();
       clickHandler();
     }}>
-    >
     <MdEdit />
   </button>
 );

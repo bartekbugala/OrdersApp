@@ -8,7 +8,6 @@ const DeleteButton = ({ clickHandler }) => (
       e.preventDefault();
       clickHandler();
     }}>
-    >
     <MdDelete />
   </button>
 );

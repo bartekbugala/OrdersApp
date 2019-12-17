@@ -12,12 +12,9 @@ import { AiOutlineColumnHeight } from 'react-icons/ai';
 
 import '../../../../styles/global.scss';
 
-const OrderlistThead = ({ tableTitle }) => {
+const OrderlistThead = () => {
   return (
     <thead>
-      <tr>
-        <th colSpan="14">{tableTitle}</th>
-      </tr>
       <tr>
         <th className="text-center">Nr</th>
         <th className="text-center">Kontrahent</th>
