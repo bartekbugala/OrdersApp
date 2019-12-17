@@ -9,6 +9,12 @@ router.route('/productions').get(ProductionsController.getProductions);
 router.route('/productions/current').get(ProductionsController.getCurrent);
 //get canceled
 router.route('/productions/canceled').get(ProductionsController.getCanceled);
+//get finished
+router.route('/productions/finished').get(ProductionsController.getFinished);
+//get transported
+router
+  .route('/productions/transported')
+  .get(ProductionsController.getTransported);
 
 // get productions by range
 router
@@ -40,4 +46,10 @@ module.exports = router;
 router
   .route('/productions/finish/:id')
   .put(ProductionsController.toggleFinishProduction);
+module.exports = router;
+
+// transport production
+router
+  .route('/productions/transport/:id')
+  .put(ProductionsController.toggleTransportProduction);
 module.exports = router;

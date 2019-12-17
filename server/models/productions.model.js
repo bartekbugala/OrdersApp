@@ -10,6 +10,7 @@ const Production = new Schema({
   finalPayment: { type: 'Boolean', required: false },
   finished: { type: 'Boolean', required: false },
   canceled: { type: 'Boolean', required: false },
+  transported: { type: 'Boolean', required: false },
   csa: { type: 'String', required: false },
   type: { type: 'String', required: false },
   core: { type: 'String', required: false },

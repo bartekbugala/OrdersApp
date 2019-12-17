@@ -13,7 +13,9 @@ exports.getProductions = async (req, res) => {
 
 exports.getCurrent = async (req, res) => {
   try {
-    res.status(200).json(await Production.find({ canceled: false }));
+    res
+      .status(200)
+      .json(await Production.find({ canceled: false, finished: false }));
   } catch (err) {
     res.status(500).json(err);
   }
@@ -22,6 +24,28 @@ exports.getCurrent = async (req, res) => {
 exports.getCanceled = async (req, res) => {
   try {
     res.status(200).json(await Production.find({ canceled: true }));
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+exports.getFinished = async (req, res) => {
+  try {
+    res.status(200).json(
+      await Production.find({
+        canceled: false,
+        finished: true,
+        transported: false
+      })
+    );
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+exports.getTransported = async (req, res) => {
+  try {
+    res.status(200).json(await Production.find({ transported: true }));
   } catch (err) {
     res.status(500).json(err);
   }
@@ -75,7 +99,8 @@ exports.addProduction = async (req, res) => {
       m2,
       csa,
       finished,
-      canceled
+      canceled,
+      transported
     } = req.body;
 
     let newProduction = new Production();
@@ -94,6 +119,7 @@ exports.addProduction = async (req, res) => {
     newProduction.csa = csa;
     newProduction.finished = finished || false;
     newProduction.canceled = canceled || false;
+    newProduction.transported = transported || false;
 
     const productionSaved = await newProduction.save();
     res.status(200).json(productionSaved);
@@ -143,6 +169,19 @@ exports.toggleFinishProduction = async (req, res) => {
       { finished: currentProduction.finished === false ? true : false }
     );
     res.status(200).json(productionFinished);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+exports.toggleTransportProduction = async (req, res) => {
+  try {
+    let currentProduction = await Production.findOne({ id: req.params.id });
+    const productionTransported = await Production.findOneAndUpdate(
+      { id: req.params.id },
+      { transported: currentProduction.transported === false ? true : false }
+    );
+    res.status(200).json(productionTransported);
   } catch (err) {
     res.status(500).json(err);
   }
