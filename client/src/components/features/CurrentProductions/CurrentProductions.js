@@ -11,7 +11,6 @@ import OrderListTable from '../../common/Table/OrderListTable/OrderListTable';
 import OrderlistTrAdd from '../../common/Table/OrderlistTrAdd/OrderlistTrAdd';
 import EditButton from '../../common/Buttons/EditButton/EditButton';
 import ProduceButton from '../../common/Buttons/ProduceButton/ProduceButton';
-import TransportButton from '../../common/Buttons/TransportButton/TransportButton';
 import CancelButton from '../../common/Buttons/CancelButton/CancelButton';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
@@ -86,8 +85,8 @@ class CurrentProductions extends React.Component {
   };
 
   finishHandler = id => {
-    const { currentToFinished, currentProductions } = this.props;
-    currentToFinished(currentProductions, id);
+    const { finishProduction, loadCurrentProductions } = this.props;
+    finishProduction(id).then(loadCurrentProductions());
   };
 
   cancelHandler = id => {
@@ -107,7 +106,7 @@ class CurrentProductions extends React.Component {
     else
       return (
         <form onSubmit={this.handleForm}>
-          <OrderListTable tableTitle="Zamówienia Bieżące">
+          <OrderListTable>
             {currentProductions.map(production => {
               let daysLeft = countDaysLeft(
                 production.downpayment,
@@ -172,7 +171,6 @@ class CurrentProductions extends React.Component {
                           this.finishHandler(production.id);
                         }}
                       />
-                      <TransportButton />
                       <CancelButton
                         clickHandler={() => {
                           this.cancelHandler(production.id);

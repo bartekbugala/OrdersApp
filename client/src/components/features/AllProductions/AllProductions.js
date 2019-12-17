@@ -12,7 +12,7 @@ import OrderlistTrAdd from '../../common/Table/OrderlistTrAdd/OrderlistTrAdd';
 import EditButton from '../../common/Buttons/EditButton/EditButton';
 import ProduceButton from '../../common/Buttons/ProduceButton/ProduceButton';
 import TransportButton from '../../common/Buttons/TransportButton/TransportButton';
-import DeleteButton from '../../common/Buttons/DeleteButton/DeleteButton';
+import CancelButton from '../../common/Buttons/CancelButton/CancelButton';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
 import './AllProductions.scss';
@@ -35,7 +35,11 @@ class AllProductions extends React.Component {
       thickness: null,
       type: ''
     };
-    this.state = { allProductions: this.props.allProductions, newProduction: initialNewProduction, startDate: new Date() };
+    this.state = {
+      allProductions: this.props.allProductions,
+      newProduction: initialNewProduction,
+      startDate: new Date()
+    };
   }
 
   componentDidMount() {
@@ -80,8 +84,8 @@ class AllProductions extends React.Component {
   };
 
   finishHandler = id => {
-    const { currentToFinished, allProductions } = this.props;
-    currentToFinished(allProductions, id);
+    const { finishProduction, loadAllProductions } = this.props;
+    finishProduction(id).then(loadAllProductions());
   };
 
   cancelHandler = id => {
@@ -106,6 +110,18 @@ class AllProductions extends React.Component {
         <form onSubmit={this.handleForm}>
           <OrderListTable>
             {allProductions.map(production => {
+              let rowBgclass;
+              switch (true) {
+                case production.canceled === true:
+                  rowBgclass = 'row-production-canceled';
+                  break;
+                case production.transported === true:
+                  rowBgclass = 'row-production-transported';
+                  break;
+                case production.finished === true:
+                  rowBgclass = 'row-production-finished';
+                  break;
+              }
               let daysLeft = countDaysLeft(
                 production.downpayment,
                 production.productionTerm
@@ -122,7 +138,9 @@ class AllProductions extends React.Component {
                   daysLeftClass = 'text-default';
               }
               return (
-                <tr key={production.id} className="list-production">
+                <tr
+                  key={production.id}
+                  className={`list-production ${rowBgclass}`}>
                   <td className={`${tdClass} short-column`}>
                     {production.orderNumber}
                   </td>
@@ -139,8 +157,8 @@ class AllProductions extends React.Component {
                     {production.finalPayment === true ? (
                       <MdAttachMoney className="text-success" />
                     ) : (
-                        <MdMoneyOff className="text-danger" />
-                      )}
+                      <MdMoneyOff className="text-danger" />
+                    )}
                   </td>
                   <td className={`${tdClass} short-column`}>
                     {production.type}
@@ -170,9 +188,11 @@ class AllProductions extends React.Component {
                         }}
                       />
                       <TransportButton />
-                      <DeleteButton clickHandler={() => {
-                        this.cancelHandler(production.id);
-                      }} />
+                      <CancelButton
+                        clickHandler={() => {
+                          this.cancelHandler(production.id);
+                        }}
+                      />
                     </span>
                   </td>
                 </tr>

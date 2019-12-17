@@ -4,8 +4,8 @@ import {
   getUpdateRequest,
   loadCurrentProductionsRequest,
   toggleCancelProductionRequest,
+  toggleFinishProductionRequest,
   addProductionRequest,
-  currentToFinished,
   resetUpdateRequest
 } from '../../../redux/ordersRedux';
 import CurrentProductions from './CurrentProductions';
@@ -19,7 +19,7 @@ const mapDispatchToProps = dispatch => ({
   loadCurrentProductions: () => dispatch(loadCurrentProductionsRequest()),
   addProduction: production => dispatch(addProductionRequest(production)),
   cancelProduction: id => dispatch(toggleCancelProductionRequest(id)),
-  currentToFinished: (currArr, id) => dispatch(currentToFinished(currArr, id)),
+  finishProduction: id => dispatch(toggleFinishProductionRequest(id)),
   resetRequest: () => dispatch(resetUpdateRequest())
 });
 

@@ -41,3 +41,14 @@
     min-height: 100%;
   }
 }
+
+.row-production-canceled {
+  color: lightgray;
+  background-color: #fff0f0;
+}
+.row-production-transported {
+  background: rgb(176, 237, 255);
+}
+.row-production-finished {
+  background: rgb(199, 255, 207);
+}

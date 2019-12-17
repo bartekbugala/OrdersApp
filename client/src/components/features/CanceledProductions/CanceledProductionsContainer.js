@@ -1,10 +1,9 @@
 import { connect } from 'react-redux';
 import {
-  getCanceled,
+  getCanceledProductions,
   getUpdateRequest,
   getRequest,
   loadCanceledProductionsRequest,
-  currentToFinished,
   deleteProductionRequest,
   resetUpdateRequest,
   resetRequest,
@@ -13,7 +12,7 @@ import {
 import CanceledProductions from './CanceledProductions';
 
 const mapStateToProps = state => ({
-  canceledProductions: getCanceled(state),
+  canceledProductions: getCanceledProductions(state),
   updateRequest: getUpdateRequest(state),
   request: getRequest(state)
 });
@@ -22,7 +21,6 @@ const mapDispatchToProps = dispatch => ({
   loadCanceledProductions: () => dispatch(loadCanceledProductionsRequest()),
   cancelProduction: id => dispatch(toggleCancelProductionRequest(id)),
   deleteProduction: id => dispatch(deleteProductionRequest(id)),
-  currentToFinished: (currArr, id) => dispatch(currentToFinished(currArr, id)),
   resetRequest: () => dispatch(resetRequest()),
   resetUpdateRequest: () => dispatch(resetUpdateRequest())
 });
