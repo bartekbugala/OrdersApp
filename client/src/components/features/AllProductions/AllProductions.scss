@@ -1,47 +1,5 @@
 @import '../../../styles/global.scss';
 
-.buttons-nowrap {
-  display: flex;
-  flex-wrap: nowrap;
-}
-
-.list-production {
-  .td-class {
-    padding: 2px;
-  }
-  .short-column {
-    min-width: 15px;
-  }
-  .name-column {
-    min-width: 250px;
-  }
-  .date-column {
-    min-width: 70px;
-  }
-}
-.list-buttons {
-  .btn {
-    padding: 2px 4px;
-  }
-}
-.new-production {
-  .form-td {
-    padding: 0;
-  }
-  .form-btn {
-    padding: 0.3rem;
-  }
-  input {
-    text-align: center;
-    display: inline-flex;
-    padding: 0.5rem 2px;
-    margin: 0;
-    border: 0;
-    width: 100%;
-    min-height: 100%;
-  }
-}
-
 .row-production-canceled {
   color: rgb(224, 224, 224);
   background: rgb(250, 255, 202);

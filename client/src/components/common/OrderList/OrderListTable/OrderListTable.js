@@ -1,4 +1,5 @@
 import React from 'react';
+import './OrderListTable.scss';
 
 // components
 import OrderlistThead from '../OrderlistThead/OrderlistThead';

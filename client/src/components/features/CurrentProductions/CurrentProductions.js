@@ -7,14 +7,13 @@ import countDaysLeft from '../../../utils/countDaysLeft';
 import currentFromSquareMeters from '../../../utils/currentFromSquareMeters';
 import cutText from '../../../utils/cutText';
 // components
-import OrderListTable from '../../common/Table/OrderListTable/OrderListTable';
-import OrderlistTrAdd from '../../common/Table/OrderlistTrAdd/OrderlistTrAdd';
+import OrderListTable from '../../common/OrderList/OrderListTable/OrderListTable';
+import OrderlistTrAdd from '../../common/OrderList/OrderlistTrAdd/OrderlistTrAdd';
 import EditButton from '../../common/Buttons/EditButton/EditButton';
 import ProduceButton from '../../common/Buttons/ProduceButton/ProduceButton';
 import CancelButton from '../../common/Buttons/CancelButton/CancelButton';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
-import './CurrentProductions.scss';
 
 class CurrentProductions extends React.Component {
   constructor(props) {
@@ -75,11 +74,14 @@ class CurrentProductions extends React.Component {
   handleCheckBoxChange = e => {
     const { newProduction } = this.state;
     const target = e.target;
-    console.dir(target)
+    console.dir(target);
     this.setState({
-      newProduction: { ...newProduction, finalPayment: (target.checked === true) ? true : false }
+      newProduction: {
+        ...newProduction,
+        finalPayment: target.checked === true ? true : false
+      }
     });
-  }
+  };
 
   handleDateSelect = date => {
     const { newProduction } = this.state;
@@ -106,10 +108,15 @@ class CurrentProductions extends React.Component {
   };
 
   render() {
-    const { handleChange, handleDateSelect, handleDateChange, handleCheckBoxChange } = this;
+    const {
+      handleChange,
+      handleDateSelect,
+      handleDateChange,
+      handleCheckBoxChange
+    } = this;
     const { currentProductions, updateRequest } = this.props;
     const { newProduction, startDate } = this.state;
-    const tdClass = 'td-class';
+    const tdClass = 'production-list-td';
 
     if (updateRequest.error)
       return <Alert variant="error">{`${updateRequest.error}`}</Alert>;
@@ -135,7 +142,7 @@ class CurrentProductions extends React.Component {
                   daysLeftClass = 'text-default';
               }
               return (
-                <tr key={production.id} className="list-production">
+                <tr key={production.id} className="production-list">
                   <td className={`${tdClass} short-column`}>
                     {production.orderNumber}
                   </td>
@@ -152,8 +159,8 @@ class CurrentProductions extends React.Component {
                     {production.finalPayment === true ? (
                       <MdAttachMoney className="text-success" />
                     ) : (
-                        <MdMoneyOff className="text-danger" />
-                      )}
+                      <MdMoneyOff className="text-danger" />
+                    )}
                   </td>
                   <td className={`${tdClass} short-column`}>
                     {production.type}
@@ -174,7 +181,7 @@ class CurrentProductions extends React.Component {
                   <td className={`${tdClass} short-column`}>
                     {production.csa}
                   </td>
-                  <td className={`${tdClass} list-buttons noprint`}>
+                  <td className={`${tdClass} production-list-buttons noprint`}>
                     <span className="buttons-nowrap">
                       <EditButton />
                       <ProduceButton

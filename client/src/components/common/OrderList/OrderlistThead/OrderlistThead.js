@@ -15,7 +15,7 @@ import '../../../../styles/global.scss';
 const OrderlistThead = () => {
   return (
     <thead>
-      <tr>
+      <tr className="list-production">
         <th className="text-center">Nr</th>
         <th className="text-center">Kontrahent</th>
         <th className="text-center">
@@ -27,7 +27,7 @@ const OrderlistThead = () => {
         <th className="text-center">
           <GiReceiveMoney />
         </th>
-        <th className="text-center">Typ</th>
+        <th className="text-center th-class">Typ</th>
         <th className="text-center">
           <IoMdColorPalette />
         </th>

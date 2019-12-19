@@ -7,12 +7,9 @@ import countDaysLeft from '../../../utils/countDaysLeft';
 import currentFromSquareMeters from '../../../utils/currentFromSquareMeters';
 import cutText from '../../../utils/cutText';
 // components
-import OrderListTable from '../../common/Table/OrderListTable/OrderListTable';
-import OrderlistTrAdd from '../../common/Table/OrderlistTrAdd/OrderlistTrAdd';
+import OrderListTable from '../../common/OrderList/OrderListTable/OrderListTable';
+import OrderlistTrAdd from '../../common/OrderList/OrderlistTrAdd/OrderlistTrAdd';
 import EditButton from '../../common/Buttons/EditButton/EditButton';
-import ProduceButton from '../../common/Buttons/ProduceButton/ProduceButton';
-import TransportButton from '../../common/Buttons/TransportButton/TransportButton';
-import CancelButton from '../../common/Buttons/CancelButton/CancelButton';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
 import './AllProductions.scss';
@@ -106,7 +103,7 @@ class AllProductions extends React.Component {
     const { handleChange, handleDateSelect, handleDateChange } = this;
     const { allProductions, updateRequest } = this.props;
     const { newProduction, startDate } = this.state;
-    const tdClass = 'td-class';
+    const tdClass = 'production-list-td';
 
     if (updateRequest.error)
       return <Alert variant="error">{`${updateRequest.error}`}</Alert>;
@@ -149,7 +146,7 @@ class AllProductions extends React.Component {
               return (
                 <tr
                   key={production.id}
-                  className={`list-production ${rowBgclass}`}>
+                  className={`production-list ${rowBgclass}`}>
                   <td className={`${tdClass} short-column`}>
                     {production.orderNumber}
                   </td>
@@ -188,25 +185,9 @@ class AllProductions extends React.Component {
                   <td className={`${tdClass} short-column`}>
                     {production.csa}
                   </td>
-                  <td className={`${tdClass} list-buttons noprint`}>
+                  <td className={`${tdClass} production-list-buttons noprint`}>
                     <span className="buttons-nowrap">
                       <EditButton />
-                      {/*                       
-                      <ProduceButton
-                        clickHandler={() => {
-                          this.finishHandler(production.id);
-                        }}
-                      />
-                      <TransportButton
-                        clickHandler={() => {
-                          this.transportHandler(production.id);
-                        }}
-                      />
-                      <CancelButton
-                        clickHandler={() => {
-                          this.cancelHandler(production.id);
-                        }}
-                      /> */}
                     </span>
                   </td>
                 </tr>

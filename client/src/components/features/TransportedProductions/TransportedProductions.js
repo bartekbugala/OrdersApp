@@ -7,12 +7,11 @@ import countDaysLeft from '../../../utils/countDaysLeft';
 import currentFromSquareMeters from '../../../utils/currentFromSquareMeters';
 import cutText from '../../../utils/cutText';
 // components
-import OrderListTable from '../../common/Table/OrderListTable/OrderListTable';
+import OrderListTable from '../../common/OrderList/OrderListTable/OrderListTable';
 import EditButton from '../../common/Buttons/EditButton/EditButton';
 import RestoreButton from '../../common/Buttons/RestoreButton/RestoreButton';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
-import './TransportedProductions.scss';
 
 class TransportedProductions extends React.Component {
   constructor(props) {
@@ -64,7 +63,7 @@ class TransportedProductions extends React.Component {
 
   render() {
     const { updateRequest, request, transportedProductions } = this.props;
-    const tdClass = 'td-class';
+    const tdClass = 'production-list-td';
 
     if (updateRequest.error || request.error)
       return <Alert variant="error">{`${updateRequest.error}`}</Alert>;
@@ -89,7 +88,7 @@ class TransportedProductions extends React.Component {
                 daysLeftClass = 'text-default';
             }
             return (
-              <tr key={production.id} className="list-production">
+              <tr key={production.id} className="production-list">
                 <td className={`${tdClass} short-column`}>
                   {production.orderNumber}
                 </td>

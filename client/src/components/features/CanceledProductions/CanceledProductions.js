@@ -7,13 +7,12 @@ import countDaysLeft from '../../../utils/countDaysLeft';
 import currentFromSquareMeters from '../../../utils/currentFromSquareMeters';
 import cutText from '../../../utils/cutText';
 // components
-import OrderListTable from '../../common/Table/OrderListTable/OrderListTable';
+import OrderListTable from '../../common/OrderList/OrderListTable/OrderListTable';
 import EditButton from '../../common/Buttons/EditButton/EditButton';
 import RestoreButton from '../../common/Buttons/RestoreButton/RestoreButton';
 import DeleteButton from '../../common/Buttons/DeleteButton/DeleteButton';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
-import './CanceledProductions.scss';
 
 class CanceledProductions extends React.Component {
   constructor(props) {
@@ -66,7 +65,7 @@ class CanceledProductions extends React.Component {
 
   render() {
     const { updateRequest, request, canceledProductions } = this.props;
-    const tdClass = 'td-class';
+    const tdClass = 'production-list-td';
 
     if (updateRequest.error || request.error)
       return <Alert variant="error">{`${updateRequest.error}`}</Alert>;
@@ -91,7 +90,7 @@ class CanceledProductions extends React.Component {
                 daysLeftClass = 'text-default';
             }
             return (
-              <tr key={production.id} className="list-production">
+              <tr key={production.id} className="production-list">
                 <td className={`${tdClass} short-column`}>
                   {production.orderNumber}
                 </td>
@@ -124,7 +123,7 @@ class CanceledProductions extends React.Component {
                   {currentFromSquareMeters(production.type, production.m2)}
                 </td>
                 <td className={`${tdClass} short-column`}>{production.csa}</td>
-                <td className={`${tdClass} list-buttons noprint`}>
+                <td className={`${tdClass} production-list-buttons noprint`}>
                   <span className="buttons-nowrap">
                     <EditButton />
                     <RestoreButton
