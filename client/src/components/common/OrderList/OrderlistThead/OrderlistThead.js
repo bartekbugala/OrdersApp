@@ -11,43 +11,53 @@ import { FaUserTie } from 'react-icons/fa';
 import { AiOutlineColumnHeight } from 'react-icons/ai';
 
 import '../../../../styles/global.scss';
+import './OrderlistThead.scss';
 
-const OrderlistThead = () => {
+const OrderlistThead = ({ numberSort }) => {
+  const thClass = 'text-center';
   return (
     <thead>
-      <tr className="list-production">
-        <th className="text-center">Nr</th>
-        <th className="text-center">Kontrahent</th>
-        <th className="text-center">
+      <tr className="production-list">
+        <th
+          role="button"
+          className={`${thClass}`}
+          onClick={e => {
+            e.preventDefault();
+            numberSort();
+          }}>
+          Nr
+        </th>
+        <th className={`${thClass}`}>Kontrahent</th>
+        <th className={`${thClass}`}>
           <GiPayMoney />
         </th>
-        <th className="text-center">
+        <th className={`${thClass}`}>
           <GiCalendar />
         </th>
-        <th className="text-center">
+        <th className={`${thClass}`}>
           <GiReceiveMoney />
         </th>
-        <th className="text-center th-class">Typ</th>
-        <th className="text-center">
+        <th className={`${thClass} production-list-th`}>Typ</th>
+        <th className={`${thClass}`}>
           <IoMdColorPalette />
         </th>
-        <th className="text-center">
+        <th className={`${thClass}`}>
           <IoIosColorPalette />
         </th>
-        <th className="text-center">
+        <th className={`${thClass}`}>
           <MdLayers />
         </th>
-        <th className="text-center">
+        <th className={`${thClass}`}>
           <AiOutlineColumnHeight />
         </th>
-        <th className="text-center">
+        <th className={`${thClass}`}>
           m<sup>2</sup>
         </th>
-        <th className="text-center">m</th>
-        <th className="text-center">
+        <th className={`${thClass}`}>m</th>
+        <th className={`${thClass}`}>
           <FaUserTie />
         </th>
-        <th className="text-center noprint">
+        <th className={`${thClass} noprint`}>
           <IoMdSettings />
         </th>
       </tr>

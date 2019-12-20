@@ -19,7 +19,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   loadTransportedProductions: () =>
     dispatch(loadTransportedProductionsRequest()),
-  transportProduction: id => dispatch(toggleTransportProductionRequest(id)),
+  transportProduction: (id, thunk) =>
+    dispatch(toggleTransportProductionRequest(id, thunk)),
   resetRequest: () => dispatch(resetRequest()),
   resetUpdateRequest: () => dispatch(resetUpdateRequest())
 });

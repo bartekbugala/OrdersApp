@@ -14,6 +14,7 @@ import ProduceButton from '../../common/Buttons/ProduceButton/ProduceButton';
 import CancelButton from '../../common/Buttons/CancelButton/CancelButton';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
+import { isEqual } from 'lodash';
 
 class CurrentProductions extends React.Component {
   constructor(props) {
@@ -24,19 +25,21 @@ class CurrentProductions extends React.Component {
       colorInside: '',
       core: '',
       csa: '',
-      downpayment: null,
+      downpayment: 0,
       finalPayment: false,
       finished: false,
       canceled: false,
       transported: false,
-      m2: null,
+      m2: 0,
       orderNumber: '',
       productionTerm: '',
-      thickness: null,
+      thickness: 0,
       type: ''
     };
     this.state = {
-      currentProductions: this.props.currentProductions,
+      currentProductions: [],
+      updateRequest: this.props.updateRequest,
+      request: this.props.request,
       newProduction: initialNewProduction,
       startDate: new Date()
     };
@@ -45,12 +48,17 @@ class CurrentProductions extends React.Component {
   componentDidMount() {
     const { loadCurrentProductions } = this.props;
     loadCurrentProductions().then(
-      this.setState({ currentProductions: this.props.currentProductions })
+      this.setState({
+        currentProductions: this.props.currentProductions
+      })
     );
   }
-  componentDidUpdate(props) {
+  componentDidUpdate() {
     const { loadCurrentProductions } = this.props;
-    if (props.currentProductions !== this.state.currentProductions) {
+    if (
+      isEqual(this.state.currentProductions, this.props.currentProductions) ===
+      false
+    ) {
       loadCurrentProductions().then(
         this.setState({ currentProductions: this.props.currentProductions })
       );
@@ -92,19 +100,35 @@ class CurrentProductions extends React.Component {
 
   handleForm = e => {
     e.preventDefault();
-    const { addProduction } = this.props;
+    const { addProduction, loadCurrentProductions } = this.props;
     const { newProduction } = this.state;
-    addProduction(newProduction).then(this.setState({ newProduction: {} }));
+    addProduction(newProduction, loadCurrentProductions).then(
+      this.setState({ newProduction: {} })
+    );
   };
 
   finishHandler = id => {
     const { finishProduction, loadCurrentProductions } = this.props;
-    finishProduction(id).then(loadCurrentProductions());
+    finishProduction(id, loadCurrentProductions);
   };
 
   cancelHandler = id => {
     const { cancelProduction, loadCurrentProductions } = this.props;
-    cancelProduction(id).then(loadCurrentProductions());
+    cancelProduction(id, loadCurrentProductions);
+  };
+
+  numberSort = (key, direction) => {
+    let { currentProductions } = this.state;
+    this.setState({
+      currentProductions: currentProductions.sort((a, b) =>
+        direction === 'asc'
+          ? parseFloat(a[key]) - parseFloat(b[key])
+          : parseFloat(b[key]) - parseFloat(a[key])
+      ),
+      direction: {
+        [key]: direction === 'asc' ? 'desc' : 'asc'
+      }
+    });
   };
 
   render() {
@@ -112,104 +136,105 @@ class CurrentProductions extends React.Component {
       handleChange,
       handleDateSelect,
       handleDateChange,
-      handleCheckBoxChange
+      handleCheckBoxChange,
+      numberSort
     } = this;
-    const { currentProductions, updateRequest } = this.props;
+    const { updateRequest, request } = this.props;
+    const { currentProductions } = this.state;
     const { newProduction, startDate } = this.state;
     const tdClass = 'production-list-td';
 
     if (updateRequest.error)
       return <Alert variant="error">{`${updateRequest.error}`}</Alert>;
-    else if (updateRequest.pending) return <Spinner />;
-    else
-      return (
-        <form onSubmit={this.handleForm}>
-          <OrderListTable>
-            {currentProductions.map(production => {
-              let daysLeft = countDaysLeft(
-                production.downpayment,
-                production.productionTerm
-              );
-              let daysLeftClass = 'text-default';
-              switch (true) {
-                case daysLeft <= 7 && daysLeft > 2:
-                  daysLeftClass = 'text-warning';
-                  break;
-                case daysLeft < 3:
-                  daysLeftClass = 'text-danger';
-                  break;
-                default:
-                  daysLeftClass = 'text-default';
-              }
-              return (
-                <tr key={production.id} className="production-list">
-                  <td className={`${tdClass} short-column`}>
-                    {production.orderNumber}
-                  </td>
-                  <td className={`${tdClass} name-column`}>
-                    {cutText(production.clientName, 25)}
-                  </td>
-                  <td className={`${tdClass} date-column`}>
-                    {formatDate(production.downpayment)}
-                  </td>
-                  <td className={`${tdClass} short-column ${daysLeftClass}`}>
-                    {daysLeft}
-                  </td>
-                  <td className={`${tdClass} short-column`}>
-                    {production.finalPayment === true ? (
-                      <MdAttachMoney className="text-success" />
-                    ) : (
-                      <MdMoneyOff className="text-danger" />
-                    )}
-                  </td>
-                  <td className={`${tdClass} short-column`}>
-                    {production.type}
-                  </td>
-                  <td className={`${tdClass}`}>{production.colorOutside}</td>
-                  <td className={`${tdClass}`}>{production.colorInside}</td>
-                  <td className={`${tdClass} short-column`}>
-                    {production.core}
-                  </td>
-                  <td className={`${tdClass} short-column`}>
-                    {production.thickness}
-                  </td>
+    else if (request.pending && updateRequest.pending) return <Spinner />;
+    return (
+      <form onSubmit={this.handleForm}>
+        {console.log('state', currentProductions)}
+        {console.log('props', this.props.currentProductions)}
+        {console.log(
+          isEqual(this.props.currentProductions, currentProductions)
+        )}
 
-                  <td className={`${tdClass}`}>{production.m2}</td>
-                  <td className={`${tdClass}`}>
-                    {currentFromSquareMeters(production.type, production.m2)}
-                  </td>
-                  <td className={`${tdClass} short-column`}>
-                    {production.csa}
-                  </td>
-                  <td className={`${tdClass} production-list-buttons noprint`}>
-                    <span className="buttons-nowrap">
-                      <EditButton />
-                      <ProduceButton
-                        clickHandler={() => {
-                          this.finishHandler(production.id);
-                        }}
-                      />
-                      <CancelButton
-                        clickHandler={() => {
-                          this.cancelHandler(production.id);
-                        }}
-                      />
-                    </span>
-                  </td>
-                </tr>
-              );
-            })}
-            <OrderlistTrAdd
-              handleChange={handleChange}
-              handleCheckBoxChange={handleCheckBoxChange}
-              newProduction={newProduction}
-              handleDateChange={handleDateChange}
-              handleDateSelect={handleDateSelect}
-              startDate={startDate}
-            />
-          </OrderListTable>
-        </form>
-      );
+        <OrderListTable numberSort={() => numberSort('orderNumber', 'asc')}>
+          {currentProductions.map(production => {
+            let daysLeft = countDaysLeft(
+              production.downpayment,
+              production.productionTerm
+            );
+            let daysLeftClass = 'text-default';
+            switch (true) {
+              case daysLeft <= 7 && daysLeft > 2:
+                daysLeftClass = 'text-warning';
+                break;
+              case daysLeft < 3:
+                daysLeftClass = 'text-danger';
+                break;
+              default:
+                daysLeftClass = 'text-default';
+            }
+            return (
+              <tr key={production.id} className="production-list">
+                <td className={`${tdClass} short-column`}>
+                  {production.orderNumber}
+                </td>
+                <td className={`${tdClass} name-column`}>
+                  {cutText(production.clientName, 25)}
+                </td>
+                <td className={`${tdClass} date-column`}>
+                  {formatDate(production.downpayment)}
+                </td>
+                <td className={`${tdClass} short-column ${daysLeftClass}`}>
+                  {daysLeft}
+                </td>
+                <td className={`${tdClass} short-column`}>
+                  {production.finalPayment === true ? (
+                    <MdAttachMoney className="text-success" />
+                  ) : (
+                    <MdMoneyOff className="text-danger" />
+                  )}
+                </td>
+                <td className={`${tdClass} short-column`}>{production.type}</td>
+                <td className={`${tdClass}`}>{production.colorOutside}</td>
+                <td className={`${tdClass}`}>{production.colorInside}</td>
+                <td className={`${tdClass} short-column`}>{production.core}</td>
+                <td className={`${tdClass} short-column`}>
+                  {production.thickness}
+                </td>
+
+                <td className={`${tdClass}`}>{production.m2}</td>
+                <td className={`${tdClass}`}>
+                  {currentFromSquareMeters(production.type, production.m2)}
+                </td>
+                <td className={`${tdClass} short-column`}>{production.csa}</td>
+                <td className={`${tdClass} production-list-buttons noprint`}>
+                  <span className="buttons-nowrap">
+                    <EditButton />
+                    <ProduceButton
+                      clickHandler={() => {
+                        this.finishHandler(production.id);
+                      }}
+                    />
+                    <CancelButton
+                      clickHandler={() => {
+                        this.cancelHandler(production.id);
+                      }}
+                    />
+                  </span>
+                </td>
+              </tr>
+            );
+          })}
+          <OrderlistTrAdd
+            handleChange={handleChange}
+            handleCheckBoxChange={handleCheckBoxChange}
+            newProduction={newProduction}
+            handleDateChange={handleDateChange}
+            handleDateSelect={handleDateSelect}
+            startDate={startDate}
+          />
+        </OrderListTable>
+      </form>
+    );
   }
 }
 export default CurrentProductions;

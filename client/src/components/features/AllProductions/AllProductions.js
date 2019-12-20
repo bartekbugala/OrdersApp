@@ -13,6 +13,7 @@ import EditButton from '../../common/Buttons/EditButton/EditButton';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
 import './AllProductions.scss';
+import { isEqual } from 'lodash';
 
 class AllProductions extends React.Component {
   constructor(props) {
@@ -47,9 +48,11 @@ class AllProductions extends React.Component {
       this.setState({ allProductions: this.props.allProductions })
     );
   }
-  componentDidUpdate(props) {
+  componentDidUpdate() {
     const { loadAllProductions } = this.props;
-    if (props.allProductions !== this.state.allProductions) {
+    if (
+      isEqual(this.state.allProductions, this.props.allProductions) === false
+    ) {
       loadAllProductions().then(
         this.setState({ allProductions: this.props.allProductions })
       );
@@ -86,29 +89,30 @@ class AllProductions extends React.Component {
 
   finishHandler = id => {
     const { finishProduction, loadAllProductions } = this.props;
-    finishProduction(id).then(loadAllProductions());
+    finishProduction(id, loadAllProductions);
   };
 
   cancelHandler = id => {
     const { cancelProduction, loadAllProductions } = this.props;
-    cancelProduction(id).then(loadAllProductions());
+    cancelProduction(id, loadAllProductions);
   };
 
   transportHandler = id => {
     const { transportProduction, loadAllProductions } = this.props;
-    transportProduction(id).then(loadAllProductions());
+    transportProduction(id, loadAllProductions);
   };
 
   render() {
     const { handleChange, handleDateSelect, handleDateChange } = this;
-    const { allProductions, updateRequest } = this.props;
+    const { allProductions, updateRequest, request } = this.props;
     const { newProduction, startDate } = this.state;
     const tdClass = 'production-list-td';
 
     if (updateRequest.error)
       return <Alert variant="error">{`${updateRequest.error}`}</Alert>;
     /*     if (updateRequest.success) return <Alert variant="success">Post has been updated!</Alert>; */ else if (
-      updateRequest.pending
+      updateRequest.pending &&
+      request.pending
     )
       return <Spinner />;
     else

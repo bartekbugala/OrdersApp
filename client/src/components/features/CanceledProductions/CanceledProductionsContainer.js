@@ -19,8 +19,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   loadCanceledProductions: () => dispatch(loadCanceledProductionsRequest()),
-  cancelProduction: id => dispatch(toggleCancelProductionRequest(id)),
-  deleteProduction: id => dispatch(deleteProductionRequest(id)),
+  cancelProduction: (id, thunk) =>
+    dispatch(toggleCancelProductionRequest(id, thunk)),
+  deleteProduction: (id, thunk) => dispatch(deleteProductionRequest(id, thunk)),
   resetRequest: () => dispatch(resetRequest()),
   resetUpdateRequest: () => dispatch(resetUpdateRequest())
 });

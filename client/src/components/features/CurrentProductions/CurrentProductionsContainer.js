@@ -2,25 +2,32 @@ import { connect } from 'react-redux';
 import {
   getCurrentProductions,
   getUpdateRequest,
+  getRequest,
   loadCurrentProductionsRequest,
   toggleCancelProductionRequest,
   toggleFinishProductionRequest,
   addProductionRequest,
-  resetUpdateRequest
+  resetUpdateRequest,
+  resetRequest
 } from '../../../redux/ordersRedux';
 import CurrentProductions from './CurrentProductions';
 
 const mapStateToProps = state => ({
   currentProductions: getCurrentProductions(state),
-  updateRequest: getUpdateRequest(state)
+  updateRequest: getUpdateRequest(state),
+  request: getRequest(state)
 });
 
 const mapDispatchToProps = dispatch => ({
   loadCurrentProductions: () => dispatch(loadCurrentProductionsRequest()),
-  addProduction: production => dispatch(addProductionRequest(production)),
-  cancelProduction: id => dispatch(toggleCancelProductionRequest(id)),
-  finishProduction: id => dispatch(toggleFinishProductionRequest(id)),
-  resetRequest: () => dispatch(resetUpdateRequest())
+  addProduction: (production, thunk) =>
+    dispatch(addProductionRequest(production, thunk)),
+  cancelProduction: (id, thunk) =>
+    dispatch(toggleCancelProductionRequest(id, thunk)),
+  finishProduction: (id, thunk) =>
+    dispatch(toggleFinishProductionRequest(id, thunk)),
+  resetUpdateRequest: () => dispatch(resetUpdateRequest()),
+  resetRequest: () => dispatch(resetRequest())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CurrentProductions);
