@@ -38,6 +38,7 @@ class CurrentProductions extends React.Component {
     };
     this.state = {
       currentProductions: [],
+      sortBy: 'oderNumber',
       updateRequest: this.props.updateRequest,
       request: this.props.request,
       newProduction: initialNewProduction,
@@ -117,7 +118,7 @@ class CurrentProductions extends React.Component {
     cancelProduction(id, loadCurrentProductions);
   };
 
-  numberSort = (key, direction) => {
+  /*   numberSort = (key, direction) => {
     let { currentProductions } = this.state;
     this.setState({
       currentProductions: currentProductions.sort((a, b) =>
@@ -129,6 +130,14 @@ class CurrentProductions extends React.Component {
         [key]: direction === 'asc' ? 'desc' : 'asc'
       }
     });
+  }; */
+
+  numberSort = (array, key, direction) => {
+    return array.sort((a, b) =>
+      direction === 'asc'
+        ? parseFloat(a[key]) - parseFloat(b[key])
+        : parseFloat(b[key]) - parseFloat(a[key])
+    );
   };
 
   render() {
@@ -143,20 +152,20 @@ class CurrentProductions extends React.Component {
     const { currentProductions } = this.state;
     const { newProduction, startDate } = this.state;
     const tdClass = 'production-list-td';
+    let sortedProductions = this.numberSort(
+      currentProductions,
+      this.state.sortBy,
+      'asc'
+    );
 
     if (updateRequest.error)
       return <Alert variant="error">{`${updateRequest.error}`}</Alert>;
     else if (request.pending && updateRequest.pending) return <Spinner />;
     return (
       <form onSubmit={this.handleForm}>
-        {console.log('state', currentProductions)}
-        {console.log('props', this.props.currentProductions)}
-        {console.log(
-          isEqual(this.props.currentProductions, currentProductions)
-        )}
-
         <OrderListTable numberSort={() => numberSort('orderNumber', 'asc')}>
-          {currentProductions.map(production => {
+          {}
+          {sortedProductions.map(production => {
             let daysLeft = countDaysLeft(
               production.downpayment,
               production.productionTerm
