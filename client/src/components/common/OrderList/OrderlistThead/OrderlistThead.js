@@ -13,7 +13,7 @@ import { AiOutlineColumnHeight } from 'react-icons/ai';
 import '../../../../styles/global.scss';
 import './OrderlistThead.scss';
 
-const OrderlistThead = ({ numberSort }) => {
+const OrderlistThead = ({ sortColumn }) => {
   const thClass = 'text-center';
   return (
     <thead>
@@ -23,21 +23,50 @@ const OrderlistThead = ({ numberSort }) => {
           className={`${thClass}`}
           onClick={e => {
             e.preventDefault();
-            numberSort();
+            sortColumn('orderNumber', 'number');
           }}>
           Nr
         </th>
-        <th className={`${thClass}`}>Kontrahent</th>
-        <th className={`${thClass}`}>
+        <th
+          className={`${thClass}`}
+          onClick={e => {
+            e.preventDefault();
+            sortColumn('clientName', 'string');
+          }}>
+          Kontrahent
+        </th>
+        <th
+          className={`${thClass}`}
+          onClick={e => {
+            e.preventDefault();
+            sortColumn('downpayment', 'date');
+          }}>
           <GiPayMoney />
         </th>
-        <th className={`${thClass}`}>
+        <th
+          className={`${thClass}`}
+          onClick={e => {
+            e.preventDefault();
+            sortColumn('productionTerm');
+          }}>
           <GiCalendar />
         </th>
-        <th className={`${thClass}`}>
+        <th
+          className={`${thClass}`}
+          onClick={e => {
+            e.preventDefault();
+            sortColumn('finalPayment');
+          }}>
           <GiReceiveMoney />
         </th>
-        <th className={`${thClass} production-list-th`}>Typ</th>
+        <th
+          className={`${thClass} production-list-th`}
+          onClick={e => {
+            e.preventDefault();
+            sortColumn('type');
+          }}>
+          Typ
+        </th>
         <th className={`${thClass}`}>
           <IoMdColorPalette />
         </th>

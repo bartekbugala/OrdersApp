@@ -4,10 +4,10 @@ import './OrderListTable.scss';
 // components
 import OrderlistThead from '../OrderlistThead/OrderlistThead';
 
-const OrderListTable = ({ children, tableTitle, numberSort }) => {
+const OrderListTable = ({ children, tableTitle, sortColumn }) => {
   return (
     <table className="table table-bordered table-responsive-md table-hover text-center">
-      <OrderlistThead tableTitle={tableTitle} numberSort={numberSort} />
+      <OrderlistThead tableTitle={tableTitle} sortColumn={sortColumn} />
       <tbody>{children}</tbody>
     </table>
   );

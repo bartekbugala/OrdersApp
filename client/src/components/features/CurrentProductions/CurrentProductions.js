@@ -4,6 +4,7 @@ import { PropTypes } from 'prop-types';
 // utils
 import formatDate from '../../../utils/formatDate';
 import countDaysLeft from '../../../utils/countDaysLeft';
+import sortByColumn from '../../../utils/sortByColumn';
 import currentFromSquareMeters from '../../../utils/currentFromSquareMeters';
 import cutText from '../../../utils/cutText';
 // components
@@ -38,7 +39,7 @@ class CurrentProductions extends React.Component {
     };
     this.state = {
       currentProductions: [],
-      sortBy: 'oderNumber',
+      sortBy: 'orderNumber',
       updateRequest: this.props.updateRequest,
       request: this.props.request,
       newProduction: initialNewProduction,
@@ -118,26 +119,19 @@ class CurrentProductions extends React.Component {
     cancelProduction(id, loadCurrentProductions);
   };
 
-  /*   numberSort = (key, direction) => {
-    let { currentProductions } = this.state;
-    this.setState({
-      currentProductions: currentProductions.sort((a, b) =>
-        direction === 'asc'
-          ? parseFloat(a[key]) - parseFloat(b[key])
-          : parseFloat(b[key]) - parseFloat(a[key])
-      ),
-      direction: {
-        [key]: direction === 'asc' ? 'desc' : 'asc'
-      }
-    });
-  }; */
-
-  numberSort = (array, key, direction) => {
-    return array.sort((a, b) =>
-      direction === 'asc'
-        ? parseFloat(a[key]) - parseFloat(b[key])
-        : parseFloat(b[key]) - parseFloat(a[key])
+  handleSort = (
+    key = 'orderNumber',
+    valueType = 'number',
+    direction = 'asc'
+  ) => {
+    const { currentProductions } = this.state;
+    let sortedProductions = sortByColumn(
+      currentProductions,
+      key,
+      valueType,
+      direction
     );
+    this.setState({ sortedProductions: sortedProductions });
   };
 
   render() {
@@ -146,26 +140,28 @@ class CurrentProductions extends React.Component {
       handleDateSelect,
       handleDateChange,
       handleCheckBoxChange,
-      numberSort
+      handleSort
     } = this;
     const { updateRequest, request } = this.props;
-    const { currentProductions } = this.state;
+    const { currentProductions, sortedProductions } = this.state;
     const { newProduction, startDate } = this.state;
     const tdClass = 'production-list-td';
-    let sortedProductions = this.numberSort(
-      currentProductions,
-      this.state.sortBy,
-      'asc'
-    );
+
+    let productions = sortedProductions
+      ? sortedProductions
+      : currentProductions;
 
     if (updateRequest.error)
       return <Alert variant="error">{`${updateRequest.error}`}</Alert>;
     else if (request.pending && updateRequest.pending) return <Spinner />;
     return (
       <form onSubmit={this.handleForm}>
-        <OrderListTable numberSort={() => numberSort('orderNumber', 'asc')}>
+        <OrderListTable
+          sortColumn={(key, valueType) => {
+            handleSort(key, valueType);
+          }}>
           {}
-          {sortedProductions.map(production => {
+          {productions.map(production => {
             let daysLeft = countDaysLeft(
               production.downpayment,
               production.productionTerm
