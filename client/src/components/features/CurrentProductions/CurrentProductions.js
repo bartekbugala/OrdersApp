@@ -40,6 +40,8 @@ class CurrentProductions extends React.Component {
     this.state = {
       currentProductions: [],
       sortBy: 'orderNumber',
+      sortValueType: 'number',
+      sortDirection: 'asc',
       updateRequest: this.props.updateRequest,
       request: this.props.request,
       newProduction: initialNewProduction,
@@ -119,28 +121,25 @@ class CurrentProductions extends React.Component {
     cancelProduction(id, loadCurrentProductions);
   };
 
-  /*   handleSort = (
+  handleChangeSort = (
     key = 'orderNumber',
     valueType = 'number',
     direction = 'asc'
   ) => {
-    const { currentProductions } = this.state;
-    let sortedProductions = sortByColumn(
-      currentProductions,
-      key,
-      valueType,
-      direction
-    );
-    this.setState({ sortBy: sortedProductions });
-  }; */
+    this.setState({
+      sortBy: key,
+      sortValueType: valueType,
+      sortDirection: direction
+    });
+  };
 
   render() {
     const {
       handleChange,
       handleDateSelect,
       handleDateChange,
-      handleCheckBoxChange /* ,
-      handleSort */
+      handleCheckBoxChange,
+      handleChangeSort
     } = this;
     const { updateRequest, request } = this.props;
     const { currentProductions } = this.state;
@@ -150,8 +149,8 @@ class CurrentProductions extends React.Component {
     let productions = sortByColumn(
       currentProductions,
       this.state.sortBy,
-      'number',
-      'asc'
+      this.state.sortValueType,
+      this.state.sortDirection
     );
 
     if (updateRequest.error)
@@ -160,10 +159,9 @@ class CurrentProductions extends React.Component {
     return (
       <form onSubmit={this.handleForm}>
         <OrderListTable
-        /* sortColumn={(key, valueType) => {
-            handleSort(key, valueType);
-          }} */
-        >
+          sortColumn={(key, valueType) => {
+            handleChangeSort(key, valueType);
+          }}>
           {productions.map(production => {
             let daysLeft = countDaysLeft(
               production.downpayment,
