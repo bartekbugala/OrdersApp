@@ -7,6 +7,7 @@ import countDaysLeft from '../../../utils/countDaysLeft';
 import sortByColumn from '../../../utils/sortByColumn';
 import currentFromSquareMeters from '../../../utils/currentFromSquareMeters';
 import cutText from '../../../utils/cutText';
+import { isEqual } from 'lodash';
 // components
 import OrderListTable from '../../common/OrderList/OrderListTable/OrderListTable';
 import OrderlistTrAdd from '../../common/OrderList/OrderlistTrAdd/OrderlistTrAdd';
@@ -15,7 +16,6 @@ import ProduceButton from '../../common/Buttons/ProduceButton/ProduceButton';
 import CancelButton from '../../common/Buttons/CancelButton/CancelButton';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
-import { isEqual } from 'lodash';
 
 class CurrentProductions extends React.Component {
   constructor(props) {
@@ -119,7 +119,7 @@ class CurrentProductions extends React.Component {
     cancelProduction(id, loadCurrentProductions);
   };
 
-  handleSort = (
+  /*   handleSort = (
     key = 'orderNumber',
     valueType = 'number',
     direction = 'asc'
@@ -131,25 +131,28 @@ class CurrentProductions extends React.Component {
       valueType,
       direction
     );
-    this.setState({ sortedProductions: sortedProductions });
-  };
+    this.setState({ sortBy: sortedProductions });
+  }; */
 
   render() {
     const {
       handleChange,
       handleDateSelect,
       handleDateChange,
-      handleCheckBoxChange,
-      handleSort
+      handleCheckBoxChange /* ,
+      handleSort */
     } = this;
     const { updateRequest, request } = this.props;
-    const { currentProductions, sortedProductions } = this.state;
+    const { currentProductions } = this.state;
     const { newProduction, startDate } = this.state;
     const tdClass = 'production-list-td';
 
-    let productions = sortedProductions
-      ? sortedProductions
-      : currentProductions;
+    let productions = sortByColumn(
+      currentProductions,
+      this.state.sortBy,
+      'number',
+      'asc'
+    );
 
     if (updateRequest.error)
       return <Alert variant="error">{`${updateRequest.error}`}</Alert>;
@@ -157,10 +160,10 @@ class CurrentProductions extends React.Component {
     return (
       <form onSubmit={this.handleForm}>
         <OrderListTable
-          sortColumn={(key, valueType) => {
+        /* sortColumn={(key, valueType) => {
             handleSort(key, valueType);
-          }}>
-          {}
+          }} */
+        >
           {productions.map(production => {
             let daysLeft = countDaysLeft(
               production.downpayment,

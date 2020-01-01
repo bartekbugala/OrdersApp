@@ -24,27 +24,3 @@ export default function sortByColumn(array, key, valueType, direction) {
       );
   }
 }
-
-/* export function sortByNumber(array, key, direction) {
-  return array.sort((a, b) =>
-    direction === 'asc'
-      ? parseFloat(a[key]) - parseFloat(b[key])
-      : parseFloat(b[key]) - parseFloat(a[key])
-  );
-}
-
-export function sortByString(array, key, direction) {
-  return array.sort((a, b) =>
-    direction === 'asc' ? a[key] - b[key] : b[key] - a[key]
-  );
-}
-
-export function sortByDate(array, key, direction) {
-  return array.sort((a, b) =>
-    // Turn strings into dates, and then subtract them
-    // to get a value that is either negative, positive, or zero.
-    direction === 'asc'
-      ? new Date(a[key].date) - new Date(b[key].date)
-      : new Date(b[key].date) - new Date(a[key].date)
-  );
-} */
