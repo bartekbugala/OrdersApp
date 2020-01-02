@@ -3,6 +3,7 @@ import {
   getCurrentProductions,
   getUpdateRequest,
   getRequest,
+  sortCurrentProductions,
   loadCurrentProductionsRequest,
   toggleCancelProductionRequest,
   toggleFinishProductionRequest,
@@ -20,6 +21,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   loadCurrentProductions: () => dispatch(loadCurrentProductionsRequest()),
+  sortCurrentProductions: (currentProductions, key, valueType, direction) =>
+    dispatch(
+      sortCurrentProductions(currentProductions, key, valueType, direction)
+    ),
   addProduction: (production, thunk) =>
     dispatch(addProductionRequest(production, thunk)),
   cancelProduction: (id, thunk) =>

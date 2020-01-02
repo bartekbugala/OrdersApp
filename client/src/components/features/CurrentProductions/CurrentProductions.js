@@ -16,6 +16,7 @@ import ProduceButton from '../../common/Buttons/ProduceButton/ProduceButton';
 import CancelButton from '../../common/Buttons/CancelButton/CancelButton';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
+import { sortCurrent } from '../../../redux/ordersRedux';
 
 class CurrentProductions extends React.Component {
   constructor(props) {
@@ -86,7 +87,6 @@ class CurrentProductions extends React.Component {
   handleCheckBoxChange = e => {
     const { newProduction } = this.state;
     const target = e.target;
-    console.dir(target);
     this.setState({
       newProduction: {
         ...newProduction,
@@ -121,16 +121,14 @@ class CurrentProductions extends React.Component {
     cancelProduction(id, loadCurrentProductions);
   };
 
-  handleChangeSort = (
+  handleSort = (
     key = 'orderNumber',
     valueType = 'number',
     direction = 'asc'
   ) => {
-    this.setState({
-      sortBy: key,
-      sortValueType: valueType,
-      sortDirection: direction
-    });
+    const { currentProductions } = this.state;
+    const { sortCurrentProductions } = this.props;
+    sortCurrentProductions(currentProductions, key, valueType, direction);
   };
 
   render() {
@@ -139,19 +137,12 @@ class CurrentProductions extends React.Component {
       handleDateSelect,
       handleDateChange,
       handleCheckBoxChange,
-      handleChangeSort
+      handleSort
     } = this;
     const { updateRequest, request } = this.props;
     const { currentProductions } = this.state;
     const { newProduction, startDate } = this.state;
     const tdClass = 'production-list-td';
-
-    let productions = sortByColumn(
-      currentProductions,
-      this.state.sortBy,
-      this.state.sortValueType,
-      this.state.sortDirection
-    );
 
     if (updateRequest.error)
       return <Alert variant="error">{`${updateRequest.error}`}</Alert>;
@@ -160,9 +151,9 @@ class CurrentProductions extends React.Component {
       <form onSubmit={this.handleForm}>
         <OrderListTable
           sortColumn={(key, valueType) => {
-            handleChangeSort(key, valueType);
+            handleSort(key, valueType);
           }}>
-          {productions.map(production => {
+          {currentProductions.map(production => {
             let daysLeft = countDaysLeft(
               production.downpayment,
               production.productionTerm
