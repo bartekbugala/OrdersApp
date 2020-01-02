@@ -94,14 +94,39 @@ const OrderlistThead = ({ sortColumn }) => {
           }}>
           <MdLayers />
         </th>
-        <th className={`${thClass}`}>
+        <th
+          className={`${thClass}`}
+          role="button"
+          onClick={e => {
+            e.preventDefault();
+            sortColumn('thickness');
+          }}>
           <AiOutlineColumnHeight />
         </th>
-        <th className={`${thClass}`}>
+        <th
+          className={`${thClass}`}
+          role="button"
+          onClick={e => {
+            e.preventDefault();
+            sortColumn('m2');
+          }}>
           m<sup>2</sup>
         </th>
-        <th className={`${thClass}`}>m</th>
-        <th className={`${thClass}`}>
+        <th
+          className={`${thClass}`}
+          onClick={e => {
+            e.preventDefault();
+            sortColumn('m2');
+          }}>
+          m
+        </th>
+        <th
+          className={`${thClass}`}
+          role="button"
+          onClick={e => {
+            e.preventDefault();
+            sortColumn('csa', 'string');
+          }}>
           <FaUserTie />
         </th>
         <th className={`${thClass} noprint`}>
