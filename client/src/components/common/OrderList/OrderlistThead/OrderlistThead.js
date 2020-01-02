@@ -23,7 +23,7 @@ const OrderlistThead = ({ sortColumn }) => {
           className={`${thClass}`}
           onClick={e => {
             e.preventDefault();
-            sortColumn('orderNumber', 'number');
+            sortColumn('orderNumber');
           }}>
           Nr
         </th>
@@ -55,7 +55,7 @@ const OrderlistThead = ({ sortColumn }) => {
           className={`${thClass}`}
           onClick={e => {
             e.preventDefault();
-            sortColumn('finalPayment');
+            sortColumn('finalPayment', 'boolean');
           }}>
           <GiReceiveMoney />
         </th>
@@ -63,17 +63,35 @@ const OrderlistThead = ({ sortColumn }) => {
           className={`${thClass} production-list-th`}
           onClick={e => {
             e.preventDefault();
-            sortColumn('type');
+            sortColumn('type', 'string');
           }}>
           Typ
         </th>
-        <th className={`${thClass}`}>
+        <th
+          className={`${thClass}`}
+          role="button"
+          onClick={e => {
+            e.preventDefault();
+            sortColumn('colorOutside', 'string');
+          }}>
           <IoMdColorPalette />
         </th>
-        <th className={`${thClass}`}>
+        <th
+          className={`${thClass}`}
+          role="button"
+          onClick={e => {
+            e.preventDefault();
+            sortColumn('colorInside', 'string');
+          }}>
           <IoIosColorPalette />
         </th>
-        <th className={`${thClass}`}>
+        <th
+          className={`${thClass}`}
+          role="button"
+          onClick={e => {
+            e.preventDefault();
+            sortColumn('core', 'string');
+          }}>
           <MdLayers />
         </th>
         <th className={`${thClass}`}>

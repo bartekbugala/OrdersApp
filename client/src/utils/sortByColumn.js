@@ -18,6 +18,13 @@ export default function sortByColumn(array, key, valueType, direction) {
           ? new Date(a[key]) - new Date(b[key])
           : new Date(b[key]) - new Date(a[key])
       );
+    case 'boolean':
+      array.sort(function(x, y) {
+        // true values first
+        return x === y ? 0 : x ? -1 : 1;
+        // false values first
+        // return (x === y)? 0 : x? 1 : -1;
+      });
     default:
       return array.sort((a, b) =>
         direction === 'asc' ? a[key] - b[key] : b[key] - a[key]

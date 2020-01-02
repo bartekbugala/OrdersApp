@@ -1,4 +1,5 @@
 import axios from 'axios';
+import sortByColumn from '../../src/utils/sortByColumn';
 import { API_URL } from '../config';
 
 //// Initial state
@@ -44,6 +45,24 @@ export const getUpdateRequest = ({ orders }) => orders.updateRequest;
 export const getRequest = ({ orders }) => orders.request;
 
 //// Thunks
+export const sortCurrentProductions = (
+  currentProductions,
+  key,
+  valueType,
+  direction
+) => {
+  return async dispatch => {
+    dispatch(startRequest());
+    try {
+      let payload = sortByColumn(currentProductions, key, valueType, direction);
+      dispatch(sortCurrent(payload));
+      dispatch(endRequest());
+    } catch (e) {
+      dispatch(errorRequest(e.message));
+    }
+  };
+};
+
 export const loadProductionsRequest = () => {
   return async dispatch => {
     dispatch(startRequest());
@@ -176,8 +195,9 @@ export const toggleTransportProductionRequest = (id, thunk) => {
 const reducerName = 'orders';
 const createActionName = name => `app/${reducerName}/${name}`;
 
-// action exports
+// action creators
 export const FINISH_PRODUCTION = createActionName('FINISH_PRODUCTION');
+export const SORT_CURRENT = createActionName('SORT_CURRENT');
 
 export const LOAD_PRODUCTIONS = createActionName('LOAD_PRODUCTIONS');
 export const LOAD_CURRENT = createActionName('LOAD_CURRENT');
@@ -194,7 +214,10 @@ export const END_UPDATE_REQUEST = createActionName('END_UPDATE_REQUEST');
 export const RESET_UPDATE_REQUEST = createActionName('RESET_UPDATE_REQUEST');
 export const ERROR_UPDATE_REQUEST = createActionName('ERROR_UPDATE_REQUEST');
 
+// actions
 export const loadProductions = payload => ({ payload, type: LOAD_PRODUCTIONS });
+export const sortCurrent = payload => ({ payload, type: SORT_CURRENT });
+
 export const loadCurrentProductions = payload => ({
   payload,
   type: LOAD_CURRENT
@@ -221,6 +244,10 @@ export default function reducer(statePart = initialState, action = {}) {
   switch (action.type) {
     case LOAD_PRODUCTIONS:
       return { ...statePart, allProductions: action.payload };
+
+    case SORT_CURRENT:
+      return { ...statePart, currentProductions: action.payload };
+
     case LOAD_CURRENT:
       return { ...statePart, currentProductions: action.payload };
     case LOAD_CANCELED:
