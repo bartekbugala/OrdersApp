@@ -12,6 +12,7 @@ const initialState = {
     { path: '/all', title: 'Wszystkie' },
     { path: '/stats', title: 'Statystyki' }
   ],
+  sortParams: { key: 'orderNumber', valueType: 'number', direction: 'asc' },
   allProductions: [],
   canceledProductions: [],
   currentProductions: [],
@@ -31,7 +32,7 @@ const initialState = {
 
 //// Selectors
 export const getMenuLinks = ({ orders }) => orders.menuLinks;
-
+export const getSortParams = ({ orders }) => orders.sortParams;
 export const getAllProductions = ({ orders }) => orders.allProductions;
 export const getCurrentProductions = ({ orders }) => orders.currentProductions;
 export const getFinishedProductions = ({ orders }) =>
@@ -54,7 +55,10 @@ export const sortCurrentProductions = (
   return async dispatch => {
     dispatch(startRequest());
     try {
-      let payload = sortByColumn(currentProductions, key, valueType, direction);
+      let payload = {
+        sorted: sortByColumn(currentProductions, key, valueType, direction),
+        sortParams: { key: key, valueType: valueType, direction: direction }
+      };
       dispatch(sortCurrent(payload));
       dispatch(endRequest());
     } catch (e) {
@@ -75,12 +79,12 @@ export const loadProductionsRequest = () => {
     }
   };
 };
-
-export const loadCurrentProductionsRequest = () => {
+export const loadCurrentProductionsRequest = (key, valueType, direction) => {
   return async dispatch => {
     dispatch(startRequest());
     try {
       let res = await axios.get(`${API_URL}/productions/current`);
+      sortByColumn(res.data, key, valueType, direction);
       dispatch(loadCurrentProductions(res.data));
       dispatch(endRequest());
     } catch (e) {
@@ -101,7 +105,6 @@ export const loadCanceledProductionsRequest = () => {
     }
   };
 };
-
 export const loadFinishedProductionsRequest = () => {
   return async dispatch => {
     dispatch(startRequest());
@@ -126,7 +129,6 @@ export const loadTransportedProductionsRequest = () => {
     }
   };
 };
-
 export const addProductionRequest = (production, thunk) => {
   return async dispatch => {
     dispatch(startUpdateRequest());
@@ -139,7 +141,6 @@ export const addProductionRequest = (production, thunk) => {
     }
   };
 };
-
 export const deleteProductionRequest = (id, thunk) => {
   return async dispatch => {
     dispatch(startUpdateRequest());
@@ -152,7 +153,6 @@ export const deleteProductionRequest = (id, thunk) => {
     }
   };
 };
-
 export const toggleCancelProductionRequest = (id, thunk) => {
   return async dispatch => {
     dispatch(startUpdateRequest());
@@ -217,7 +217,6 @@ export const ERROR_UPDATE_REQUEST = createActionName('ERROR_UPDATE_REQUEST');
 // actions
 export const loadProductions = payload => ({ payload, type: LOAD_PRODUCTIONS });
 export const sortCurrent = payload => ({ payload, type: SORT_CURRENT });
-
 export const loadCurrentProductions = payload => ({
   payload,
   type: LOAD_CURRENT
@@ -246,7 +245,11 @@ export default function reducer(statePart = initialState, action = {}) {
       return { ...statePart, allProductions: action.payload };
 
     case SORT_CURRENT:
-      return { ...statePart, currentProductions: action.payload };
+      return {
+        ...statePart,
+        currentProductions: action.payload.sorted,
+        sortParams: action.payload.sortParams
+      };
 
     case LOAD_CURRENT:
       return { ...statePart, currentProductions: action.payload };

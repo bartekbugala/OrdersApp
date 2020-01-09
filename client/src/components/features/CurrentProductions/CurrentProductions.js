@@ -4,7 +4,6 @@ import { PropTypes } from 'prop-types';
 // utils
 import formatDate from '../../../utils/formatDate';
 import countDaysLeft from '../../../utils/countDaysLeft';
-import sortByColumn from '../../../utils/sortByColumn';
 import currentFromSquareMeters from '../../../utils/currentFromSquareMeters';
 import cutText from '../../../utils/cutText';
 import { isEqual } from 'lodash';
@@ -16,7 +15,6 @@ import ProduceButton from '../../common/Buttons/ProduceButton/ProduceButton';
 import CancelButton from '../../common/Buttons/CancelButton/CancelButton';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
-import { sortCurrent } from '../../../redux/ordersRedux';
 
 class CurrentProductions extends React.Component {
   constructor(props) {
@@ -40,9 +38,6 @@ class CurrentProductions extends React.Component {
     };
     this.state = {
       currentProductions: [],
-      sortBy: 'orderNumber',
-      sortValueType: 'number',
-      sortDirection: 'asc',
       updateRequest: this.props.updateRequest,
       request: this.props.request,
       newProduction: initialNewProduction,
@@ -51,20 +46,28 @@ class CurrentProductions extends React.Component {
   }
 
   componentDidMount() {
-    const { loadCurrentProductions } = this.props;
-    loadCurrentProductions().then(
+    const { loadCurrentProductions, sortParams } = this.props;
+    loadCurrentProductions(
+      sortParams.key,
+      sortParams.valueType,
+      sortParams.direction
+    ).then(
       this.setState({
         currentProductions: this.props.currentProductions
       })
     );
   }
   componentDidUpdate() {
-    const { loadCurrentProductions } = this.props;
+    const { loadCurrentProductions, sortParams } = this.props;
     if (
       isEqual(this.state.currentProductions, this.props.currentProductions) ===
       false
     ) {
-      loadCurrentProductions().then(
+      loadCurrentProductions(
+        sortParams.key,
+        sortParams.valueType,
+        sortParams.direction
+      ).then(
         this.setState({ currentProductions: this.props.currentProductions })
       );
     }

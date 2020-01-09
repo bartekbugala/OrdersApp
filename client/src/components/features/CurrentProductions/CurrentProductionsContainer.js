@@ -9,18 +9,24 @@ import {
   toggleFinishProductionRequest,
   addProductionRequest,
   resetUpdateRequest,
-  resetRequest
+  resetRequest,
+  getSortParams
 } from '../../../redux/ordersRedux';
 import CurrentProductions from './CurrentProductions';
 
 const mapStateToProps = state => ({
   currentProductions: getCurrentProductions(state),
   updateRequest: getUpdateRequest(state),
+  sortParams: getSortParams(state),
   request: getRequest(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-  loadCurrentProductions: () => dispatch(loadCurrentProductionsRequest()),
+  loadCurrentProductions: (
+    key = 'orderNumber',
+    valueType = 'number',
+    direction = 'asc'
+  ) => dispatch(loadCurrentProductionsRequest(key, valueType, direction)),
   sortCurrentProductions: (currentProductions, key, valueType, direction) =>
     dispatch(
       sortCurrentProductions(currentProductions, key, valueType, direction)
