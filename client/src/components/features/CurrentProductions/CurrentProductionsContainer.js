@@ -2,25 +2,43 @@ import { connect } from 'react-redux';
 import {
   getCurrentProductions,
   getUpdateRequest,
+  getRequest,
+  sortCurrentProductions,
   loadCurrentProductionsRequest,
   toggleCancelProductionRequest,
   toggleFinishProductionRequest,
   addProductionRequest,
-  resetUpdateRequest
+  resetUpdateRequest,
+  resetRequest,
+  getSortParams
 } from '../../../redux/ordersRedux';
 import CurrentProductions from './CurrentProductions';
 
 const mapStateToProps = state => ({
   currentProductions: getCurrentProductions(state),
-  updateRequest: getUpdateRequest(state)
+  updateRequest: getUpdateRequest(state),
+  sortParams: getSortParams(state),
+  request: getRequest(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-  loadCurrentProductions: () => dispatch(loadCurrentProductionsRequest()),
-  addProduction: production => dispatch(addProductionRequest(production)),
-  cancelProduction: id => dispatch(toggleCancelProductionRequest(id)),
-  finishProduction: id => dispatch(toggleFinishProductionRequest(id)),
-  resetRequest: () => dispatch(resetUpdateRequest())
+  loadCurrentProductions: (
+    key = 'orderNumber',
+    valueType = 'number',
+    direction = 'asc'
+  ) => dispatch(loadCurrentProductionsRequest(key, valueType, direction)),
+  sortCurrentProductions: (currentProductions, key, valueType, direction) =>
+    dispatch(
+      sortCurrentProductions(currentProductions, key, valueType, direction)
+    ),
+  addProduction: (production, thunk) =>
+    dispatch(addProductionRequest(production, thunk)),
+  cancelProduction: (id, thunk) =>
+    dispatch(toggleCancelProductionRequest(id, thunk)),
+  finishProduction: (id, thunk) =>
+    dispatch(toggleFinishProductionRequest(id, thunk)),
+  resetUpdateRequest: () => dispatch(resetUpdateRequest()),
+  resetRequest: () => dispatch(resetRequest())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CurrentProductions);

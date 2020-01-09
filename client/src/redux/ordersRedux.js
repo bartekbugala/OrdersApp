@@ -1,4 +1,5 @@
 import axios from 'axios';
+import sortByColumn from '../../src/utils/sortByColumn';
 import { API_URL } from '../config';
 
 //// Initial state
@@ -11,6 +12,7 @@ const initialState = {
     { path: '/all', title: 'Wszystkie' },
     { path: '/stats', title: 'Statystyki' }
   ],
+  sortParams: { key: 'orderNumber', valueType: 'number', direction: 'asc' },
   allProductions: [],
   canceledProductions: [],
   currentProductions: [],
@@ -30,7 +32,7 @@ const initialState = {
 
 //// Selectors
 export const getMenuLinks = ({ orders }) => orders.menuLinks;
-
+export const getSortParams = ({ orders }) => orders.sortParams;
 export const getAllProductions = ({ orders }) => orders.allProductions;
 export const getCurrentProductions = ({ orders }) => orders.currentProductions;
 export const getFinishedProductions = ({ orders }) =>
@@ -41,9 +43,30 @@ export const getCanceledProductions = ({ orders }) =>
   orders.canceledProductions;
 
 export const getUpdateRequest = ({ orders }) => orders.updateRequest;
-export const getRequest = ({ orders }) => orders.updateRequest;
+export const getRequest = ({ orders }) => orders.request;
 
 //// Thunks
+export const sortCurrentProductions = (
+  currentProductions,
+  key,
+  valueType,
+  direction
+) => {
+  return async dispatch => {
+    dispatch(startRequest());
+    try {
+      let payload = {
+        sorted: sortByColumn(currentProductions, key, valueType, direction),
+        sortParams: { key: key, valueType: valueType, direction: direction }
+      };
+      dispatch(sortCurrent(payload));
+      dispatch(endRequest());
+    } catch (e) {
+      dispatch(errorRequest(e.message));
+    }
+  };
+};
+
 export const loadProductionsRequest = () => {
   return async dispatch => {
     dispatch(startRequest());
@@ -56,12 +79,12 @@ export const loadProductionsRequest = () => {
     }
   };
 };
-
-export const loadCurrentProductionsRequest = () => {
+export const loadCurrentProductionsRequest = (key, valueType, direction) => {
   return async dispatch => {
     dispatch(startRequest());
     try {
       let res = await axios.get(`${API_URL}/productions/current`);
+      sortByColumn(res.data, key, valueType, direction);
       dispatch(loadCurrentProductions(res.data));
       dispatch(endRequest());
     } catch (e) {
@@ -82,7 +105,6 @@ export const loadCanceledProductionsRequest = () => {
     }
   };
 };
-
 export const loadFinishedProductionsRequest = () => {
   return async dispatch => {
     dispatch(startRequest());
@@ -107,58 +129,60 @@ export const loadTransportedProductionsRequest = () => {
     }
   };
 };
-
-export const addProductionRequest = production => {
+export const addProductionRequest = (production, thunk) => {
   return async dispatch => {
     dispatch(startUpdateRequest());
     try {
       await axios.post(`${API_URL}/productions/add`, production);
+      dispatch(thunk);
       dispatch(endUpdateRequest());
     } catch (e) {
       dispatch(errorUpdateRequest(JSON.stringify(e)));
     }
   };
 };
-
-export const deleteProductionRequest = id => {
+export const deleteProductionRequest = (id, thunk) => {
   return async dispatch => {
     dispatch(startUpdateRequest());
     try {
       await axios.delete(`${API_URL}/productions/${id}`);
+      dispatch(thunk);
       dispatch(endUpdateRequest());
     } catch (e) {
       dispatch(errorUpdateRequest(JSON.stringify(e)));
     }
   };
 };
-
-export const toggleCancelProductionRequest = id => {
+export const toggleCancelProductionRequest = (id, thunk) => {
   return async dispatch => {
     dispatch(startUpdateRequest());
     try {
       await axios.put(`${API_URL}/productions/cancel/${id}`);
+      dispatch(thunk);
       dispatch(endUpdateRequest());
     } catch (e) {
       dispatch(errorUpdateRequest(JSON.stringify(e)));
     }
   };
 };
-export const toggleFinishProductionRequest = id => {
+export const toggleFinishProductionRequest = (id, thunk) => {
   return async dispatch => {
     dispatch(startUpdateRequest());
     try {
       await axios.put(`${API_URL}/productions/finish/${id}`);
+      dispatch(thunk);
       dispatch(endUpdateRequest());
     } catch (e) {
       dispatch(errorUpdateRequest(JSON.stringify(e)));
     }
   };
 };
-export const toggleTransportProductionRequest = id => {
+export const toggleTransportProductionRequest = (id, thunk) => {
   return async dispatch => {
     dispatch(startUpdateRequest());
     try {
       await axios.put(`${API_URL}/productions/transport/${id}`);
+      dispatch(thunk);
       dispatch(endUpdateRequest());
     } catch (e) {
       dispatch(errorUpdateRequest(JSON.stringify(e)));
@@ -171,8 +195,9 @@ export const toggleTransportProductionRequest = id => {
 const reducerName = 'orders';
 const createActionName = name => `app/${reducerName}/${name}`;
 
-// action exports
+// action creators
 export const FINISH_PRODUCTION = createActionName('FINISH_PRODUCTION');
+export const SORT_CURRENT = createActionName('SORT_CURRENT');
 
 export const LOAD_PRODUCTIONS = createActionName('LOAD_PRODUCTIONS');
 export const LOAD_CURRENT = createActionName('LOAD_CURRENT');
@@ -189,7 +214,9 @@ export const END_UPDATE_REQUEST = createActionName('END_UPDATE_REQUEST');
 export const RESET_UPDATE_REQUEST = createActionName('RESET_UPDATE_REQUEST');
 export const ERROR_UPDATE_REQUEST = createActionName('ERROR_UPDATE_REQUEST');
 
+// actions
 export const loadProductions = payload => ({ payload, type: LOAD_PRODUCTIONS });
+export const sortCurrent = payload => ({ payload, type: SORT_CURRENT });
 export const loadCurrentProductions = payload => ({
   payload,
   type: LOAD_CURRENT
@@ -216,6 +243,14 @@ export default function reducer(statePart = initialState, action = {}) {
   switch (action.type) {
     case LOAD_PRODUCTIONS:
       return { ...statePart, allProductions: action.payload };
+
+    case SORT_CURRENT:
+      return {
+        ...statePart,
+        currentProductions: action.payload.sorted,
+        sortParams: action.payload.sortParams
+      };
+
     case LOAD_CURRENT:
       return { ...statePart, currentProductions: action.payload };
     case LOAD_CANCELED:

@@ -7,12 +7,12 @@ import countDaysLeft from '../../../utils/countDaysLeft';
 import currentFromSquareMeters from '../../../utils/currentFromSquareMeters';
 import cutText from '../../../utils/cutText';
 // components
-import OrderListTable from '../../common/Table/OrderListTable/OrderListTable';
+import OrderListTable from '../../common/OrderList/OrderListTable/OrderListTable';
 import EditButton from '../../common/Buttons/EditButton/EditButton';
 import RestoreButton from '../../common/Buttons/RestoreButton/RestoreButton';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
-import './TransportedProductions.scss';
+import { isEqual } from 'lodash';
 
 class TransportedProductions extends React.Component {
   constructor(props) {
@@ -43,13 +43,18 @@ class TransportedProductions extends React.Component {
     const { loadTransportedProductions } = this.props;
     loadTransportedProductions().then(
       this.setState({
-        transportedProductions: this.props.transportedProductions
+        loadTransportedProductions: this.props.loadTransportedProductions
       })
     );
   }
-  componentDidUpdate(props) {
+  componentDidUpdate() {
     const { loadTransportedProductions } = this.props;
-    if (props.transportedProductions !== this.state.transportedProductions) {
+    if (
+      isEqual(
+        this.state.transportedProductions,
+        this.props.transportedProductions
+      ) === false
+    ) {
       loadTransportedProductions().then(
         this.setState({
           transportedProductions: this.props.transportedProductions
@@ -57,87 +62,87 @@ class TransportedProductions extends React.Component {
       );
     }
   }
+
   transportHandler = id => {
     const { transportProduction, loadTransportedProductions } = this.props;
-    transportProduction(id).then(loadTransportedProductions());
+    transportProduction(id, loadTransportedProductions);
   };
 
   render() {
     const { updateRequest, request, transportedProductions } = this.props;
-    const tdClass = 'td-class';
+    const tdClass = 'production-list-td';
 
     if (updateRequest.error || request.error)
       return <Alert variant="error">{`${updateRequest.error}`}</Alert>;
-    else if (updateRequest.pending || request.pending) return <Spinner />;
-    else
-      return (
-        <OrderListTable>
-          {transportedProductions.map(production => {
-            let daysLeft = countDaysLeft(
-              production.downpayment,
-              production.productionTerm
-            );
-            let daysLeftClass = 'text-default';
-            switch (true) {
-              case daysLeft <= 7 && daysLeft > 2:
-                daysLeftClass = 'text-warning';
-                break;
-              case daysLeft < 3:
-                daysLeftClass = 'text-danger';
-                break;
-              default:
-                daysLeftClass = 'text-default';
-            }
-            return (
-              <tr key={production.id} className="list-production">
-                <td className={`${tdClass} short-column`}>
-                  {production.orderNumber}
-                </td>
-                <td className={`${tdClass} name-column`}>
-                  {cutText(production.clientName, 25)}
-                </td>
-                <td className={`${tdClass} date-column`}>
-                  {formatDate(production.downpayment)}
-                </td>
-                <td className={`${tdClass} short-column ${daysLeftClass}`}>
-                  {daysLeft}
-                </td>
-                <td className={`${tdClass} short-column`}>
-                  {production.finalPayment === true ? (
-                    <MdAttachMoney className="text-success" />
-                  ) : (
-                    <MdMoneyOff className="text-danger" />
-                  )}
-                </td>
-                <td className={`${tdClass} short-column`}>{production.type}</td>
-                <td className={`${tdClass}`}>{production.colorOutside}</td>
-                <td className={`${tdClass}`}>{production.colorInside}</td>
-                <td className={`${tdClass} short-column`}>{production.core}</td>
-                <td className={`${tdClass} short-column`}>
-                  {production.thickness}
-                </td>
+    else if (updateRequest.pending && request.pending) return <Spinner />;
+    return (
+      <OrderListTable>
+        {transportedProductions.map(production => {
+          let daysLeft = countDaysLeft(
+            production.downpayment,
+            production.productionTerm
+          );
+          let daysLeftClass = 'text-default';
+          switch (true) {
+            case daysLeft <= 7 && daysLeft > 2:
+              daysLeftClass = 'text-warning';
+              break;
+            case daysLeft < 3:
+              daysLeftClass = 'text-danger';
+              break;
+            default:
+              daysLeftClass = 'text-default';
+          }
+          return (
+            <tr key={production.id} className="production-list">
+              <td className={`${tdClass} short-column`}>
+                {production.orderNumber}
+              </td>
+              <td className={`${tdClass} name-column`}>
+                {cutText(production.clientName, 25)}
+              </td>
+              <td className={`${tdClass} date-column`}>
+                {formatDate(production.downpayment)}
+              </td>
+              <td className={`${tdClass} short-column ${daysLeftClass}`}>
+                {daysLeft}
+              </td>
+              <td className={`${tdClass} short-column`}>
+                {production.finalPayment === true ? (
+                  <MdAttachMoney className="text-success" />
+                ) : (
+                  <MdMoneyOff className="text-danger" />
+                )}
+              </td>
+              <td className={`${tdClass} short-column`}>{production.type}</td>
+              <td className={`${tdClass}`}>{production.colorOutside}</td>
+              <td className={`${tdClass}`}>{production.colorInside}</td>
+              <td className={`${tdClass} short-column`}>{production.core}</td>
+              <td className={`${tdClass} short-column`}>
+                {production.thickness}
+              </td>
 
-                <td className={`${tdClass}`}>{production.m2}</td>
-                <td className={`${tdClass}`}>
-                  {currentFromSquareMeters(production.type, production.m2)}
-                </td>
-                <td className={`${tdClass} short-column`}>{production.csa}</td>
-                <td className={`${tdClass} list-buttons noprint`}>
-                  <span className="buttons-nowrap">
-                    <EditButton />
+              <td className={`${tdClass}`}>{production.m2}</td>
+              <td className={`${tdClass}`}>
+                {currentFromSquareMeters(production.type, production.m2)}
+              </td>
+              <td className={`${tdClass} short-column`}>{production.csa}</td>
+              <td className={`${tdClass} list-buttons noprint`}>
+                <span className="buttons-nowrap">
+                  <EditButton />
 
-                    <RestoreButton
-                      clickHandler={() => {
-                        this.transportHandler(production.id);
-                      }}
-                    />
-                  </span>
-                </td>
-              </tr>
-            );
-          })}
-        </OrderListTable>
-      );
+                  <RestoreButton
+                    clickHandler={() => {
+                      this.transportHandler(production.id);
+                    }}
+                  />
+                </span>
+              </td>
+            </tr>
+          );
+        })}
+      </OrderListTable>
+    );
   }
 }
 

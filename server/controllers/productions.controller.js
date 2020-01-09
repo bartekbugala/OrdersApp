@@ -61,7 +61,7 @@ exports.getSingleProduction = async (req, res) => {
 };
 
 // get productions by range
-exports.getProductionsByRange = async function(req, res) {
+exports.getProductionsByRange = async function (req, res) {
   try {
     let { startAt, limit, sortParam } = req.params;
 
@@ -109,7 +109,7 @@ exports.addProduction = async (req, res) => {
     newProduction.clientName = clientName;
     newProduction.downpayment = downpayment;
     newProduction.productionTerm = productionTerm;
-    newProduction.finalpayment = finalPayment || false;
+    newProduction.finalPayment = finalPayment || false;
     newProduction.type = type;
     newProduction.colorOutside = colorOutside;
     newProduction.colorInside = colorInside;
