@@ -37,7 +37,7 @@ class CurrentProductions extends React.Component {
       type: ''
     };
     this.state = {
-      currentProductions: [],
+      currentProductions: this.props.currentProductions, // was []
       updateRequest: this.props.updateRequest,
       request: this.props.request,
       newProduction: initialNewProduction,
@@ -157,10 +157,11 @@ class CurrentProductions extends React.Component {
             handleSort(key, valueType);
           }}>
           {currentProductions.map(production => {
-            let daysLeft = countDaysLeft(
-              production.downpayment,
-              production.productionTerm
-            );
+            let daysLeft =
+              countDaysLeft(
+                production.downpayment,
+                production.productionTerm
+              ) || '';
             let daysLeftClass = 'text-default';
             switch (true) {
               case daysLeft <= 7 && daysLeft > 2:
@@ -244,19 +245,19 @@ CurrentProductions.propTypes = {
   currentProductions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      orderNumber: PropTypes.string.isRequired,
-      clientName: PropTypes.string.isRequired,
-      downpayment: PropTypes.string.isRequired,
-      productionTerm: PropTypes.number.isRequired,
-      finalPayment: PropTypes.bool.isRequired,
+      orderNumber: PropTypes.string,
+      clientName: PropTypes.string,
+      downpayment: PropTypes.string,
+      productionTerm: PropTypes.number,
+      finalPayment: PropTypes.bool,
       finished: PropTypes.bool.isRequired,
-      type: PropTypes.string.isRequired,
-      colorOutside: PropTypes.string.isRequired,
-      colorInside: PropTypes.string.isRequired,
-      core: PropTypes.string.isRequired,
-      thickness: PropTypes.number.isRequired,
-      m2: PropTypes.number.isRequired,
-      csa: PropTypes.string.isRequired
+      type: PropTypes.string,
+      colorOutside: PropTypes.string,
+      colorInside: PropTypes.string,
+      core: PropTypes.string,
+      thickness: PropTypes.number,
+      m2: PropTypes.number,
+      csa: PropTypes.string
     })
   ),
   loadPostsByPage: PropTypes.func

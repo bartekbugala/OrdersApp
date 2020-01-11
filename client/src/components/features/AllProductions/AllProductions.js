@@ -18,23 +18,7 @@ import './AllProductions.scss';
 class AllProductions extends React.Component {
   constructor(props) {
     super(props);
-    let initialNewProduction = {
-      clientName: '',
-      colorOutside: '',
-      colorInside: '',
-      core: '',
-      csa: '',
-      downpayment: '',
-      finalPayment: false,
-      finished: false,
-      canceled: false,
-      transported: false,
-      m2: '',
-      orderNumber: '',
-      productionTerm: '',
-      thickness: '',
-      type: ''
-    };
+    let initialNewProduction = {};
     this.state = {
       allProductions: this.props.allProductions,
       request: this.props.request,

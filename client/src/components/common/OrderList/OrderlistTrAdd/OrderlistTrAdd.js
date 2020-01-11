@@ -10,22 +10,22 @@ const OrderlistTrAdd = ({
   newProduction,
   handleChange,
   handleDateChange,
-  handleDateSelect,
-  handleCheckBoxChange
+  handleCheckBoxChange,
+  handleDateSelect
 }) => (
   <tr className="new-production noprint">
     <td className={`${tdClass}`}>
       <input
         name="orderNumber"
         onChange={handleChange}
-        value={newProduction.orderNumber}
+        defaultValue={newProduction.orderNumber}
       />
     </td>
     <td className={`${tdClass}`}>
       <input
         name="clientName"
         onChange={handleChange}
-        value={newProduction.clientName}
+        defaultValue={newProduction.clientName}
       />
     </td>
     <td className={`${tdClass}`}>
@@ -35,7 +35,7 @@ const OrderlistTrAdd = ({
         selected={newProduction.downpayment}
         onChange={handleDateChange}
         onSelect={handleDateSelect}
-        value={
+        defaultValue={
           !isNaN(newProduction.downpayment)
             ? newProduction.downpayment
             : startDate
@@ -47,50 +47,66 @@ const OrderlistTrAdd = ({
       <input
         name="productionTerm"
         onChange={handleChange}
-        value={newProduction.productionTerm}
+        defaultValue={newProduction.productionTerm}
       />
     </td>
     <td className={`${tdClass}`}>
       <input
         name="finalPayment"
         type="checkbox"
-        checked={newProduction.finalPayment}
+        defaultValue={newProduction.finalPayment}
         onChange={handleCheckBoxChange}
       />
     </td>
     <td className={`${tdClass}`}>
-      <input name="type" onChange={handleChange} value={newProduction.type} />
+      <input
+        name="type"
+        onChange={handleChange}
+        defaultValue={newProduction.type}
+      />
     </td>
     <td className="form-td">
       <input
         name="colorOutside"
         onChange={handleChange}
-        value={newProduction.colorOutside}
+        defaultValue={newProduction.colorOutside}
       />
     </td>
     <td className={`${tdClass}`}>
       <input
         name="colorInside"
         onChange={handleChange}
-        value={newProduction.colorInside}
+        defaultValue={newProduction.colorInside}
       />
     </td>
     <td className={`${tdClass}`}>
-      <input name="core" onChange={handleChange} value={newProduction.core} />
+      <input
+        name="core"
+        onChange={handleChange}
+        defaultValue={newProduction.core}
+      />
     </td>
     <td className={`${tdClass}`}>
       <input
         name="thickness"
         onChange={handleChange}
-        value={newProduction.thickness}
+        defaultValue={newProduction.thickness}
       />
     </td>
     <td className={`${tdClass}`}>
-      <input name="m2" onChange={handleChange} value={newProduction.m2} />
+      <input
+        name="m2"
+        onChange={handleChange}
+        defaultValue={newProduction.m2}
+      />
     </td>
     <td className={`${tdClass}`}></td>
     <td className={`${tdClass}`}>
-      <input name="csa" onChange={handleChange} value={newProduction.csa} />
+      <input
+        name="csa"
+        onChange={handleChange}
+        defaultValue={newProduction.csa}
+      />
     </td>
     <td className="form-btn">
       <AddRowButton type="submit" />
