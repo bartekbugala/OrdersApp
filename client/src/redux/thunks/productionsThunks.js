@@ -44,24 +44,12 @@ export const loadCurrentProductionsRequest = (key, valueType, direction) => {
     }
   };
 };
-
-export const loadCanceledProductionsRequest = () => {
-  return async dispatch => {
-    dispatch(startRequest());
-    try {
-      let res = await axios.get(`${API_URL}/productions/canceled`);
-      dispatch(loadCanceled(res.data));
-      dispatch(endRequest());
-    } catch (e) {
-      dispatch(errorRequest(e.message));
-    }
-  };
-};
-export const loadFinishedProductionsRequest = () => {
+export const loadFinishedProductionsRequest = (key, valueType, direction) => {
   return async dispatch => {
     dispatch(startRequest());
     try {
       let res = await axios.get(`${API_URL}/productions/finished`);
+      sortByColumn(res.data, key, valueType, direction);
       dispatch(loadFinished(res.data));
       dispatch(endRequest());
     } catch (e) {
@@ -69,11 +57,30 @@ export const loadFinishedProductionsRequest = () => {
     }
   };
 };
-export const loadTransportedProductionsRequest = () => {
+export const loadCanceledProductionsRequest = (key, valueType, direction) => {
+  return async dispatch => {
+    dispatch(startRequest());
+    try {
+      let res = await axios.get(`${API_URL}/productions/canceled`);
+      sortByColumn(res.data, key, valueType, direction);
+      dispatch(loadCanceled(res.data));
+      dispatch(endRequest());
+    } catch (e) {
+      dispatch(errorRequest(e.message));
+    }
+  };
+};
+
+export const loadTransportedProductionsRequest = (
+  key,
+  valueType,
+  direction
+) => {
   return async dispatch => {
     dispatch(startRequest());
     try {
       let res = await axios.get(`${API_URL}/productions/transported`);
+      sortByColumn(res.data, key, valueType, direction);
       dispatch(loadTransported(res.data));
       dispatch(endRequest());
     } catch (e) {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { MdAttachMoney, MdMoneyOff } from 'react-icons/md';
 import { PropTypes } from 'prop-types';
+import { isEqual } from 'lodash';
 // utils
 import formatDate from '../../../utils/formatDate';
 import countDaysLeft from '../../../utils/countDaysLeft';
@@ -13,50 +14,42 @@ import RestoreButton from '../../common/Buttons/RestoreButton/RestoreButton';
 import TransportButton from '../../common/Buttons/TransportButton/TransportButton';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
-import { isEqual } from 'lodash';
 
 class FinishedProductions extends React.Component {
   constructor(props) {
     super(props);
-    let initialNewProduction = {
-      clientName: '',
-      colorOutside: '',
-      colorInside: '',
-      core: '',
-      csa: '',
-      downpayment: null,
-      finalPayment: false,
-      finished: false,
-      m2: null,
-      orderNumber: '',
-      productionTerm: '',
-      thickness: null,
-      type: ''
-    };
     this.state = {
-      finishedProductions: [],
-      newProduction: initialNewProduction,
+      finishedProductions: this.props.finishedProductions,
       startDate: new Date()
     };
   }
 
   componentDidMount() {
-    const { loadFinishedProductions } = this.props;
-    loadFinishedProductions().then(
+    const { loadFinishedProductions, sortParams } = this.props;
+    loadFinishedProductions(
+      sortParams.key,
+      sortParams.valueType,
+      sortParams.direction
+    ).then(
       this.setState({
         finishedProductions: this.props.finishedProductions
       })
     );
   }
+
   componentDidUpdate() {
-    const { loadFinishedProductions } = this.props;
+    const { loadFinishedProductions, sortParams } = this.props;
     if (
       isEqual(
         this.state.finishedProductions,
         this.props.finishedProductions
       ) === false
     ) {
-      loadFinishedProductions().then(
+      loadFinishedProductions(
+        sortParams.key,
+        sortParams.valueType,
+        sortParams.direction
+      ).then(
         this.setState({ finishedProductions: this.props.finishedProductions })
       );
     }
@@ -66,12 +59,24 @@ class FinishedProductions extends React.Component {
     const { finishProduction, loadFinishedProductions } = this.props;
     finishProduction(id, loadFinishedProductions);
   };
+
   transportHandler = id => {
     const { transportProduction, loadFinishedProductions } = this.props;
     transportProduction(id, loadFinishedProductions);
   };
 
+  handleSort = (
+    key = 'orderNumber',
+    valueType = 'number',
+    direction = 'asc'
+  ) => {
+    const { finishedProductions } = this.state;
+    const { sortFinishedProductions } = this.props;
+    sortFinishedProductions(finishedProductions, key, valueType, direction);
+  };
+
   render() {
+    const { handleSort } = this;
     const { updateRequest, request } = this.props;
     const { finishedProductions } = this.state;
     const tdClass = 'production-list-td';
@@ -80,7 +85,10 @@ class FinishedProductions extends React.Component {
       return <Alert variant="error">{`${updateRequest.error}`}</Alert>;
     else if (updateRequest.pending && request.pending) return <Spinner />;
     return (
-      <OrderListTable>
+      <OrderListTable
+        sortColumn={(key, valueType) => {
+          handleSort(key, valueType);
+        }}>
         {finishedProductions.map(production => {
           let daysLeft = countDaysLeft(
             production.downpayment,
@@ -161,19 +169,19 @@ FinishedProductions.propTypes = {
   finishedProductions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      orderNumber: PropTypes.string.isRequired,
-      clientName: PropTypes.string.isRequired,
-      downpayment: PropTypes.object.isRequired,
-      productionTerm: PropTypes.number.isRequired,
-      finalPayment: PropTypes.bool.isRequired,
+      orderNumber: PropTypes.string,
+      clientName: PropTypes.string,
+      downpayment: PropTypes.string,
+      productionTerm: PropTypes.number,
+      finalPayment: PropTypes.bool,
       finished: PropTypes.bool.isRequired,
-      type: PropTypes.string.isRequired,
-      colorOutside: PropTypes.string.isRequired,
-      colorInside: PropTypes.string.isRequired,
-      core: PropTypes.string.isRequired,
-      thickness: PropTypes.number.isRequired,
-      m2: PropTypes.number.isRequired,
-      csa: PropTypes.string.isRequired
+      type: PropTypes.string,
+      colorOutside: PropTypes.string,
+      colorInside: PropTypes.string,
+      core: PropTypes.string,
+      thickness: PropTypes.number,
+      m2: PropTypes.number,
+      csa: PropTypes.string
     })
   ),
   loadPostsByPage: PropTypes.func

@@ -143,8 +143,7 @@ class CurrentProductions extends React.Component {
       handleSort
     } = this;
     const { updateRequest, request } = this.props;
-    const { currentProductions } = this.state;
-    const { newProduction, startDate } = this.state;
+    const { currentProductions, newProduction, startDate } = this.state;
     const tdClass = 'production-list-td';
 
     if (updateRequest.error)

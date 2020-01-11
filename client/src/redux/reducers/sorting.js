@@ -14,7 +14,7 @@ export default function reducer(statePart = initialState, action = {}) {
     case SORT_ALL:
       return {
         ...statePart,
-        currentProductions: action.payload.sorted,
+        allProductions: action.payload.sorted,
         sortParams: action.payload.sortParams
       };
     case SORT_CURRENT:
@@ -26,19 +26,19 @@ export default function reducer(statePart = initialState, action = {}) {
     case SORT_FINISHED:
       return {
         ...statePart,
-        currentProductions: action.payload.sorted,
+        finishedProductions: action.payload.sorted,
         sortParams: action.payload.sortParams
       };
     case SORT_TRANSPORTED:
       return {
         ...statePart,
-        currentProductions: action.payload.sorted,
+        transportedProductions: action.payload.sorted,
         sortParams: action.payload.sortParams
       };
     case SORT_CANCELED:
       return {
         ...statePart,
-        currentProductions: action.payload.sorted,
+        canceledProductions: action.payload.sorted,
         sortParams: action.payload.sortParams
       };
     default:

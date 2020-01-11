@@ -3,7 +3,6 @@ import {
   resetUpdateRequest,
   resetRequest
 } from '../../../redux/actions/requestsActions';
-import FinishedProductions from './FinishedProductions';
 import {
   getFinishedProductions,
   getUpdateRequest,
@@ -15,14 +14,26 @@ import {
   toggleFinishProductionRequest,
   toggleTransportProductionRequest
 } from '../../../redux/thunks/productionsThunks';
+import { sortFinishedProductions } from '../../../redux/thunks/sortingThunks';
+import FinishedProductions from './FinishedProductions';
+
 const mapStateToProps = state => ({
   finishedProductions: getFinishedProductions(state),
   updateRequest: getUpdateRequest(state),
+  sortParams: getSortParams(state),
   request: getRequest(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-  loadFinishedProductions: () => dispatch(loadFinishedProductionsRequest()),
+  loadFinishedProductions: (
+    key = 'orderNumber',
+    valueType = 'number',
+    direction = 'asc'
+  ) => dispatch(loadFinishedProductionsRequest(key, valueType, direction)),
+  sortFinishedProductions: (finishedProductions, key, valueType, direction) =>
+    dispatch(
+      sortFinishedProductions(finishedProductions, key, valueType, direction)
+    ),
   finishProduction: (id, thunk) =>
     dispatch(toggleFinishProductionRequest(id, thunk)),
   transportProduction: (id, thunk) =>
