@@ -1,10 +1,7 @@
 import { connect } from 'react-redux';
 import {
-  loadFinishedProductionsRequest,
   resetUpdateRequest,
-  resetRequest,
-  toggleFinishProductionRequest,
-  toggleTransportProductionRequest
+  resetRequest
 } from '../../../redux/reducers/productions';
 import FinishedProductions from './FinishedProductions';
 import {
@@ -13,6 +10,11 @@ import {
   getRequest,
   getSortParams
 } from '../../../redux/selectors';
+import {
+  loadFinishedProductionsRequest,
+  toggleFinishProductionRequest,
+  toggleTransportProductionRequest
+} from '../../../redux/thunks/productionsThunks';
 const mapStateToProps = state => ({
   finishedProductions: getFinishedProductions(state),
   updateRequest: getUpdateRequest(state),

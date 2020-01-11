@@ -1,9 +1,7 @@
 import { connect } from 'react-redux';
 import {
-  loadTransportedProductionsRequest,
   resetUpdateRequest,
-  resetRequest,
-  toggleTransportProductionRequest
+  resetRequest
 } from '../../../redux/reducers/productions';
 import TransportedProductions from './TransportedProductions';
 import {
@@ -12,6 +10,10 @@ import {
   getRequest,
   getSortParams
 } from '../../../redux/selectors';
+import {
+  loadTransportedProductionsRequest,
+  toggleTransportProductionRequest
+} from '../../../redux/thunks/productionsThunks';
 const mapStateToProps = state => ({
   transportedProductions: getTransportedProductions(state),
   updateRequest: getUpdateRequest(state),

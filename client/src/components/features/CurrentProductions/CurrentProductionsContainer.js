@@ -1,13 +1,15 @@
 import { connect } from 'react-redux';
 import {
+  resetUpdateRequest,
+  resetRequest
+} from '../../../redux/reducers/productions';
+import {
   sortCurrentProductions,
   loadCurrentProductionsRequest,
   toggleCancelProductionRequest,
   toggleFinishProductionRequest,
-  addProductionRequest,
-  resetUpdateRequest,
-  resetRequest
-} from '../../../redux/reducers/productions';
+  addProductionRequest
+} from '../../../redux/thunks/productionsThunks';
 import {
   getCurrentProductions,
   getUpdateRequest,

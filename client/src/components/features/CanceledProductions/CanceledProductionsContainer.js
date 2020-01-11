@@ -1,10 +1,7 @@
 import { connect } from 'react-redux';
 import {
-  loadCanceledProductionsRequest,
-  deleteProductionRequest,
   resetUpdateRequest,
-  resetRequest,
-  toggleCancelProductionRequest
+  resetRequest
 } from '../../../redux/reducers/productions';
 import {
   getCanceledProductions,
@@ -12,6 +9,11 @@ import {
   getRequest,
   getSortParams
 } from '../../../redux/selectors';
+import {
+  loadCanceledProductionsRequest,
+  deleteProductionRequest,
+  toggleCancelProductionRequest
+} from '../../../redux/thunks/productionsThunks';
 import CanceledProductions from './CanceledProductions';
 
 const mapStateToProps = state => ({
