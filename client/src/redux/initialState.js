@@ -9,10 +9,10 @@ const initialState = {
   ],
   sortParams: { key: 'orderNumber', valueType: 'number', direction: 'asc' },
   allProductions: [],
-  canceledProductions: [],
   currentProductions: [],
   finishedProductions: [],
   transportedProductions: [],
+  canceledProductions: [],
   updateRequest: {
     pending: false,
     error: null,
