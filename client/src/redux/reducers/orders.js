@@ -1,34 +1,7 @@
 import axios from 'axios';
 import sortByColumn from '../../utils/sortByColumn';
 import { API_URL } from '../../config';
-
-//// Initial state
-const initialState = {
-  menuLinks: [
-    { path: '/current', title: 'Bieżące' },
-    { path: '/finished', title: 'Wyprodukowane' },
-    { path: '/transported', title: 'Wywiezione' },
-    { path: '/canceled', title: 'Anulowane' },
-    { path: '/all', title: 'Wszystkie' },
-    { path: '/stats', title: 'Statystyki' }
-  ],
-  sortParams: { key: 'orderNumber', valueType: 'number', direction: 'asc' },
-  allProductions: [],
-  canceledProductions: [],
-  currentProductions: [],
-  finishedProductions: [],
-  transportedProductions: [],
-  updateRequest: {
-    pending: false,
-    error: null,
-    success: null
-  },
-  request: {
-    pending: false,
-    error: null,
-    success: null
-  }
-};
+import initialState from '../initialState';
 
 //// Thunks
 export const sortCurrentProductions = (
