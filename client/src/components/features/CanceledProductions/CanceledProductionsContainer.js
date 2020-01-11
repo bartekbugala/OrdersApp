@@ -9,11 +9,11 @@ import {
   getRequest,
   getSortParams
 } from '../../../redux/selectors';
+import { loadCanceledProductionsRequest } from '../../../redux/thunks/productionsThunks';
 import {
-  loadCanceledProductionsRequest,
   deleteProductionRequest,
   toggleCancelProductionRequest
-} from '../../../redux/thunks/productionsThunks';
+} from '../../../redux/thunks/productionsHandlersThunks';
 import CanceledProductions from './CanceledProductions';
 
 const mapStateToProps = state => ({

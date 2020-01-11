@@ -10,14 +10,13 @@ import {
   getSortParams
 } from '../../../redux/selectors';
 import { sortAllProductions } from '../../../redux/thunks/sortingThunks';
-
+import { loadAllProductionsRequest } from '../../../redux/thunks/productionsThunks';
 import {
   addProductionRequest,
-  loadAllProductionsRequest,
   toggleCancelProductionRequest,
   toggleFinishProductionRequest,
   toggleTransportProductionRequest
-} from '../../../redux/thunks/productionsThunks';
+} from '../../../redux/thunks/productionsHandlersThunks';
 import AllProductions from './AllProductions';
 
 const mapStateToProps = state => ({
