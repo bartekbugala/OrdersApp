@@ -18,7 +18,23 @@ import './AllProductions.scss';
 class AllProductions extends React.Component {
   constructor(props) {
     super(props);
-    let initialNewProduction = {};
+    let initialNewProduction = {
+      clientName: '',
+      colorOutside: '',
+      colorInside: '',
+      core: '',
+      csa: '',
+      downpayment: '',
+      finalPayment: false,
+      finished: false,
+      canceled: false,
+      transported: false,
+      m2: '',
+      orderNumber: '',
+      productionTerm: '',
+      thickness: '',
+      type: ''
+    };
     this.state = {
       allProductions: this.props.allProductions,
       request: this.props.request,
@@ -87,6 +103,15 @@ class AllProductions extends React.Component {
     addProduction(newProduction).then(this.setState({ newProduction: {} }));
   };
 
+  handleForm = e => {
+    e.preventDefault();
+    const { addProduction, loadAllProductions } = this.props;
+    const { newProduction } = this.state;
+    addProduction(newProduction, loadAllProductions).then(
+      this.setState({ newProduction: {} })
+    );
+  };
+
   finishHandler = id => {
     const { finishProduction, loadAllProductions } = this.props;
     finishProduction(id, loadAllProductions);
@@ -153,10 +178,11 @@ class AllProductions extends React.Component {
                 default:
                   break;
               }
-              let daysLeft = countDaysLeft(
-                production.downpayment,
-                production.productionTerm
-              );
+              let daysLeft =
+                countDaysLeft(
+                  production.downpayment,
+                  production.productionTerm
+                ) || '';
               let daysLeftClass = 'text-default';
               switch (true) {
                 case daysLeft <= 7 && daysLeft > 2:
@@ -238,19 +264,19 @@ AllProductions.propTypes = {
   allProductions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      orderNumber: PropTypes.string.isRequired,
-      clientName: PropTypes.string.isRequired,
-      downpayment: PropTypes.string.isRequired,
-      productionTerm: PropTypes.number.isRequired,
-      finalPayment: PropTypes.bool.isRequired,
+      orderNumber: PropTypes.string,
+      clientName: PropTypes.string,
+      downpayment: PropTypes.string,
+      productionTerm: PropTypes.number,
+      finalPayment: PropTypes.bool,
       finished: PropTypes.bool.isRequired,
-      type: PropTypes.string.isRequired,
-      colorOutside: PropTypes.string.isRequired,
-      colorInside: PropTypes.string.isRequired,
-      core: PropTypes.string.isRequired,
-      thickness: PropTypes.number.isRequired,
-      m2: PropTypes.number.isRequired,
-      csa: PropTypes.string.isRequired
+      type: PropTypes.string,
+      colorOutside: PropTypes.string,
+      colorInside: PropTypes.string,
+      core: PropTypes.string,
+      thickness: PropTypes.number,
+      m2: PropTypes.number,
+      csa: PropTypes.string
     })
   ),
   loadPostsByPage: PropTypes.func
