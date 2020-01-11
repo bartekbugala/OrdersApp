@@ -22,6 +22,15 @@ export const loadCurrentProductions = payload => ({
   payload,
   type: LOAD_CURRENT
 });
-export const loadCanceled = payload => ({ payload, type: LOAD_CANCELED });
-export const loadFinished = payload => ({ payload, type: LOAD_FINISHED });
-export const loadTransported = payload => ({ payload, type: LOAD_TRANSPORTED });
+export const loadCanceledProductions = payload => ({
+  payload,
+  type: LOAD_CANCELED
+});
+export const loadFinishedProductions = payload => ({
+  payload,
+  type: LOAD_FINISHED
+});
+export const loadTransportedProductions = payload => ({
+  payload,
+  type: LOAD_TRANSPORTED
+});

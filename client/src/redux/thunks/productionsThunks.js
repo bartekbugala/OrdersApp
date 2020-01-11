@@ -12,9 +12,9 @@ import {
 import {
   loadAllProductions,
   loadCurrentProductions,
-  loadFinished,
-  loadTransported,
-  loadCanceled
+  loadFinishedProductions,
+  loadTransportedProductions,
+  loadCanceledProductions
 } from '../actions/productionsActions';
 
 //// Thunks
@@ -50,7 +50,7 @@ export const loadFinishedProductionsRequest = (key, valueType, direction) => {
     try {
       let res = await axios.get(`${API_URL}/productions/finished`);
       sortByColumn(res.data, key, valueType, direction);
-      dispatch(loadFinished(res.data));
+      dispatch(loadFinishedProductions(res.data));
       dispatch(endRequest());
     } catch (e) {
       dispatch(errorRequest(e.message));
@@ -63,7 +63,7 @@ export const loadCanceledProductionsRequest = (key, valueType, direction) => {
     try {
       let res = await axios.get(`${API_URL}/productions/canceled`);
       sortByColumn(res.data, key, valueType, direction);
-      dispatch(loadCanceled(res.data));
+      dispatch(loadCanceledProductions(res.data));
       dispatch(endRequest());
     } catch (e) {
       dispatch(errorRequest(e.message));
@@ -81,13 +81,14 @@ export const loadTransportedProductionsRequest = (
     try {
       let res = await axios.get(`${API_URL}/productions/transported`);
       sortByColumn(res.data, key, valueType, direction);
-      dispatch(loadTransported(res.data));
+      dispatch(loadTransportedProductions(res.data));
       dispatch(endRequest());
     } catch (e) {
       dispatch(errorRequest(e.message));
     }
   };
 };
+
 export const addProductionRequest = (production, thunk) => {
   return async dispatch => {
     dispatch(startUpdateRequest());
