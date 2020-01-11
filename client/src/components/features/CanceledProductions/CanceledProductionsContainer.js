@@ -14,16 +14,26 @@ import {
   deleteProductionRequest,
   toggleCancelProductionRequest
 } from '../../../redux/thunks/productionsHandlersThunks';
+import { sortCanceledProductions } from '../../../redux/thunks/sortingThunks';
 import CanceledProductions from './CanceledProductions';
 
 const mapStateToProps = state => ({
   canceledProductions: getCanceledProductions(state),
   updateRequest: getUpdateRequest(state),
+  sortParams: getSortParams(state),
   request: getRequest(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-  loadCanceledProductions: () => dispatch(loadCanceledProductionsRequest()),
+  loadCanceledProductions: (
+    key = 'orderNumber',
+    valueType = 'number',
+    direction = 'asc'
+  ) => dispatch(loadCanceledProductionsRequest(key, valueType, direction)),
+  sortCanceledProductions: (canceledProductions, key, valueType, direction) =>
+    dispatch(
+      sortCanceledProductions(canceledProductions, key, valueType, direction)
+    ),
   cancelProduction: (id, thunk) =>
     dispatch(toggleCancelProductionRequest(id, thunk)),
   deleteProduction: (id, thunk) => dispatch(deleteProductionRequest(id, thunk)),

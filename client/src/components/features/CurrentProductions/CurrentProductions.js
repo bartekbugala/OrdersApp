@@ -37,7 +37,7 @@ class CurrentProductions extends React.Component {
       csa: ''
     };
     this.state = {
-      currentProductions: this.props.currentProductions, // was []
+      currentProductions: this.props.currentProductions,
       updateRequest: this.props.updateRequest,
       request: this.props.request,
       newProduction: initialNewProduction,

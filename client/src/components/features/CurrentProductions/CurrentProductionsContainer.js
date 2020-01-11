@@ -15,7 +15,6 @@ import {
   toggleFinishProductionRequest,
   addProductionRequest
 } from '../../../redux/thunks/productionsHandlersThunks';
-
 import { sortCurrentProductions } from '../../../redux/thunks/sortingThunks';
 import CurrentProductions from './CurrentProductions';
 
