@@ -1,3 +1,5 @@
+import countDaysLeft from './countDaysLeft';
+
 export default function sortByColumn(array, key, valueType, direction) {
   switch (valueType) {
     case 'number':
@@ -6,14 +8,20 @@ export default function sortByColumn(array, key, valueType, direction) {
           ? parseFloat(a[key]) - parseFloat(b[key])
           : parseFloat(b[key]) - parseFloat(a[key])
       );
-
     case 'string':
       return array.sort((a, b) =>
         direction === 'asc'
           ? a[key].localeCompare(b[key])
           : b[key].localeCompare(a[key])
       );
-
+    case 'productionTerm':
+      return array.sort((a, b) =>
+        direction === 'asc'
+          ? countDaysLeft(a.downpayment, a[key]) -
+            countDaysLeft(b.downpayment, b[key])
+          : countDaysLeft(b.downpayment, b[key]) -
+            countDaysLeft(a.downpayment, a[key])
+      );
     case 'date':
       return array.sort((a, b) =>
         direction === 'asc'
@@ -22,13 +30,9 @@ export default function sortByColumn(array, key, valueType, direction) {
       );
 
     case 'boolean':
-      array.sort(function(x, y) {
-        // true values first
-        return x === y ? 0 : x ? -1 : 1;
-        // false values first
-        // return (x === y)? 0 : x? 1 : -1;
-      });
-      break;
+      return array.sort((a, b) =>
+        direction === 'asc' ? b[key] - a[key] : a[key] - b[key]
+      );
     default:
       return array.sort((a, b) =>
         direction === 'asc' ? a[key] - b[key] : b[key] - a[key]

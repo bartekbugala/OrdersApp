@@ -19,21 +19,21 @@ class AllProductions extends React.Component {
   constructor(props) {
     super(props);
     let initialNewProduction = {
+      orderNumber: '',
       clientName: '',
+      downpayment: '',
+      productionTerm: '',
+      finalPayment: false,
+      type: '',
       colorOutside: '',
       colorInside: '',
       core: '',
-      csa: '',
-      downpayment: '',
-      finalPayment: false,
+      thickness: '',
       finished: false,
       canceled: false,
       transported: false,
       m2: '',
-      orderNumber: '',
-      productionTerm: '',
-      thickness: '',
-      type: ''
+      csa: ''
     };
     this.state = {
       allProductions: this.props.allProductions,
