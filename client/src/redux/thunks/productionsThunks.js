@@ -4,27 +4,24 @@ import sortByColumn from '../../utils/sortByColumn';
 import {
   startRequest,
   endRequest,
-  errorRequest,
-  startUpdateRequest,
-  endUpdateRequest,
-  errorUpdateRequest
+  errorRequest
 } from '../actions/requestsActions';
 import {
-  loadProductions,
+  loadAllProductions,
   loadCurrentProductions,
-  sortCurrent,
-  loadFinished,
-  loadTransported,
-  loadCanceled
+  loadFinishedProductions,
+  loadTransportedProductions,
+  loadCanceledProductions
 } from '../actions/productionsActions';
 
 //// Thunks
-export const loadProductionsRequest = () => {
+export const loadAllProductionsRequest = (key, valueType, direction) => {
   return async dispatch => {
     dispatch(startRequest());
     try {
       let res = await axios.get(`${API_URL}/productions`);
-      dispatch(loadProductions(res.data));
+      sortByColumn(res.data, key, valueType, direction);
+      dispatch(loadAllProductions(res.data));
       dispatch(endRequest());
     } catch (e) {
       dispatch(errorRequest(e.message));
@@ -44,100 +41,46 @@ export const loadCurrentProductionsRequest = (key, valueType, direction) => {
     }
   };
 };
-
-export const loadCanceledProductionsRequest = () => {
-  return async dispatch => {
-    dispatch(startRequest());
-    try {
-      let res = await axios.get(`${API_URL}/productions/canceled`);
-      dispatch(loadCanceled(res.data));
-      dispatch(endRequest());
-    } catch (e) {
-      dispatch(errorRequest(e.message));
-    }
-  };
-};
-export const loadFinishedProductionsRequest = () => {
+export const loadFinishedProductionsRequest = (key, valueType, direction) => {
   return async dispatch => {
     dispatch(startRequest());
     try {
       let res = await axios.get(`${API_URL}/productions/finished`);
-      dispatch(loadFinished(res.data));
+      sortByColumn(res.data, key, valueType, direction);
+      dispatch(loadFinishedProductions(res.data));
       dispatch(endRequest());
     } catch (e) {
       dispatch(errorRequest(e.message));
     }
   };
 };
-export const loadTransportedProductionsRequest = () => {
+export const loadCanceledProductionsRequest = (key, valueType, direction) => {
+  return async dispatch => {
+    dispatch(startRequest());
+    try {
+      let res = await axios.get(`${API_URL}/productions/canceled`);
+      sortByColumn(res.data, key, valueType, direction);
+      dispatch(loadCanceledProductions(res.data));
+      dispatch(endRequest());
+    } catch (e) {
+      dispatch(errorRequest(e.message));
+    }
+  };
+};
+export const loadTransportedProductionsRequest = (
+  key,
+  valueType,
+  direction
+) => {
   return async dispatch => {
     dispatch(startRequest());
     try {
       let res = await axios.get(`${API_URL}/productions/transported`);
-      dispatch(loadTransported(res.data));
+      sortByColumn(res.data, key, valueType, direction);
+      dispatch(loadTransportedProductions(res.data));
       dispatch(endRequest());
     } catch (e) {
       dispatch(errorRequest(e.message));
-    }
-  };
-};
-export const addProductionRequest = (production, thunk) => {
-  return async dispatch => {
-    dispatch(startUpdateRequest());
-    try {
-      await axios.post(`${API_URL}/productions/add`, production);
-      dispatch(thunk);
-      dispatch(endUpdateRequest());
-    } catch (e) {
-      dispatch(errorUpdateRequest(JSON.stringify(e)));
-    }
-  };
-};
-export const deleteProductionRequest = (id, thunk) => {
-  return async dispatch => {
-    dispatch(startUpdateRequest());
-    try {
-      await axios.delete(`${API_URL}/productions/${id}`);
-      dispatch(thunk);
-      dispatch(endUpdateRequest());
-    } catch (e) {
-      dispatch(errorUpdateRequest(JSON.stringify(e)));
-    }
-  };
-};
-export const toggleCancelProductionRequest = (id, thunk) => {
-  return async dispatch => {
-    dispatch(startUpdateRequest());
-    try {
-      await axios.put(`${API_URL}/productions/cancel/${id}`);
-      dispatch(thunk);
-      dispatch(endUpdateRequest());
-    } catch (e) {
-      dispatch(errorUpdateRequest(JSON.stringify(e)));
-    }
-  };
-};
-export const toggleFinishProductionRequest = (id, thunk) => {
-  return async dispatch => {
-    dispatch(startUpdateRequest());
-    try {
-      await axios.put(`${API_URL}/productions/finish/${id}`);
-      dispatch(thunk);
-      dispatch(endUpdateRequest());
-    } catch (e) {
-      dispatch(errorUpdateRequest(JSON.stringify(e)));
-    }
-  };
-};
-export const toggleTransportProductionRequest = (id, thunk) => {
-  return async dispatch => {
-    dispatch(startUpdateRequest());
-    try {
-      await axios.put(`${API_URL}/productions/transport/${id}`);
-      dispatch(thunk);
-      dispatch(endUpdateRequest());
-    } catch (e) {
-      dispatch(errorUpdateRequest(JSON.stringify(e)));
     }
   };
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 import { MdAttachMoney, MdMoneyOff } from 'react-icons/md';
 import { PropTypes } from 'prop-types';
+import { isEqual } from 'lodash';
 // utils
 import formatDate from '../../../utils/formatDate';
 import countDaysLeft from '../../../utils/countDaysLeft';
@@ -13,48 +14,39 @@ import RestoreButton from '../../common/Buttons/RestoreButton/RestoreButton';
 import DeleteButton from '../../common/Buttons/DeleteButton/DeleteButton';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
-import { isEqual } from 'lodash';
 
 class CanceledProductions extends React.Component {
   constructor(props) {
     super(props);
-    let initialNewProduction = {
-      clientName: '',
-      colorOutside: '',
-      colorInside: '',
-      core: '',
-      csa: '',
-      downpayment: null,
-      finalPayment: false,
-      finished: false,
-      m2: null,
-      orderNumber: '',
-      productionTerm: '',
-      thickness: null,
-      type: ''
-    };
     this.state = {
-      canceledProductions: [],
-      newProduction: initialNewProduction,
+      canceledProductions: this.props.canceledProductions,
       startDate: new Date()
     };
   }
 
   componentDidMount() {
-    const { loadCanceledProductions } = this.props;
-    loadCanceledProductions().then(
+    const { loadCanceledProductions, sortParams } = this.props;
+    loadCanceledProductions(
+      sortParams.key,
+      sortParams.valueType,
+      sortParams.direction
+    ).then(
       this.setState({ canceledProductions: this.props.canceledProductions })
     );
   }
   componentDidUpdate() {
-    const { loadCanceledProductions } = this.props;
+    const { loadCanceledProductions, sortParams } = this.props;
     if (
       isEqual(
         this.state.canceledProductions,
         this.props.canceledProductions
       ) === false
     ) {
-      loadCanceledProductions().then(
+      loadCanceledProductions(
+        sortParams.key,
+        sortParams.valueType,
+        sortParams.direction
+      ).then(
         this.setState({
           canceledProductions: this.props.canceledProductions
         })
@@ -72,7 +64,18 @@ class CanceledProductions extends React.Component {
     deleteProduction(id, loadCanceledProductions);
   };
 
+  handleSort = (
+    key = 'orderNumber',
+    valueType = 'number',
+    direction = 'asc'
+  ) => {
+    const { canceledProductions } = this.state;
+    const { sortCanceledProductions } = this.props;
+    sortCanceledProductions(canceledProductions, key, valueType, direction);
+  };
+
   render() {
+    const { handleSort } = this;
     const { updateRequest, request, canceledProductions } = this.props;
     const tdClass = 'production-list-td';
 
@@ -80,7 +83,10 @@ class CanceledProductions extends React.Component {
       return <Alert variant="error">{`${updateRequest.error}`}</Alert>;
     else if (updateRequest.pending && request.pending) return <Spinner />;
     return (
-      <OrderListTable>
+      <OrderListTable
+        sortColumn={(key, valueType) => {
+          handleSort(key, valueType);
+        }}>
         {canceledProductions.map(production => {
           let daysLeft = countDaysLeft(
             production.downpayment,
@@ -161,19 +167,19 @@ CanceledProductions.propTypes = {
   canceledProductions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      orderNumber: PropTypes.string.isRequired,
-      clientName: PropTypes.string.isRequired,
-      downpayment: PropTypes.object.isRequired,
-      productionTerm: PropTypes.number.isRequired,
-      finalPayment: PropTypes.bool.isRequired,
+      orderNumber: PropTypes.string,
+      clientName: PropTypes.string,
+      downpayment: PropTypes.string,
+      productionTerm: PropTypes.number,
+      finalPayment: PropTypes.bool,
       finished: PropTypes.bool.isRequired,
-      type: PropTypes.string.isRequired,
-      colorOutside: PropTypes.string.isRequired,
-      colorInside: PropTypes.string.isRequired,
-      core: PropTypes.string.isRequired,
-      thickness: PropTypes.number.isRequired,
-      m2: PropTypes.number.isRequired,
-      csa: PropTypes.string.isRequired
+      type: PropTypes.string,
+      colorOutside: PropTypes.string,
+      colorInside: PropTypes.string,
+      core: PropTypes.string,
+      thickness: PropTypes.number,
+      m2: PropTypes.number,
+      csa: PropTypes.string
     })
   ),
   loadPostsByPage: PropTypes.func

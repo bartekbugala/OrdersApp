@@ -1,6 +1,7 @@
 import React from 'react';
 import { MdAttachMoney, MdMoneyOff } from 'react-icons/md';
 import { PropTypes } from 'prop-types';
+import { isEqual } from 'lodash';
 // utils
 import formatDate from '../../../utils/formatDate';
 import countDaysLeft from '../../../utils/countDaysLeft';
@@ -12,50 +13,41 @@ import EditButton from '../../common/Buttons/EditButton/EditButton';
 import RestoreButton from '../../common/Buttons/RestoreButton/RestoreButton';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
-import { isEqual } from 'lodash';
 
 class TransportedProductions extends React.Component {
   constructor(props) {
     super(props);
-    let initialNewProduction = {
-      clientName: '',
-      colorOutside: '',
-      colorInside: '',
-      core: '',
-      csa: '',
-      downpayment: null,
-      finalPayment: false,
-      transported: false,
-      m2: null,
-      orderNumber: '',
-      productionTerm: '',
-      thickness: null,
-      type: ''
-    };
     this.state = {
-      transportedProductions: [],
-      newProduction: initialNewProduction,
+      transportedProductions: this.props.transportedProductions,
       startDate: new Date()
     };
   }
 
   componentDidMount() {
-    const { loadTransportedProductions } = this.props;
-    loadTransportedProductions().then(
+    const { loadTransportedProductions, sortParams } = this.props;
+    loadTransportedProductions(
+      sortParams.key,
+      sortParams.valueType,
+      sortParams.direction
+    ).then(
       this.setState({
-        loadTransportedProductions: this.props.loadTransportedProductions
+        transportedProductions: this.props.transportedProductions
       })
     );
   }
   componentDidUpdate() {
-    const { loadTransportedProductions } = this.props;
+    const { loadTransportedProductions, sortParams } = this.props;
     if (
       isEqual(
         this.state.transportedProductions,
         this.props.transportedProductions
       ) === false
     ) {
-      loadTransportedProductions().then(
+      loadTransportedProductions(
+        sortParams.key,
+        sortParams.valueType,
+        sortParams.direction
+      ).then(
         this.setState({
           transportedProductions: this.props.transportedProductions
         })
@@ -68,15 +60,35 @@ class TransportedProductions extends React.Component {
     transportProduction(id, loadTransportedProductions);
   };
 
+  handleSort = (
+    key = 'orderNumber',
+    valueType = 'number',
+    direction = 'asc'
+  ) => {
+    const { transportedProductions } = this.state;
+    const { sortTransportedProductions } = this.props;
+    sortTransportedProductions(
+      transportedProductions,
+      key,
+      valueType,
+      direction
+    );
+  };
+
   render() {
-    const { updateRequest, request, transportedProductions } = this.props;
+    const { handleSort } = this;
+    const { transportedProductions } = this.state;
+    const { updateRequest, request } = this.props;
     const tdClass = 'production-list-td';
 
     if (updateRequest.error || request.error)
       return <Alert variant="error">{`${updateRequest.error}`}</Alert>;
     else if (updateRequest.pending && request.pending) return <Spinner />;
     return (
-      <OrderListTable>
+      <OrderListTable
+        sortColumn={(key, valueType) => {
+          handleSort(key, valueType);
+        }}>
         {transportedProductions.map(production => {
           let daysLeft = countDaysLeft(
             production.downpayment,
@@ -153,19 +165,19 @@ TransportedProductions.propTypes = {
   TransportedProductions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      orderNumber: PropTypes.string.isRequired,
-      clientName: PropTypes.string.isRequired,
-      downpayment: PropTypes.object.isRequired,
-      productionTerm: PropTypes.number.isRequired,
-      finalPayment: PropTypes.bool.isRequired,
-      transported: PropTypes.bool.isRequired,
-      type: PropTypes.string.isRequired,
-      colorOutside: PropTypes.string.isRequired,
-      colorInside: PropTypes.string.isRequired,
-      core: PropTypes.string.isRequired,
-      thickness: PropTypes.number.isRequired,
-      m2: PropTypes.number.isRequired,
-      csa: PropTypes.string.isRequired
+      orderNumber: PropTypes.string,
+      clientName: PropTypes.string,
+      downpayment: PropTypes.string,
+      productionTerm: PropTypes.number,
+      finalPayment: PropTypes.bool,
+      finished: PropTypes.bool.isRequired,
+      type: PropTypes.string,
+      colorOutside: PropTypes.string,
+      colorInside: PropTypes.string,
+      core: PropTypes.string,
+      thickness: PropTypes.number,
+      m2: PropTypes.number,
+      csa: PropTypes.string
     })
   ),
   loadPostsByPage: PropTypes.func

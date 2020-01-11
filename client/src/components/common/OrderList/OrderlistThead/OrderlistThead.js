@@ -47,7 +47,7 @@ const OrderlistThead = ({ sortColumn }) => {
           className={`${thClass}`}
           onClick={e => {
             e.preventDefault();
-            sortColumn('productionTerm');
+            sortColumn('productionTerm', 'productionTerm');
           }}>
           <GiCalendar />
         </th>

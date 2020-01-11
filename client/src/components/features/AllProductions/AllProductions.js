@@ -1,6 +1,7 @@
 import React from 'react';
 import { MdAttachMoney, MdMoneyOff } from 'react-icons/md';
 import { PropTypes } from 'prop-types';
+import { isEqual } from 'lodash';
 // utils
 import formatDate from '../../../utils/formatDate';
 import countDaysLeft from '../../../utils/countDaysLeft';
@@ -13,49 +14,53 @@ import EditButton from '../../common/Buttons/EditButton/EditButton';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
 import './AllProductions.scss';
-import { isEqual } from 'lodash';
 
 class AllProductions extends React.Component {
   constructor(props) {
     super(props);
     let initialNewProduction = {
+      orderNumber: '',
       clientName: '',
+      downpayment: '',
+      productionTerm: '',
+      finalPayment: false,
+      type: '',
       colorOutside: '',
       colorInside: '',
       core: '',
-      csa: '',
-      downpayment: null,
-      finalPayment: false,
+      thickness: '',
       finished: false,
       canceled: false,
       transported: false,
-      m2: null,
-      orderNumber: '',
-      productionTerm: '',
-      thickness: null,
-      type: ''
+      m2: '',
+      csa: ''
     };
     this.state = {
       allProductions: this.props.allProductions,
+      request: this.props.request,
       newProduction: initialNewProduction,
       startDate: new Date()
     };
   }
 
   componentDidMount() {
-    const { loadAllProductions } = this.props;
-    loadAllProductions().then(
-      this.setState({ allProductions: this.props.allProductions })
-    );
+    const { loadAllProductions, sortParams } = this.props;
+    loadAllProductions(
+      sortParams.key,
+      sortParams.valueType,
+      sortParams.direction
+    ).then(this.setState({ allProductions: this.props.allProductions }));
   }
   componentDidUpdate() {
-    const { loadAllProductions } = this.props;
+    const { loadAllProductions, sortParams } = this.props;
     if (
       isEqual(this.state.allProductions, this.props.allProductions) === false
     ) {
-      loadAllProductions().then(
-        this.setState({ allProductions: this.props.allProductions })
-      );
+      loadAllProductions(
+        sortParams.key,
+        sortParams.valueType,
+        sortParams.direction
+      ).then(this.setState({ allProductions: this.props.allProductions }));
     }
   }
 
@@ -73,6 +78,17 @@ class AllProductions extends React.Component {
     });
   };
 
+  handleCheckBoxChange = e => {
+    const { newProduction } = this.state;
+    const target = e.target;
+    this.setState({
+      newProduction: {
+        ...newProduction,
+        finalPayment: target.checked === true ? true : false
+      }
+    });
+  };
+
   handleDateSelect = date => {
     const { newProduction } = this.state;
     this.setState({
@@ -85,6 +101,15 @@ class AllProductions extends React.Component {
     const { addProduction } = this.props;
     const { newProduction } = this.state;
     addProduction(newProduction).then(this.setState({ newProduction: {} }));
+  };
+
+  handleForm = e => {
+    e.preventDefault();
+    const { addProduction, loadAllProductions } = this.props;
+    const { newProduction } = this.state;
+    addProduction(newProduction, loadAllProductions).then(
+      this.setState({ newProduction: {} })
+    );
   };
 
   finishHandler = id => {
@@ -102,8 +127,24 @@ class AllProductions extends React.Component {
     transportProduction(id, loadAllProductions);
   };
 
+  handleSort = (
+    key = 'orderNumber',
+    valueType = 'number',
+    direction = 'asc'
+  ) => {
+    const { allProductions } = this.state;
+    const { sortAllProductions } = this.props;
+    sortAllProductions(allProductions, key, valueType, direction);
+  };
+
   render() {
-    const { handleChange, handleDateSelect, handleDateChange } = this;
+    const {
+      handleChange,
+      handleDateSelect,
+      handleDateChange,
+      handleCheckBoxChange,
+      handleSort
+    } = this;
     const { allProductions, updateRequest, request } = this.props;
     const { newProduction, startDate } = this.state;
     const tdClass = 'production-list-td';
@@ -118,7 +159,10 @@ class AllProductions extends React.Component {
     else
       return (
         <form onSubmit={this.handleForm}>
-          <OrderListTable>
+          <OrderListTable
+            sortColumn={(key, valueType) => {
+              handleSort(key, valueType);
+            }}>
             {allProductions.map(production => {
               let rowBgclass;
               switch (true) {
@@ -131,11 +175,14 @@ class AllProductions extends React.Component {
                 case production.finished === true:
                   rowBgclass = 'row-production-finished';
                   break;
+                default:
+                  break;
               }
-              let daysLeft = countDaysLeft(
-                production.downpayment,
-                production.productionTerm
-              );
+              let daysLeft =
+                countDaysLeft(
+                  production.downpayment,
+                  production.productionTerm
+                ) || '';
               let daysLeftClass = 'text-default';
               switch (true) {
                 case daysLeft <= 7 && daysLeft > 2:
@@ -201,6 +248,7 @@ class AllProductions extends React.Component {
               handleChange={handleChange}
               newProduction={newProduction}
               handleDateChange={handleDateChange}
+              handleCheckBoxChange={handleCheckBoxChange}
               handleDateSelect={handleDateSelect}
               startDate={startDate}
             />
@@ -216,19 +264,19 @@ AllProductions.propTypes = {
   allProductions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      orderNumber: PropTypes.string.isRequired,
-      clientName: PropTypes.string.isRequired,
-      downpayment: PropTypes.string.isRequired,
-      productionTerm: PropTypes.number.isRequired,
-      finalPayment: PropTypes.bool.isRequired,
+      orderNumber: PropTypes.string,
+      clientName: PropTypes.string,
+      downpayment: PropTypes.string,
+      productionTerm: PropTypes.number,
+      finalPayment: PropTypes.bool,
       finished: PropTypes.bool.isRequired,
-      type: PropTypes.string.isRequired,
-      colorOutside: PropTypes.string.isRequired,
-      colorInside: PropTypes.string.isRequired,
-      core: PropTypes.string.isRequired,
-      thickness: PropTypes.number.isRequired,
-      m2: PropTypes.number.isRequired,
-      csa: PropTypes.string.isRequired
+      type: PropTypes.string,
+      colorOutside: PropTypes.string,
+      colorInside: PropTypes.string,
+      core: PropTypes.string,
+      thickness: PropTypes.number,
+      m2: PropTypes.number,
+      csa: PropTypes.string
     })
   ),
   loadPostsByPage: PropTypes.func

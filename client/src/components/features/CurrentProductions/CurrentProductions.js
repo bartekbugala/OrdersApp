@@ -1,12 +1,12 @@
 import React from 'react';
 import { MdAttachMoney, MdMoneyOff } from 'react-icons/md';
 import { PropTypes } from 'prop-types';
+import { isEqual } from 'lodash';
 // utils
 import formatDate from '../../../utils/formatDate';
 import countDaysLeft from '../../../utils/countDaysLeft';
 import currentFromSquareMeters from '../../../utils/currentFromSquareMeters';
 import cutText from '../../../utils/cutText';
-import { isEqual } from 'lodash';
 // components
 import OrderListTable from '../../common/OrderList/OrderListTable/OrderListTable';
 import OrderlistTrAdd from '../../common/OrderList/OrderlistTrAdd/OrderlistTrAdd';
@@ -20,24 +20,24 @@ class CurrentProductions extends React.Component {
   constructor(props) {
     super(props);
     let initialNewProduction = {
+      orderNumber: '',
       clientName: '',
+      downpayment: '',
+      productionTerm: '',
+      finalPayment: false,
+      type: '',
       colorOutside: '',
       colorInside: '',
       core: '',
-      csa: '',
-      downpayment: 0,
-      finalPayment: false,
+      thickness: '',
       finished: false,
       canceled: false,
       transported: false,
-      m2: 0,
-      orderNumber: '',
-      productionTerm: '',
-      thickness: 0,
-      type: ''
+      m2: '',
+      csa: ''
     };
     this.state = {
-      currentProductions: [],
+      currentProductions: this.props.currentProductions,
       updateRequest: this.props.updateRequest,
       request: this.props.request,
       newProduction: initialNewProduction,
@@ -143,8 +143,7 @@ class CurrentProductions extends React.Component {
       handleSort
     } = this;
     const { updateRequest, request } = this.props;
-    const { currentProductions } = this.state;
-    const { newProduction, startDate } = this.state;
+    const { currentProductions, newProduction, startDate } = this.state;
     const tdClass = 'production-list-td';
 
     if (updateRequest.error)
@@ -244,19 +243,19 @@ CurrentProductions.propTypes = {
   currentProductions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      orderNumber: PropTypes.string.isRequired,
-      clientName: PropTypes.string.isRequired,
-      downpayment: PropTypes.string.isRequired,
-      productionTerm: PropTypes.number.isRequired,
-      finalPayment: PropTypes.bool.isRequired,
+      orderNumber: PropTypes.string,
+      clientName: PropTypes.string,
+      downpayment: PropTypes.string,
+      productionTerm: PropTypes.number,
+      finalPayment: PropTypes.bool,
       finished: PropTypes.bool.isRequired,
-      type: PropTypes.string.isRequired,
-      colorOutside: PropTypes.string.isRequired,
-      colorInside: PropTypes.string.isRequired,
-      core: PropTypes.string.isRequired,
-      thickness: PropTypes.number.isRequired,
-      m2: PropTypes.number.isRequired,
-      csa: PropTypes.string.isRequired
+      type: PropTypes.string,
+      colorOutside: PropTypes.string,
+      colorInside: PropTypes.string,
+      core: PropTypes.string,
+      thickness: PropTypes.number,
+      m2: PropTypes.number,
+      csa: PropTypes.string
     })
   ),
   loadPostsByPage: PropTypes.func
