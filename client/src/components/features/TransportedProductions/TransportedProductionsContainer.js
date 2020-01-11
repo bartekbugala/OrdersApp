@@ -1,15 +1,17 @@
 import { connect } from 'react-redux';
 import {
-  getTransportedProductions,
   loadTransportedProductionsRequest,
-  getUpdateRequest,
-  getRequest,
   resetUpdateRequest,
   resetRequest,
   toggleTransportProductionRequest
 } from '../../../redux/reducers/orders';
 import TransportedProductions from './TransportedProductions';
-
+import {
+  getTransportedProductions,
+  getUpdateRequest,
+  getRequest,
+  getSortParams
+} from '../../../redux/selectors';
 const mapStateToProps = state => ({
   transportedProductions: getTransportedProductions(state),
   updateRequest: getUpdateRequest(state),
