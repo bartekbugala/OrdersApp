@@ -150,7 +150,7 @@ class CurrentProductions extends React.Component {
       return <Alert variant="error">{`${updateRequest.error}`}</Alert>;
     else if (request.pending && updateRequest.pending) return <Spinner />;
     return (
-      <form onSubmit={this.handleForm}>
+      <form onSubmit={this.handleForm} autocomplete="off">
         <OrderListTable
           sortColumn={(key, valueType) => {
             handleSort(key, valueType);
