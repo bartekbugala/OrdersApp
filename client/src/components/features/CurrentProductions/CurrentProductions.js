@@ -25,15 +25,15 @@ class CurrentProductions extends React.Component {
       colorInside: '',
       core: '',
       csa: '',
-      downpayment: 0,
+      downpayment: '',
       finalPayment: false,
       finished: false,
       canceled: false,
       transported: false,
-      m2: 0,
+      m2: '',
       orderNumber: '',
       productionTerm: '',
-      thickness: 0,
+      thickness: '',
       type: ''
     };
     this.state = {

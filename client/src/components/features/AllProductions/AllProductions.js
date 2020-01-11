@@ -24,15 +24,15 @@ class AllProductions extends React.Component {
       colorInside: '',
       core: '',
       csa: '',
-      downpayment: null,
+      downpayment: '',
       finalPayment: false,
       finished: false,
       canceled: false,
       transported: false,
-      m2: null,
+      m2: '',
       orderNumber: '',
       productionTerm: '',
-      thickness: null,
+      thickness: '',
       type: ''
     };
     this.state = {
@@ -75,6 +75,17 @@ class AllProductions extends React.Component {
     const { newProduction } = this.state;
     this.setState({
       newProduction: { ...newProduction, downpayment: date }
+    });
+  };
+
+  handleCheckBoxChange = e => {
+    const { newProduction } = this.state;
+    const target = e.target;
+    this.setState({
+      newProduction: {
+        ...newProduction,
+        finalPayment: target.checked === true ? true : false
+      }
     });
   };
 
@@ -122,6 +133,7 @@ class AllProductions extends React.Component {
       handleChange,
       handleDateSelect,
       handleDateChange,
+      handleCheckBoxChange,
       handleSort
     } = this;
     const { allProductions, updateRequest, request } = this.props;
@@ -153,6 +165,8 @@ class AllProductions extends React.Component {
                   break;
                 case production.finished === true:
                   rowBgclass = 'row-production-finished';
+                  break;
+                default:
                   break;
               }
               let daysLeft = countDaysLeft(
@@ -224,6 +238,7 @@ class AllProductions extends React.Component {
               handleChange={handleChange}
               newProduction={newProduction}
               handleDateChange={handleDateChange}
+              handleCheckBoxChange={handleCheckBoxChange}
               handleDateSelect={handleDateSelect}
               startDate={startDate}
             />

@@ -6,18 +6,21 @@ export default function sortByColumn(array, key, valueType, direction) {
           ? parseFloat(a[key]) - parseFloat(b[key])
           : parseFloat(b[key]) - parseFloat(a[key])
       );
+
     case 'string':
       return array.sort((a, b) =>
         direction === 'asc'
           ? a[key].localeCompare(b[key])
           : b[key].localeCompare(a[key])
       );
+
     case 'date':
       return array.sort((a, b) =>
         direction === 'asc'
           ? new Date(a[key]) - new Date(b[key])
           : new Date(b[key]) - new Date(a[key])
       );
+
     case 'boolean':
       array.sort(function(x, y) {
         // true values first
@@ -25,6 +28,7 @@ export default function sortByColumn(array, key, valueType, direction) {
         // false values first
         // return (x === y)? 0 : x? 1 : -1;
       });
+      break;
     default:
       return array.sort((a, b) =>
         direction === 'asc' ? a[key] - b[key] : b[key] - a[key]
