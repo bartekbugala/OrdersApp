@@ -5,7 +5,7 @@ import {
   resetUpdateRequest,
   resetRequest,
   toggleCancelProductionRequest
-} from '../../../redux/reducers/orders';
+} from '../../../redux/reducers/productions';
 import {
   getCanceledProductions,
   getUpdateRequest,

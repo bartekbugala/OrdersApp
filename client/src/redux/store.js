@@ -2,11 +2,11 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 
 // import reducers
-import orders from './reducers/orders.js';
+import productions from './reducers/productions.js';
 
 // combine reducers
 const rootReducer = combineReducers({
-  orders
+  productions
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

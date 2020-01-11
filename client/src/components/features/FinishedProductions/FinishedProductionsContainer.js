@@ -5,7 +5,7 @@ import {
   resetRequest,
   toggleFinishProductionRequest,
   toggleTransportProductionRequest
-} from '../../../redux/reducers/orders';
+} from '../../../redux/reducers/productions';
 import FinishedProductions from './FinishedProductions';
 import {
   getFinishedProductions,

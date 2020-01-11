@@ -4,7 +4,7 @@ import {
   resetUpdateRequest,
   resetRequest,
   toggleTransportProductionRequest
-} from '../../../redux/reducers/orders';
+} from '../../../redux/reducers/productions';
 import TransportedProductions from './TransportedProductions';
 import {
   getTransportedProductions,

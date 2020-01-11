@@ -7,7 +7,7 @@ import {
   addProductionRequest,
   resetUpdateRequest,
   resetRequest
-} from '../../../redux/reducers/orders';
+} from '../../../redux/reducers/productions';
 import {
   getAllProductions,
   getUpdateRequest,

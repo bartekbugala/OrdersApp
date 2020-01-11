@@ -150,7 +150,7 @@ export const toggleTransportProductionRequest = (id, thunk) => {
 
 //// Actions
 // action name creator
-const reducerName = 'orders';
+const reducerName = 'productions';
 const createActionName = name => `app/${reducerName}/${name}`;
 
 // action creators
