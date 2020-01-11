@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import {
   resetUpdateRequest,
   resetRequest
-} from '../../../redux/reducers/productions';
+} from '../../../redux/actions/requestsActions';
 import FinishedProductions from './FinishedProductions';
 import {
   getFinishedProductions,

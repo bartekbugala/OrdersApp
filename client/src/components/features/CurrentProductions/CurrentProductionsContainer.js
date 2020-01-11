@@ -2,14 +2,14 @@ import { connect } from 'react-redux';
 import {
   resetUpdateRequest,
   resetRequest
-} from '../../../redux/reducers/productions';
+} from '../../../redux/actions/requestsActions';
 import {
-  sortCurrentProductions,
   loadCurrentProductionsRequest,
   toggleCancelProductionRequest,
   toggleFinishProductionRequest,
   addProductionRequest
 } from '../../../redux/thunks/productionsThunks';
+import { sortCurrentProductions } from '../../../redux/thunks/sortingThunks';
 import {
   getCurrentProductions,
   getUpdateRequest,

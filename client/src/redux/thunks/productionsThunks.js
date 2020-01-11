@@ -19,27 +19,6 @@ import {
 } from '../actions/productionsActions';
 
 //// Thunks
-export const sortCurrentProductions = (
-  currentProductions,
-  key,
-  valueType,
-  direction
-) => {
-  return async dispatch => {
-    dispatch(startRequest());
-    try {
-      let payload = {
-        sorted: sortByColumn(currentProductions, key, valueType, direction),
-        sortParams: { key: key, valueType: valueType, direction: direction }
-      };
-      dispatch(sortCurrent(payload));
-      dispatch(endRequest());
-    } catch (e) {
-      dispatch(errorRequest(e.message));
-    }
-  };
-};
-
 export const loadProductionsRequest = () => {
   return async dispatch => {
     dispatch(startRequest());

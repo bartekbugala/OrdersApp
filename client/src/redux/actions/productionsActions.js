@@ -15,7 +15,6 @@ export const LOAD_TRANSPORTED = createActionName('LOAD_TRANSPORTED');
 
 // actions
 export const loadProductions = payload => ({ payload, type: LOAD_PRODUCTIONS });
-export const sortCurrent = payload => ({ payload, type: SORT_CURRENT });
 export const loadCurrentProductions = payload => ({
   payload,
   type: LOAD_CURRENT

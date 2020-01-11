@@ -1,10 +1,10 @@
-// menu links
-export const getMenuLinks = ({ productions }) => productions.menuLinks;
+// menu links selectors
+export const getMenuLinks = ({ main }) => main.menuLinks;
 
-// sorting parameters
-export const getSortParams = ({ productions }) => productions.sortParams;
+// sorting selectors
+export const getSortParams = ({ sorting }) => sorting.sortParams;
 
-// productions
+// productions selectors
 export const getAllProductions = ({ productions }) =>
   productions.allProductions;
 export const getCurrentProductions = ({ productions }) =>
@@ -17,5 +17,5 @@ export const getCanceledProductions = ({ productions }) =>
   productions.canceledProductions;
 
 // requests
-export const getUpdateRequest = ({ productions }) => productions.updateRequest;
-export const getRequest = ({ productions }) => productions.request;
+export const getUpdateRequest = ({ requests }) => requests.updateRequest;
+export const getRequest = ({ requests }) => requests.request;
