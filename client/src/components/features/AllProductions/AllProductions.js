@@ -158,7 +158,7 @@ class AllProductions extends React.Component {
       return <Spinner />;
     else
       return (
-        <form onSubmit={this.handleForm} autocomplete="off">
+        <form onSubmit={this.handleForm} autoComplete="off">
           <OrderListTable
             sortColumn={(key, valueType) => {
               handleSort(key, valueType);
