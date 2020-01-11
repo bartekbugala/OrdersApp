@@ -8,7 +8,7 @@ import {
   resetRequest,
   toggleFinishProductionRequest,
   toggleTransportProductionRequest
-} from '../../../redux/ordersRedux';
+} from '../../../redux/reducers/orders';
 import FinishedProductions from './FinishedProductions';
 
 const mapStateToProps = state => ({

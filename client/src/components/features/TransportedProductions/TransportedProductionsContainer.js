@@ -7,7 +7,7 @@ import {
   resetUpdateRequest,
   resetRequest,
   toggleTransportProductionRequest
-} from '../../../redux/ordersRedux';
+} from '../../../redux/reducers/orders';
 import TransportedProductions from './TransportedProductions';
 
 const mapStateToProps = state => ({

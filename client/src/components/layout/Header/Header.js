@@ -1,7 +1,7 @@
 import React from 'react';
 import MainMenu from '../../layout/MainMenu/MainMenu';
 import { connect } from 'react-redux';
-import { getMenuLinks } from '../../../redux/ordersRedux';
+import { getMenuLinks } from '../../../redux/reducers/orders';
 
 const mapStateToProps = state => ({
   menuLinks: getMenuLinks(state)

@@ -10,7 +10,7 @@ import {
   resetUpdateRequest,
   resetRequest,
   getRequest
-} from '../../../redux/ordersRedux';
+} from '../../../redux/reducers/orders';
 import AllProductions from './AllProductions';
 
 const mapStateToProps = state => ({

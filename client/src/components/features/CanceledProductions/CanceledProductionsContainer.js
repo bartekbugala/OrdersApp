@@ -8,7 +8,7 @@ import {
   resetUpdateRequest,
   resetRequest,
   toggleCancelProductionRequest
-} from '../../../redux/ordersRedux';
+} from '../../../redux/reducers/orders';
 import CanceledProductions from './CanceledProductions';
 
 const mapStateToProps = state => ({

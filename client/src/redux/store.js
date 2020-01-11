@@ -2,7 +2,7 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 
 // import reducers
-import orders from './ordersRedux.js';
+import orders from './reducers/orders.js';
 
 // combine reducers
 const rootReducer = combineReducers({

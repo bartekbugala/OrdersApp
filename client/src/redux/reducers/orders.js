@@ -1,6 +1,6 @@
 import axios from 'axios';
-import sortByColumn from '../../src/utils/sortByColumn';
-import { API_URL } from '../config';
+import sortByColumn from '../../utils/sortByColumn';
+import { API_URL } from '../../config';
 
 //// Initial state
 const initialState = {

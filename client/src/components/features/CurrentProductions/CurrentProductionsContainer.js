@@ -11,7 +11,7 @@ import {
   resetUpdateRequest,
   resetRequest,
   getSortParams
-} from '../../../redux/ordersRedux';
+} from '../../../redux/reducers/orders';
 import CurrentProductions from './CurrentProductions';
 
 const mapStateToProps = state => ({
