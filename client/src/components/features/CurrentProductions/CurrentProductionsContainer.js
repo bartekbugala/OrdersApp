@@ -1,17 +1,21 @@
 import { connect } from 'react-redux';
 import {
-  getCurrentProductions,
-  getUpdateRequest,
-  getRequest,
-  sortCurrentProductions,
+  resetUpdateRequest,
+  resetRequest
+} from '../../../redux/actions/requestsActions';
+import {
   loadCurrentProductionsRequest,
   toggleCancelProductionRequest,
   toggleFinishProductionRequest,
-  addProductionRequest,
-  resetUpdateRequest,
-  resetRequest,
+  addProductionRequest
+} from '../../../redux/thunks/productionsThunks';
+import { sortCurrentProductions } from '../../../redux/thunks/sortingThunks';
+import {
+  getCurrentProductions,
+  getUpdateRequest,
+  getRequest,
   getSortParams
-} from '../../../redux/ordersRedux';
+} from '../../../redux/selectors';
 import CurrentProductions from './CurrentProductions';
 
 const mapStateToProps = state => ({

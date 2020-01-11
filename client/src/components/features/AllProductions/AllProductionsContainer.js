@@ -1,16 +1,21 @@
 import { connect } from 'react-redux';
 import {
+  resetUpdateRequest,
+  resetRequest
+} from '../../../redux/actions/requestsActions';
+import {
   getAllProductions,
   getUpdateRequest,
+  getRequest,
+  getSortParams
+} from '../../../redux/selectors';
+import {
+  addProductionRequest,
   loadProductionsRequest,
   toggleCancelProductionRequest,
   toggleFinishProductionRequest,
-  toggleTransportProductionRequest,
-  addProductionRequest,
-  resetUpdateRequest,
-  resetRequest,
-  getRequest
-} from '../../../redux/ordersRedux';
+  toggleTransportProductionRequest
+} from '../../../redux/thunks/productionsThunks';
 import AllProductions from './AllProductions';
 
 const mapStateToProps = state => ({
