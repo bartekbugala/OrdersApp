@@ -9,9 +9,11 @@ import {
   getRequest,
   getSortParams
 } from '../../../redux/selectors';
+import { sortAllProductions } from '../../../redux/thunks/sortingThunks';
+
 import {
   addProductionRequest,
-  loadProductionsRequest,
+  loadAllProductionsRequest,
   toggleCancelProductionRequest,
   toggleFinishProductionRequest,
   toggleTransportProductionRequest
@@ -21,11 +23,19 @@ import AllProductions from './AllProductions';
 const mapStateToProps = state => ({
   allProductions: getAllProductions(state),
   updateRequest: getUpdateRequest(state),
+  sortParams: getSortParams(state),
   request: getRequest(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-  loadAllProductions: () => dispatch(loadProductionsRequest()),
+  loadAllProductions: (
+    key = 'orderNumber',
+    valueType = 'number',
+    direction = 'asc'
+  ) => dispatch(loadAllProductionsRequest(key, valueType, direction)),
+
+  sortAllProductions: (allProductions, key, valueType, direction) =>
+    dispatch(sortAllProductions(allProductions, key, valueType, direction)),
   addProduction: (production, thunk) =>
     dispatch(addProductionRequest(production, thunk)),
   cancelProduction: (id, thunk) =>

@@ -4,18 +4,18 @@ import {
   resetRequest
 } from '../../../redux/actions/requestsActions';
 import {
+  getCurrentProductions,
+  getUpdateRequest,
+  getRequest,
+  getSortParams
+} from '../../../redux/selectors';
+import {
   loadCurrentProductionsRequest,
   toggleCancelProductionRequest,
   toggleFinishProductionRequest,
   addProductionRequest
 } from '../../../redux/thunks/productionsThunks';
 import { sortCurrentProductions } from '../../../redux/thunks/sortingThunks';
-import {
-  getCurrentProductions,
-  getUpdateRequest,
-  getRequest,
-  getSortParams
-} from '../../../redux/selectors';
 import CurrentProductions from './CurrentProductions';
 
 const mapStateToProps = state => ({

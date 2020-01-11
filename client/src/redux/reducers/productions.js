@@ -1,7 +1,7 @@
 import initialState from '../initialState';
 
 import {
-  LOAD_PRODUCTIONS,
+  LOAD_ALL,
   LOAD_CURRENT,
   LOAD_CANCELED,
   LOAD_FINISHED,
@@ -11,7 +11,7 @@ import {
 //// Reducer
 export default function reducer(statePart = initialState, action = {}) {
   switch (action.type) {
-    case LOAD_PRODUCTIONS:
+    case LOAD_ALL:
       return { ...statePart, allProductions: action.payload };
     case LOAD_CURRENT:
       return { ...statePart, currentProductions: action.payload };

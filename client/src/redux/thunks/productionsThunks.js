@@ -10,21 +10,21 @@ import {
   errorUpdateRequest
 } from '../actions/requestsActions';
 import {
-  loadProductions,
+  loadAllProductions,
   loadCurrentProductions,
-  sortCurrent,
   loadFinished,
   loadTransported,
   loadCanceled
 } from '../actions/productionsActions';
 
 //// Thunks
-export const loadProductionsRequest = () => {
+export const loadAllProductionsRequest = (key, valueType, direction) => {
   return async dispatch => {
     dispatch(startRequest());
     try {
       let res = await axios.get(`${API_URL}/productions`);
-      dispatch(loadProductions(res.data));
+      sortByColumn(res.data, key, valueType, direction);
+      dispatch(loadAllProductions(res.data));
       dispatch(endRequest());
     } catch (e) {
       dispatch(errorRequest(e.message));

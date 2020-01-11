@@ -1,12 +1,12 @@
 import React from 'react';
 import { MdAttachMoney, MdMoneyOff } from 'react-icons/md';
 import { PropTypes } from 'prop-types';
+import { isEqual } from 'lodash';
 // utils
 import formatDate from '../../../utils/formatDate';
 import countDaysLeft from '../../../utils/countDaysLeft';
 import currentFromSquareMeters from '../../../utils/currentFromSquareMeters';
 import cutText from '../../../utils/cutText';
-import { isEqual } from 'lodash';
 // components
 import OrderListTable from '../../common/OrderList/OrderListTable/OrderListTable';
 import OrderlistTrAdd from '../../common/OrderList/OrderlistTrAdd/OrderlistTrAdd';

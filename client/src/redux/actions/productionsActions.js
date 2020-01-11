@@ -7,14 +7,17 @@ const createActionName = name => `app/${reducerName}/${name}`;
 export const FINISH_PRODUCTION = createActionName('FINISH_PRODUCTION');
 export const SORT_CURRENT = createActionName('SORT_CURRENT');
 
-export const LOAD_PRODUCTIONS = createActionName('LOAD_PRODUCTIONS');
+export const LOAD_ALL = createActionName('LOAD_ALL');
 export const LOAD_CURRENT = createActionName('LOAD_CURRENT');
 export const LOAD_CANCELED = createActionName('LOAD_CANCELED');
 export const LOAD_FINISHED = createActionName('LOAD_FINISHED');
 export const LOAD_TRANSPORTED = createActionName('LOAD_TRANSPORTED');
 
 // actions
-export const loadProductions = payload => ({ payload, type: LOAD_PRODUCTIONS });
+export const loadAllProductions = payload => ({
+  payload,
+  type: LOAD_ALL
+});
 export const loadCurrentProductions = payload => ({
   payload,
   type: LOAD_CURRENT

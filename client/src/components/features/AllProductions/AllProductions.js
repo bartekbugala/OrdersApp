@@ -1,6 +1,7 @@
 import React from 'react';
 import { MdAttachMoney, MdMoneyOff } from 'react-icons/md';
 import { PropTypes } from 'prop-types';
+import { isEqual } from 'lodash';
 // utils
 import formatDate from '../../../utils/formatDate';
 import countDaysLeft from '../../../utils/countDaysLeft';
@@ -13,7 +14,6 @@ import EditButton from '../../common/Buttons/EditButton/EditButton';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
 import './AllProductions.scss';
-import { isEqual } from 'lodash';
 
 class AllProductions extends React.Component {
   constructor(props) {
@@ -37,25 +37,30 @@ class AllProductions extends React.Component {
     };
     this.state = {
       allProductions: this.props.allProductions,
+      request: this.props.request,
       newProduction: initialNewProduction,
       startDate: new Date()
     };
   }
 
   componentDidMount() {
-    const { loadAllProductions } = this.props;
-    loadAllProductions().then(
-      this.setState({ allProductions: this.props.allProductions })
-    );
+    const { loadAllProductions, sortParams } = this.props;
+    loadAllProductions(
+      sortParams.key,
+      sortParams.valueType,
+      sortParams.direction
+    ).then(this.setState({ allProductions: this.props.allProductions }));
   }
   componentDidUpdate() {
-    const { loadAllProductions } = this.props;
+    const { loadAllProductions, sortParams } = this.props;
     if (
       isEqual(this.state.allProductions, this.props.allProductions) === false
     ) {
-      loadAllProductions().then(
-        this.setState({ allProductions: this.props.allProductions })
-      );
+      loadAllProductions(
+        sortParams.key,
+        sortParams.valueType,
+        sortParams.direction
+      ).then(this.setState({ allProductions: this.props.allProductions }));
     }
   }
 
@@ -102,8 +107,23 @@ class AllProductions extends React.Component {
     transportProduction(id, loadAllProductions);
   };
 
+  handleSort = (
+    key = 'orderNumber',
+    valueType = 'number',
+    direction = 'asc'
+  ) => {
+    const { allProductions } = this.state;
+    const { sortAllProductions } = this.props;
+    sortAllProductions(allProductions, key, valueType, direction);
+  };
+
   render() {
-    const { handleChange, handleDateSelect, handleDateChange } = this;
+    const {
+      handleChange,
+      handleDateSelect,
+      handleDateChange,
+      handleSort
+    } = this;
     const { allProductions, updateRequest, request } = this.props;
     const { newProduction, startDate } = this.state;
     const tdClass = 'production-list-td';
@@ -118,7 +138,10 @@ class AllProductions extends React.Component {
     else
       return (
         <form onSubmit={this.handleForm}>
-          <OrderListTable>
+          <OrderListTable
+            sortColumn={(key, valueType) => {
+              handleSort(key, valueType);
+            }}>
             {allProductions.map(production => {
               let rowBgclass;
               switch (true) {
