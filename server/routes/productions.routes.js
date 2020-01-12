@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-const ProductionsController = require('../controllers/productions.controller');
 // C.R.U.D. routes
 const createProductionsController = require('../controllers/createProductions.controller');
 const readProductionsController = require('../controllers/readProductions.controller');
