@@ -1,18 +1,43 @@
 // import model
 const Production = require('../models/productions.model');
 
-exports.editProduction = async (req, res) => {
+exports.updateProduction = async (req, res) => {
   try {
-    const { name, price, img, amount, description, tag } = req.body;
+    const {
+      orderNumber,
+      clientName,
+      downpayment,
+      productionTerm,
+      finalPayment,
+      type,
+      colorOutside,
+      colorInside,
+      core,
+      thickness,
+      m2,
+      csa,
+      finished,
+      canceled,
+      transported
+    } = req.body;
     const productionUpdated = await Production.findOneAndUpdate(
       { id: req.params.id },
       {
-        name: name,
-        price: price,
-        img: img,
-        amount: amount,
-        description: description,
-        tag: tag
+        orderNumber: orderNumber,
+        clientName: clientName,
+        downpayment: downpayment,
+        productionTerm: productionTerm,
+        finalPayment: finalPayment,
+        type: type,
+        colorOutside: colorOutside,
+        colorInside: colorInside,
+        core: core,
+        thickness: thickness,
+        m2: m2,
+        csa: csa,
+        finished: finished,
+        canceled: canceled,
+        transported: transported
       }
     );
     res.status(200).json(productionUpdated);

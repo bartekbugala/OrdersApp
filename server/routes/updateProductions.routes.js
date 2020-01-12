@@ -5,8 +5,8 @@ const updateProductionsController = require('../controllers/updateProductions.co
 
 // find and update product
 router
-  .route('/productions/:id')
-  .patch(updateProductionsController.editProduction);
+  .route('/productions/update/:id')
+  .put(updateProductionsController.updateProduction);
 
 // find decreace amount of 1 product
 router
