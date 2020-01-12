@@ -8,7 +8,7 @@ router
   .route('/productions/update/:id')
   .put(updateProductionsController.updateProduction);
 
-// find decreace amount of 1 product
+// find decreace amount of 1 product - UNUSED
 router
   .route('/productions/:id')
   .put(updateProductionsController.removeOneAmount);

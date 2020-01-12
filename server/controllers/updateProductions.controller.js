@@ -85,6 +85,7 @@ exports.toggleTransportProduction = async (req, res) => {
   }
 };
 
+// UNUSED
 exports.removeOneAmount = async (req, res) => {
   try {
     const productionUpdated = await Production.findOneAndUpdate(
