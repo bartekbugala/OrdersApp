@@ -13,6 +13,7 @@ import OrderlistTrAdd from '../../common/OrderList/OrderlistTrAdd/OrderlistTrAdd
 import EditButton from '../../common/Buttons/EditButton/EditButton';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
+import Modal from '../../common/Modal/Modal';
 import './AllProductions.scss';
 
 class AllProductions extends React.Component {
@@ -163,6 +164,9 @@ class AllProductions extends React.Component {
             sortColumn={(key, valueType) => {
               handleSort(key, valueType);
             }}>
+            <Modal>
+              <div>Hello</div>
+            </Modal>
             {allProductions.map(production => {
               let rowBgclass;
               switch (true) {
