@@ -127,7 +127,6 @@ class AllProductions extends React.Component {
 
   editHandler = id => {
     const { loadEditedProduction } = this.props;
-    alert('editHandler', id);
     loadEditedProduction(id);
     this.setState({ isEdited: true });
   };
