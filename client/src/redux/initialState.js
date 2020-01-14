@@ -13,6 +13,7 @@ const initialState = {
   finishedProductions: [],
   transportedProductions: [],
   canceledProductions: [],
+  editedProduction: {},
   updateRequest: {
     pending: false,
     error: null,

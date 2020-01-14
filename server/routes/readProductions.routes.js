@@ -25,7 +25,7 @@ router
   .route('/productions/range/:startAt/:limit/:sortParam')
   .get(readProductionsController.getProductionsByRange);
 
-// get single product
+// get single production
 router
   .route('/productions/:id')
   .get(readProductionsController.getSingleProduction);

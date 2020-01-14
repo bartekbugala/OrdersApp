@@ -5,7 +5,8 @@ import {
   LOAD_CURRENT,
   LOAD_CANCELED,
   LOAD_FINISHED,
-  LOAD_TRANSPORTED
+  LOAD_TRANSPORTED,
+  LOAD_EDITED
 } from '../actions/productionsActions';
 
 //// Reducer
@@ -21,6 +22,8 @@ export default function reducer(statePart = initialState, action = {}) {
       return { ...statePart, finishedProductions: action.payload };
     case LOAD_TRANSPORTED:
       return { ...statePart, transportedProductions: action.payload };
+    case LOAD_EDITED:
+      return { ...statePart, editedProduction: action.payload };
     default:
       return statePart;
   }

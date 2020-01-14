@@ -15,6 +15,8 @@ export const getTransportedProductions = ({ productions }) =>
   productions.transportedProductions;
 export const getCanceledProductions = ({ productions }) =>
   productions.canceledProductions;
+export const getEditedProduction = ({ productions }) =>
+  productions.editedProduction;
 
 // requests
 export const getUpdateRequest = ({ requests }) => requests.updateRequest;

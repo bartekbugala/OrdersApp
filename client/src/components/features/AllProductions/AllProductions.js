@@ -10,6 +10,7 @@ import cutText from '../../../utils/cutText';
 // components
 import OrderListTable from '../../common/OrderList/OrderListTable/OrderListTable';
 import OrderlistTrAdd from '../../common/OrderList/OrderlistTrAdd/OrderlistTrAdd';
+import OrderlistEditProduction from '../../common/OrderList/OrderlistEditProduction/OrderlistEditProduction';
 import EditButton from '../../common/Buttons/EditButton/EditButton';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
@@ -38,6 +39,7 @@ class AllProductions extends React.Component {
     };
     this.state = {
       allProductions: this.props.allProductions,
+      isEdited: true,
       request: this.props.request,
       newProduction: initialNewProduction,
       startDate: new Date()
@@ -123,6 +125,13 @@ class AllProductions extends React.Component {
     cancelProduction(id, loadAllProductions);
   };
 
+  editHandler = id => {
+    const { loadEditedProduction } = this.props;
+    alert('editHandler', id);
+    loadEditedProduction(id);
+    this.setState({ isEdited: true });
+  };
+
   transportHandler = id => {
     const { transportProduction, loadAllProductions } = this.props;
     transportProduction(id, loadAllProductions);
@@ -136,6 +145,10 @@ class AllProductions extends React.Component {
     const { allProductions } = this.state;
     const { sortAllProductions } = this.props;
     sortAllProductions(allProductions, key, valueType, direction);
+  };
+
+  closeEdit = () => {
+    this.setState({ isEdited: false });
   };
 
   render() {
@@ -159,105 +172,122 @@ class AllProductions extends React.Component {
       return <Spinner />;
     else
       return (
-        <form onSubmit={this.handleForm} autoComplete="off">
-          <OrderListTable
-            sortColumn={(key, valueType) => {
-              handleSort(key, valueType);
-            }}>
-            <Modal>
-              <div>Hello</div>
+        <div>
+          {this.state.isEdited && (
+            <Modal handleModal={this.closeEdit}>
+              <OrderlistEditProduction
+                handleChange={handleChange}
+                editedProduction={newProduction}
+                handleDateChange={handleDateChange}
+                handleCheckBoxChange={handleCheckBoxChange}
+                handleDateSelect={handleDateSelect}
+                startDate={startDate}
+              />
             </Modal>
-            {allProductions.map(production => {
-              let rowBgclass;
-              switch (true) {
-                case production.canceled === true:
-                  rowBgclass = 'row-production-canceled';
-                  break;
-                case production.transported === true:
-                  rowBgclass = 'row-production-transported';
-                  break;
-                case production.finished === true:
-                  rowBgclass = 'row-production-finished';
-                  break;
-                default:
-                  break;
-              }
-              let daysLeft =
-                countDaysLeft(
-                  production.downpayment,
-                  production.productionTerm
-                ) || '';
-              let daysLeftClass = 'text-default';
-              switch (true) {
-                case daysLeft <= 7 && daysLeft > 2:
-                  daysLeftClass = 'text-warning';
-                  break;
-                case daysLeft < 3:
-                  daysLeftClass = 'text-danger';
-                  break;
-                default:
-                  daysLeftClass = 'text-default';
-              }
-              return (
-                <tr
-                  key={production.id}
-                  className={`production-list ${rowBgclass}`}>
-                  <td className={`${tdClass} short-column`}>
-                    {production.orderNumber}
-                  </td>
-                  <td className={`${tdClass} name-column`}>
-                    {cutText(production.clientName, 25)}
-                  </td>
-                  <td className={`${tdClass} date-column`}>
-                    {formatDate(production.downpayment)}
-                  </td>
-                  <td className={`${tdClass} short-column ${daysLeftClass}`}>
-                    {daysLeft}
-                  </td>
-                  <td className={`${tdClass} short-column`}>
-                    {production.finalPayment === true ? (
-                      <MdAttachMoney className="text-success" />
-                    ) : (
-                      <MdMoneyOff className="text-danger" />
-                    )}
-                  </td>
-                  <td className={`${tdClass} short-column`}>
-                    {production.type}
-                  </td>
-                  <td className={`${tdClass}`}>{production.colorOutside}</td>
-                  <td className={`${tdClass}`}>{production.colorInside}</td>
-                  <td className={`${tdClass} short-column`}>
-                    {production.core}
-                  </td>
-                  <td className={`${tdClass} short-column`}>
-                    {production.thickness}
-                  </td>
+          )}
 
-                  <td className={`${tdClass}`}>{production.m2}</td>
-                  <td className={`${tdClass}`}>
-                    {currentFromSquareMeters(production.type, production.m2)}
-                  </td>
-                  <td className={`${tdClass} short-column`}>
-                    {production.csa}
-                  </td>
-                  <td className={`${tdClass} production-list-buttons noprint`}>
-                    <span className="buttons-nowrap">
-                      <EditButton />
-                    </span>
-                  </td>
-                </tr>
-              );
-            })}
-            <OrderlistTrAdd
-              handleChange={handleChange}
-              newProduction={newProduction}
-              handleDateChange={handleDateChange}
-              handleCheckBoxChange={handleCheckBoxChange}
-              handleDateSelect={handleDateSelect}
-              startDate={startDate}
-            />
-          </OrderListTable>
-        </form>
+          <form onSubmit={this.handleForm} autoComplete="off">
+            <OrderListTable
+              sortColumn={(key, valueType) => {
+                handleSort(key, valueType);
+              }}>
+              {allProductions.map(production => {
+                let rowBgclass;
+                switch (true) {
+                  case production.canceled === true:
+                    rowBgclass = 'row-production-canceled';
+                    break;
+                  case production.transported === true:
+                    rowBgclass = 'row-production-transported';
+                    break;
+                  case production.finished === true:
+                    rowBgclass = 'row-production-finished';
+                    break;
+                  default:
+                    break;
+                }
+                let daysLeft =
+                  countDaysLeft(
+                    production.downpayment,
+                    production.productionTerm
+                  ) || '';
+                let daysLeftClass = 'text-default';
+                switch (true) {
+                  case daysLeft <= 7 && daysLeft > 2:
+                    daysLeftClass = 'text-warning';
+                    break;
+                  case daysLeft < 3:
+                    daysLeftClass = 'text-danger';
+                    break;
+                  default:
+                    daysLeftClass = 'text-default';
+                }
+                return (
+                  <tr
+                    key={production.id}
+                    className={`production-list ${rowBgclass}`}>
+                    <td className={`${tdClass} short-column`}>
+                      {production.orderNumber}
+                    </td>
+                    <td className={`${tdClass} name-column`}>
+                      {cutText(production.clientName, 25)}
+                    </td>
+                    <td className={`${tdClass} date-column`}>
+                      {formatDate(production.downpayment)}
+                    </td>
+                    <td className={`${tdClass} short-column ${daysLeftClass}`}>
+                      {daysLeft}
+                    </td>
+                    <td className={`${tdClass} short-column`}>
+                      {production.finalPayment === true ? (
+                        <MdAttachMoney className="text-success" />
+                      ) : (
+                        <MdMoneyOff className="text-danger" />
+                      )}
+                    </td>
+                    <td className={`${tdClass} short-column`}>
+                      {production.type}
+                    </td>
+                    <td className={`${tdClass}`}>{production.colorOutside}</td>
+                    <td className={`${tdClass}`}>{production.colorInside}</td>
+                    <td className={`${tdClass} short-column`}>
+                      {production.core}
+                    </td>
+                    <td className={`${tdClass} short-column`}>
+                      {production.thickness}
+                    </td>
+
+                    <td className={`${tdClass}`}>{production.m2}</td>
+                    <td className={`${tdClass}`}>
+                      {currentFromSquareMeters(production.type, production.m2)}
+                    </td>
+                    <td className={`${tdClass} short-column`}>
+                      {production.csa}
+                    </td>
+                    <td
+                      className={`${tdClass} production-list-buttons noprint`}>
+                      <span className="buttons-nowrap">
+                        <EditButton
+                          clickHandler={() => {
+                            this.editHandler(production.id);
+                          }}
+                        />
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
+              <OrderlistTrAdd
+                handleChange={handleChange}
+                newProduction={newProduction}
+                handleDateChange={handleDateChange}
+                handleCheckBoxChange={handleCheckBoxChange}
+                handleDateSelect={handleDateSelect}
+                startDate={startDate}
+              />
+            </OrderListTable>
+          </form>
+        </div>
       );
   }
 }

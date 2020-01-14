@@ -11,7 +11,8 @@ import {
   loadCurrentProductions,
   loadFinishedProductions,
   loadTransportedProductions,
-  loadCanceledProductions
+  loadCanceledProductions,
+  loadEditedProduction
 } from '../actions/productionsActions';
 
 //// Thunks
@@ -78,6 +79,19 @@ export const loadTransportedProductionsRequest = (
       let res = await axios.get(`${API_URL}/productions/transported`);
       sortByColumn(res.data, key, valueType, direction);
       dispatch(loadTransportedProductions(res.data));
+      dispatch(endRequest());
+    } catch (e) {
+      dispatch(errorRequest(e.message));
+    }
+  };
+};
+// load edited productrion
+export const loadEditedProductionRequest = id => {
+  return async dispatch => {
+    dispatch(startRequest());
+    try {
+      const res = await axios.get(`${API_URL}/productions/${id}`);
+      dispatch(loadEditedProduction(res.data));
       dispatch(endRequest());
     } catch (e) {
       dispatch(errorRequest(e.message));

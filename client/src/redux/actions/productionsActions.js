@@ -12,6 +12,7 @@ export const LOAD_CURRENT = createActionName('LOAD_CURRENT');
 export const LOAD_CANCELED = createActionName('LOAD_CANCELED');
 export const LOAD_FINISHED = createActionName('LOAD_FINISHED');
 export const LOAD_TRANSPORTED = createActionName('LOAD_TRANSPORTED');
+export const LOAD_EDITED = createActionName('LOAD_EDITED');
 
 // actions
 export const loadAllProductions = payload => ({
@@ -33,4 +34,8 @@ export const loadFinishedProductions = payload => ({
 export const loadTransportedProductions = payload => ({
   payload,
   type: LOAD_TRANSPORTED
+});
+export const loadEditedProduction = payload => ({
+  payload,
+  type: LOAD_EDITED
 });
