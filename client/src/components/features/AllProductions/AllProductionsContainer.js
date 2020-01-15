@@ -48,7 +48,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(toggleFinishProductionRequest(id, thunk)),
   transportProduction: (id, thunk) =>
     dispatch(toggleTransportProductionRequest(id, thunk)), */
-  loadEditedProduction: id => loadEditedProductionRequest(id),
+  loadEditedProduction: id => dispatch(loadEditedProductionRequest(id)),
   resetRequest: () => dispatch(resetRequest()),
   resetUpdateRequest: () => dispatch(resetUpdateRequest())
 });

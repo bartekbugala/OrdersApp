@@ -17,12 +17,11 @@ const OrderlistEditProduction = ({
     <table>
       <tr className="new-production noprint">
         <td className={`${tdClass}`}>
-          <input
-            name="orderNumber"
-            onChange={handleChange}
-            defaultValue={editedProduction.orderNumber}
-          />
+          <label>order Number</label>
+          <input name="orderNumber" onChange={handleChange} />
         </td>
+      </tr>
+      <tr className="new-production noprint">
         <td className={`${tdClass}`}>
           <input
             name="clientName"
@@ -30,7 +29,10 @@ const OrderlistEditProduction = ({
             defaultValue={editedProduction.clientName}
           />
         </td>
+      </tr>
+      <tr className="new-production noprint">
         <td className={`${tdClass}`}>
+          {console.dir(editedProduction.downpayment)}
           <DatePicker
             allowSameDay="true"
             name="downpayment"
@@ -42,9 +44,11 @@ const OrderlistEditProduction = ({
                 ? editedProduction.downpayment
                 : startDate
             }
-            dateFormat="dd.MM.yy"
+            dateFormat="dd.MM.yyyy"
           />
         </td>
+      </tr>
+      <tr className="new-production noprint">
         <td className={`${tdClass}`}>
           <input
             name="productionTerm"
@@ -52,6 +56,8 @@ const OrderlistEditProduction = ({
             defaultValue={editedProduction.productionTerm}
           />
         </td>
+      </tr>
+      <tr className="new-production noprint">
         <td className={`${tdClass}`}>
           <input
             name="finalPayment"
@@ -60,6 +66,8 @@ const OrderlistEditProduction = ({
             onChange={handleCheckBoxChange}
           />
         </td>
+      </tr>
+      <tr className="new-production noprint">
         <td className={`${tdClass}`}>
           <input
             name="type"
@@ -67,6 +75,8 @@ const OrderlistEditProduction = ({
             defaultValue={editedProduction.type}
           />
         </td>
+      </tr>
+      <tr className="new-production noprint">
         <td className="form-td">
           <input
             name="colorOutside"
@@ -74,6 +84,8 @@ const OrderlistEditProduction = ({
             defaultValue={editedProduction.colorOutside}
           />
         </td>
+      </tr>
+      <tr className="new-production noprint">
         <td className={`${tdClass}`}>
           <input
             name="colorInside"
@@ -81,6 +93,8 @@ const OrderlistEditProduction = ({
             defaultValue={editedProduction.colorInside}
           />
         </td>
+      </tr>
+      <tr className="new-production noprint">
         <td className={`${tdClass}`}>
           <input
             name="core"
@@ -88,6 +102,8 @@ const OrderlistEditProduction = ({
             defaultValue={editedProduction.core}
           />
         </td>
+      </tr>
+      <tr className="new-production noprint">
         <td className={`${tdClass}`}>
           <input
             name="thickness"
@@ -95,6 +111,8 @@ const OrderlistEditProduction = ({
             defaultValue={editedProduction.thickness}
           />
         </td>
+      </tr>
+      <tr className="new-production noprint">
         <td className={`${tdClass}`}>
           <input
             name="m2"
@@ -102,7 +120,11 @@ const OrderlistEditProduction = ({
             defaultValue={editedProduction.m2}
           />
         </td>
+      </tr>
+      <tr className="new-production noprint">
         <td className={`${tdClass}`}></td>
+      </tr>
+      <tr className="new-production noprint">
         <td className={`${tdClass}`}>
           <input
             name="csa"
@@ -110,6 +132,8 @@ const OrderlistEditProduction = ({
             defaultValue={editedProduction.csa}
           />
         </td>
+      </tr>
+      <tr className="new-production noprint">
         <td className="form-btn">
           <AddRowButton type="submit" />
         </td>

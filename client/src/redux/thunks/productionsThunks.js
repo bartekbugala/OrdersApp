@@ -91,7 +91,10 @@ export const loadEditedProductionRequest = id => {
     dispatch(startRequest());
     try {
       const res = await axios.get(`${API_URL}/productions/${id}`);
-      dispatch(loadEditedProduction(res.data));
+      const payload = res.data;
+      const downpaymentDate = new Date(res.data.downpayment);
+      payload.downpayment = downpaymentDate;
+      dispatch(loadEditedProduction(payload));
       dispatch(endRequest());
     } catch (e) {
       dispatch(errorRequest(e.message));

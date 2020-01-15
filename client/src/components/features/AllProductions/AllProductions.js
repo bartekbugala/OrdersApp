@@ -39,7 +39,7 @@ class AllProductions extends React.Component {
     };
     this.state = {
       allProductions: this.props.allProductions,
-      isEdited: true,
+      isEdited: false,
       request: this.props.request,
       newProduction: initialNewProduction,
       startDate: new Date()
@@ -54,10 +54,10 @@ class AllProductions extends React.Component {
       sortParams.direction
     ).then(this.setState({ allProductions: this.props.allProductions }));
   }
-  componentDidUpdate() {
+  componentDidUpdate(prevState) {
     const { loadAllProductions, sortParams } = this.props;
     if (
-      isEqual(this.state.allProductions, this.props.allProductions) === false
+      isEqual(this.state.allProductions, prevState.allProductions) === false
     ) {
       loadAllProductions(
         sortParams.key,
@@ -127,8 +127,7 @@ class AllProductions extends React.Component {
 
   editHandler = id => {
     const { loadEditedProduction } = this.props;
-    loadEditedProduction(id);
-    this.setState({ isEdited: true });
+    loadEditedProduction(id).then(this.setState({ isEdited: true }));
   };
 
   transportHandler = id => {
@@ -176,7 +175,7 @@ class AllProductions extends React.Component {
             <Modal handleModal={this.closeEdit}>
               <OrderlistEditProduction
                 handleChange={handleChange}
-                editedProduction={newProduction}
+                editedProduction={this.props.editedProduction}
                 handleDateChange={handleDateChange}
                 handleCheckBoxChange={handleCheckBoxChange}
                 handleDateSelect={handleDateSelect}
