@@ -1,5 +1,5 @@
 import React from 'react';
-import AddRowButton from '../../Buttons/AddRowButton/AddRowButton';
+import ConfirmButton from '../../Buttons/ConfirmButton/ConfirmButton';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -11,9 +11,10 @@ const OrderlistEditProduction = ({
   handleChange,
   handleDateChange,
   handleCheckBoxChange,
-  handleDateSelect
+  handleDateSelect,
+  handleEditForm
 }) => (
-  <form onSubmit={''} autoComplete="off">
+  <form onSubmit={handleEditForm} autoComplete="off">
     <table>
       <tr className="new-production noprint">
         <td className={`${tdClass}`}>
@@ -135,7 +136,7 @@ const OrderlistEditProduction = ({
       </tr>
       <tr className="new-production noprint">
         <td className="form-btn">
-          <AddRowButton type="submit" />
+          <ConfirmButton type="submit" />
         </td>
       </tr>
     </table>

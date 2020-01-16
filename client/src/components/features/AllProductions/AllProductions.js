@@ -42,6 +42,7 @@ class AllProductions extends React.Component {
       isEdited: false,
       request: this.props.request,
       newProduction: initialNewProduction,
+      editedProduction: {},
       startDate: new Date()
     };
   }
@@ -66,7 +67,6 @@ class AllProductions extends React.Component {
       ).then(this.setState({ allProductions: this.props.allProductions }));
     }
   }
-
   handleChange = e => {
     const { newProduction } = this.state;
     this.setState({
@@ -99,19 +99,58 @@ class AllProductions extends React.Component {
     });
   };
 
-  handleForm = e => {
-    e.preventDefault();
-    const { addProduction } = this.props;
-    const { newProduction } = this.state;
-    addProduction(newProduction).then(this.setState({ newProduction: {} }));
-  };
-
-  handleForm = e => {
+  handleAddForm = e => {
     e.preventDefault();
     const { addProduction, loadAllProductions } = this.props;
     const { newProduction } = this.state;
     addProduction(newProduction, loadAllProductions).then(
       this.setState({ newProduction: {} })
+    );
+  };
+
+  handleEditChange = e => {
+    const { editedProduction } = this.state;
+    this.setState({
+      editedProduction: { ...editedProduction, [e.target.name]: e.target.value }
+    });
+  };
+
+  handleEditDateChange = date => {
+    const { editedProduction } = this.props;
+    this.setState({
+      editedProduction: { ...editedProduction, downpayment: date }
+    });
+  };
+
+  handleEditCheckBoxChange = e => {
+    const { editedProduction } = this.props;
+    const target = e.target;
+    this.setState({
+      editedProduction: {
+        ...editedProduction,
+        finalPayment: target.checked === true ? true : false
+      }
+    });
+  };
+
+  handleEditDateSelect = date => {
+    const { editedProduction } = this.state;
+    this.setState({
+      editedProduction: { ...editedProduction, downpayment: date }
+    });
+  };
+
+  handleEditForm = e => {
+    e.preventDefault();
+    const {
+      updateProduction,
+      editedProduction,
+      loadAllProductions
+    } = this.props;
+    updateProduction(
+      editedProduction.id,
+      this.state.editedProduction,
+      loadAllProductions
     );
   };
 
@@ -126,8 +165,10 @@ class AllProductions extends React.Component {
   };
 
   editHandler = id => {
-    const { loadEditedProduction } = this.props;
-    loadEditedProduction(id).then(this.setState({ isEdited: true }));
+    const { loadEditedProduction, editedProduction } = this.props;
+    loadEditedProduction(id)
+      .then(this.setState({ editedProduction: editedProduction }))
+      .then(this.setState({ isEdited: true }));
   };
 
   transportHandler = id => {
@@ -155,7 +196,8 @@ class AllProductions extends React.Component {
       handleDateSelect,
       handleDateChange,
       handleCheckBoxChange,
-      handleSort
+      handleSort,
+      handleEditForm
     } = this;
     const { allProductions, updateRequest, request } = this.props;
     const { newProduction, startDate } = this.state;
@@ -174,17 +216,18 @@ class AllProductions extends React.Component {
           {this.state.isEdited && (
             <Modal handleModal={this.closeEdit}>
               <OrderlistEditProduction
-                handleChange={handleChange}
-                editedProduction={this.props.editedProduction}
-                handleDateChange={handleDateChange}
-                handleCheckBoxChange={handleCheckBoxChange}
-                handleDateSelect={handleDateSelect}
+                handleChange={this.handleEditChange}
+                editedProduction={this.state.editedProduction}
+                handleDateChange={this.handleEdithandleDateChange}
+                handleCheckBoxChange={this.handleEdithandleCheckBoxChange}
+                handleDateSelect={this.handleEdithandleDateSelect}
                 startDate={startDate}
+                handleEditForm={handleEditForm}
               />
             </Modal>
           )}
 
-          <form onSubmit={this.handleForm} autoComplete="off">
+          <form onSubmit={this.handleAddForm} autoComplete="off">
             <OrderListTable
               sortColumn={(key, valueType) => {
                 handleSort(key, valueType);

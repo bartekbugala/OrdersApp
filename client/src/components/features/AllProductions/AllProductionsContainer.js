@@ -17,6 +17,7 @@ import {
 } from '../../../redux/thunks/productionsThunks';
 import {
   addProductionRequest,
+  updateProductionRequest,
   toggleCancelProductionRequest,
   toggleFinishProductionRequest,
   toggleTransportProductionRequest
@@ -42,6 +43,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(sortAllProductions(allProductions, key, valueType, direction)),
   addProduction: (production, thunk) =>
     dispatch(addProductionRequest(production, thunk)),
+  updateProduction: (id, production, thunk) =>
+    dispatch(updateProductionRequest(id, production, thunk)),
   /* cancelProduction: (id, thunk) =>
     dispatch(toggleCancelProductionRequest(id, thunk)),
   finishProduction: (id, thunk) =>
