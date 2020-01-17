@@ -16,7 +16,7 @@ const OrderlistEditProduction = ({
   handleForm
 }) => (
   <form onSubmit={handleForm} autoComplete="off">
-    <table class="edit-production-table">
+    <table className="edit-production-table">
       <tbody>
         <tr className="edit-production noprint">
           <td className={`${tdClass}`}>
