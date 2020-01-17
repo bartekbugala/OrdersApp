@@ -108,28 +108,23 @@ class AllProductions extends React.Component {
     );
   };
 
+  closeEdit = () => {
+    this.setState({ isEdited: false });
+  };
+
+  editHandler = id => {
+    const { loadEditedProduction, editedProduction } = this.props;
+    const loadEdited = async () => {
+      await loadEditedProduction(id);
+      this.setState({ editedProduction: editedProduction, isEdited: true });
+    };
+    loadEdited();
+  };
+
   handleEditChange = e => {
     const { editedProduction } = this.state;
     this.setState({
       editedProduction: { ...editedProduction, [e.target.name]: e.target.value }
-    });
-  };
-
-  handleEditDateChange = date => {
-    const { editedProduction } = this.props;
-    this.setState({
-      editedProduction: { ...editedProduction, downpayment: date }
-    });
-  };
-
-  handleEditCheckBoxChange = e => {
-    const { editedProduction } = this.props;
-    const target = e.target;
-    this.setState({
-      editedProduction: {
-        ...editedProduction,
-        finalPayment: target.checked === true ? true : false
-      }
     });
   };
 
@@ -140,15 +135,29 @@ class AllProductions extends React.Component {
     });
   };
 
+  handleEditDateChange = date => {
+    const { editedProduction } = this.state;
+    this.setState({
+      editedProduction: { ...editedProduction, downpayment: date }
+    });
+  };
+
+  handleEditCheckBoxChange = e => {
+    const { editedProduction } = this.state;
+    const target = e.target;
+    this.setState({
+      editedProduction: {
+        ...editedProduction,
+        finalPayment: target.checked === true ? true : false
+      }
+    });
+  };
+
   handleEditForm = e => {
     e.preventDefault();
-    const {
-      updateProduction,
-      editedProduction,
-      loadAllProductions
-    } = this.props;
+    const { updateProduction, loadAllProductions } = this.props;
     updateProduction(
-      editedProduction.id,
+      this.state.editedProduction.id,
       this.state.editedProduction,
       loadAllProductions
     );
@@ -162,13 +171,6 @@ class AllProductions extends React.Component {
   cancelHandler = id => {
     const { cancelProduction, loadAllProductions } = this.props;
     cancelProduction(id, loadAllProductions);
-  };
-
-  editHandler = id => {
-    const { loadEditedProduction, editedProduction } = this.props;
-    loadEditedProduction(id)
-      .then(this.setState({ editedProduction: editedProduction }))
-      .then(this.setState({ isEdited: true }));
   };
 
   transportHandler = id => {
@@ -186,19 +188,23 @@ class AllProductions extends React.Component {
     sortAllProductions(allProductions, key, valueType, direction);
   };
 
-  closeEdit = () => {
-    this.setState({ isEdited: false });
-  };
-
   render() {
     const {
       handleChange,
       handleDateSelect,
       handleDateChange,
       handleCheckBoxChange,
-      handleSort,
-      handleEditForm
+      handleSort
     } = this;
+    const {
+      handleEditChange,
+      handleEditDateSelect,
+      handleEditDateChange,
+      handleEditCheckBoxChange,
+      handleEditForm,
+      closeEdit
+    } = this;
+
     const { allProductions, updateRequest, request } = this.props;
     const { newProduction, startDate } = this.state;
     const tdClass = 'production-list-td';
@@ -214,15 +220,15 @@ class AllProductions extends React.Component {
       return (
         <div>
           {this.state.isEdited && (
-            <Modal handleModal={this.closeEdit}>
+            <Modal handleModal={closeEdit}>
               <OrderlistEditProduction
-                handleChange={this.handleEditChange}
-                editedProduction={this.state.editedProduction}
-                handleDateChange={this.handleEdithandleDateChange}
-                handleCheckBoxChange={this.handleEdithandleCheckBoxChange}
-                handleDateSelect={this.handleEdithandleDateSelect}
+                handleChange={handleEditChange}
+                editedProduction={this.props.editedProduction}
+                handleDateChange={handleEditDateChange}
+                handleCheckBoxChange={handleEditCheckBoxChange}
+                handleDateSelect={handleEditDateSelect}
                 startDate={startDate}
-                handleEditForm={handleEditForm}
+                handleForm={handleEditForm}
               />
             </Modal>
           )}
