@@ -122,7 +122,7 @@ class AllProductions extends React.Component {
   };
 
   handleEditChange = e => {
-    const { editedProduction } = this.state;
+    const { editedProduction } = this.props;
     this.setState({
       editedProduction: { ...editedProduction, [e.target.name]: e.target.value }
     });
@@ -155,12 +155,21 @@ class AllProductions extends React.Component {
 
   handleEditForm = e => {
     e.preventDefault();
-    const { updateProduction, loadAllProductions } = this.props;
+    const {
+      updateProduction,
+      loadAllProductions,
+      loadEditedProduction
+    } = this.props;
+    const { editedProduction } = this.state;
+    const loadEdited = async id => {
+      await loadEditedProduction(id);
+      this.setState({ editedProduction: editedProduction, isEdited: false });
+    };
     updateProduction(
-      this.state.editedProduction.id,
-      this.state.editedProduction,
+      editedProduction.id,
+      editedProduction,
       loadAllProductions
-    );
+    ).then(loadEdited(editedProduction.id));
   };
 
   finishHandler = id => {
