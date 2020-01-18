@@ -55,6 +55,7 @@ class AllProductions extends React.Component {
       sortParams.direction
     ).then(this.setState({ allProductions: this.props.allProductions }));
   }
+
   componentDidUpdate(prevState) {
     const { loadAllProductions, sortParams } = this.props;
     if (
@@ -74,12 +75,12 @@ class AllProductions extends React.Component {
     });
   };
 
-  /*   handleDateChange = date => {
+  handleDateSelect = date => {
     const { newProduction } = this.state;
     this.setState({
       newProduction: { ...newProduction, downpayment: date }
     });
-  }; */
+  };
 
   handleCheckBoxChange = e => {
     const { newProduction } = this.state;
@@ -89,13 +90,6 @@ class AllProductions extends React.Component {
         ...newProduction,
         finalPayment: target.checked === true ? true : false
       }
-    });
-  };
-
-  handleDateSelect = date => {
-    const { newProduction } = this.state;
-    this.setState({
-      newProduction: { ...newProduction, downpayment: date }
     });
   };
 

@@ -10,7 +10,6 @@ const OrderlistEditProduction = ({
   startDate,
   editedProduction,
   handleChange,
-  handleDateChange,
   handleCheckBoxChange,
   handleDateSelect,
   handleForm
@@ -46,7 +45,6 @@ const OrderlistEditProduction = ({
               allowSameDay="true"
               name="downpayment"
               selected={editedProduction.downpayment}
-              onChange={handleDateChange}
               onSelect={handleDateSelect}
               defaultValue={
                 !isNaN(editedProduction.downpayment)
