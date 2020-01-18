@@ -9,7 +9,6 @@ const OrderlistTrAdd = ({
   startDate,
   newProduction,
   handleChange,
-  handleDateChange,
   handleCheckBoxChange,
   handleDateSelect
 }) => (
@@ -33,7 +32,6 @@ const OrderlistTrAdd = ({
         allowSameDay="true"
         name="downpayment"
         selected={newProduction.downpayment}
-        onChange={handleDateChange}
         onSelect={handleDateSelect}
         defaultValue={
           !isNaN(newProduction.downpayment)
