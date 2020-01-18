@@ -55,7 +55,6 @@ class AllProductions extends React.Component {
       sortParams.direction
     ).then(this.setState({ allProductions: this.props.allProductions }));
   }
-
   componentDidUpdate(prevState) {
     const { loadAllProductions, sortParams } = this.props;
     if (
@@ -75,7 +74,7 @@ class AllProductions extends React.Component {
     });
   };
 
-  handleDateSelect = date => {
+  handleDateChange = date => {
     const { newProduction } = this.state;
     this.setState({
       newProduction: { ...newProduction, downpayment: date }
@@ -90,6 +89,13 @@ class AllProductions extends React.Component {
         ...newProduction,
         finalPayment: target.checked === true ? true : false
       }
+    });
+  };
+
+  handleDateSelect = date => {
+    const { newProduction } = this.state;
+    this.setState({
+      newProduction: { ...newProduction, downpayment: date }
     });
   };
 
@@ -115,7 +121,21 @@ class AllProductions extends React.Component {
     loadEdited();
   };
 
+  handleEditChange = e => {
+    const { editedProduction } = this.props;
+    this.setState({
+      editedProduction: { ...editedProduction, [e.target.name]: e.target.value }
+    });
+  };
+
   handleEditDateSelect = date => {
+    const { editedProduction } = this.state;
+    this.setState({
+      editedProduction: { ...editedProduction, downpayment: date }
+    });
+  };
+
+  handleEditDateChange = date => {
     const { editedProduction } = this.state;
     this.setState({
       editedProduction: { ...editedProduction, downpayment: date }
@@ -181,12 +201,14 @@ class AllProductions extends React.Component {
     const {
       handleChange,
       handleDateSelect,
+      handleDateChange,
       handleCheckBoxChange,
       handleSort
     } = this;
     const {
       handleEditChange,
       handleEditDateSelect,
+      handleEditDateChange,
       handleEditCheckBoxChange,
       handleEditForm,
       closeEdit
@@ -210,7 +232,8 @@ class AllProductions extends React.Component {
             <Modal handleModal={closeEdit}>
               <OrderlistEditProduction
                 handleChange={handleEditChange}
-                editedProduction={this.state.editedProduction}
+                editedProduction={this.props.editedProduction}
+                handleDateChange={handleEditDateChange}
                 handleCheckBoxChange={handleEditCheckBoxChange}
                 handleDateSelect={handleEditDateSelect}
                 startDate={startDate}
@@ -313,6 +336,7 @@ class AllProductions extends React.Component {
               <OrderlistTrAdd
                 handleChange={handleChange}
                 newProduction={newProduction}
+                handleDateChange={handleDateChange}
                 handleCheckBoxChange={handleCheckBoxChange}
                 handleDateSelect={handleDateSelect}
                 startDate={startDate}
