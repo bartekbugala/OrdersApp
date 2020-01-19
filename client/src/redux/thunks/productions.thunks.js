@@ -7,7 +7,7 @@ import {
   loadEditedProduction,
   loadNewProduction
 } from '../actions/productionsActions';
-import initialState from '../initialState';
+import emptyNewProduction from '../reducers/productions';
 export const updateEdited = editedProduction => {
   return async dispatch => {
     dispatch(startUpdateRequest());
@@ -34,7 +34,7 @@ export const resetNew = () => {
   return async dispatch => {
     dispatch(startUpdateRequest());
     try {
-      await dispatch(loadNewProduction(initialState.newProduction));
+      await dispatch(loadNewProduction(emptyNewProduction));
       dispatch(endUpdateRequest());
     } catch (e) {
       dispatch(errorUpdateRequest(e.message));

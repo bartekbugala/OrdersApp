@@ -8,6 +8,24 @@ import {
   LOAD_NEW
 } from '../actions/productionsActions';
 
+export const emptyNewProduction = {
+  orderNumber: '',
+  clientName: '',
+  downpayment: '',
+  productionTerm: '',
+  finalPayment: false,
+  type: '',
+  colorOutside: '',
+  colorInside: '',
+  core: '',
+  thickness: '',
+  finished: false,
+  canceled: false,
+  transported: false,
+  m2: '',
+  csa: ''
+};
+
 const initialState = {
   allProductions: [],
   currentProductions: [],
@@ -15,23 +33,7 @@ const initialState = {
   transportedProductions: [],
   canceledProductions: [],
   editedProduction: {},
-  newProduction: {
-    orderNumber: '',
-    clientName: '',
-    downpayment: '',
-    productionTerm: '',
-    finalPayment: false,
-    type: '',
-    colorOutside: '',
-    colorInside: '',
-    core: '',
-    thickness: '',
-    finished: false,
-    canceled: false,
-    transported: false,
-    m2: '',
-    csa: ''
-  }
+  newProduction: emptyNewProduction
 };
 
 //// Reducer
