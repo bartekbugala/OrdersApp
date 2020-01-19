@@ -1,5 +1,3 @@
-import initialState from '../initialState';
-
 import {
   LOAD_ALL,
   LOAD_CURRENT,
@@ -9,6 +7,32 @@ import {
   LOAD_EDITED,
   LOAD_NEW
 } from '../actions/productionsActions';
+
+const initialState = {
+  allProductions: [],
+  currentProductions: [],
+  finishedProductions: [],
+  transportedProductions: [],
+  canceledProductions: [],
+  editedProduction: {},
+  newProduction: {
+    orderNumber: '',
+    clientName: '',
+    downpayment: '',
+    productionTerm: '',
+    finalPayment: false,
+    type: '',
+    colorOutside: '',
+    colorInside: '',
+    core: '',
+    thickness: '',
+    finished: false,
+    canceled: false,
+    transported: false,
+    m2: '',
+    csa: ''
+  }
+};
 
 //// Reducer
 export default function reducer(statePart = initialState, action = {}) {

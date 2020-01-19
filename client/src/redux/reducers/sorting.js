@@ -1,5 +1,3 @@
-import initialState from '../initialState';
-
 import {
   SORT_ALL,
   SORT_CURRENT,
@@ -7,6 +5,10 @@ import {
   SORT_TRANSPORTED,
   SORT_CANCELED
 } from '../actions/sortingActions';
+
+const initialState = {
+  sortParams: { key: 'orderNumber', valueType: 'number', direction: 'asc' }
+};
 
 //// Reducer
 export default function reducer(statePart = initialState, action = {}) {
