@@ -52,10 +52,9 @@ class EditProduction extends React.Component {
       handleEditChange,
       handleEditDateSelect,
       handleEditDateChange,
-      handleEditCheckBoxChange,
-      handleEditForm
+      handleEditCheckBoxChange
     } = this;
-    const { startDate, closeEdit, editedProduction } = this.props;
+    const { startDate, closeEdit, editedProduction, handleForm } = this.props;
     return (
       <Modal handleModal={closeEdit}>
         <OrderlistEditProduction
@@ -65,7 +64,7 @@ class EditProduction extends React.Component {
           handleCheckBoxChange={handleEditCheckBoxChange}
           handleDateSelect={handleEditDateSelect}
           startDate={startDate}
-          handleForm={handleEditForm}
+          handleForm={handleForm}
           closeEdit={closeEdit}
         />
       </Modal>

@@ -61,10 +61,6 @@ class AllProductions extends React.Component {
     resetNew();
   };
 
-  closeEdit = () => {
-    this.setState({ isEdited: false });
-  };
-
   editHandler = id => {
     const { loadEditedProduction } = this.props;
     const loadEdited = async () => {
@@ -72,6 +68,29 @@ class AllProductions extends React.Component {
       this.setState({ isEdited: true });
     };
     loadEdited();
+  };
+
+  handleEditForm = e => {
+    e.preventDefault();
+    const {
+      updateProduction,
+      loadAllProductions,
+      loadEditedProduction
+    } = this.props;
+    const { editedProduction } = this.props;
+    const loadEdited = async id => {
+      await loadEditedProduction(id);
+      this.setState({ isEdited: false });
+    };
+    updateProduction(
+      editedProduction.id,
+      editedProduction,
+      loadAllProductions
+    ).then(loadEdited(editedProduction.id));
+  };
+
+  closeEdit = () => {
+    this.setState({ isEdited: false });
   };
 
   finishHandler = id => {
@@ -106,7 +125,8 @@ class AllProductions extends React.Component {
       allProductions,
       updateRequest,
       request,
-      newProduction
+      newProduction,
+      editedProduction
     } = this.props;
     const { startDate, isEdited } = this.state;
     const tdClass = 'production-list-td';
@@ -123,7 +143,7 @@ class AllProductions extends React.Component {
         <div>
           {this.state.isEdited && (
             <EditProduction
-              editedProduction={this.props.editedProduction}
+              editedProduction={editedProduction}
               startDate={startDate}
               handleForm={handleEditForm}
               isEdited={isEdited}
