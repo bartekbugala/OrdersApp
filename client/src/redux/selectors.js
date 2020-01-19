@@ -17,6 +17,7 @@ export const getCanceledProductions = ({ productions }) =>
   productions.canceledProductions;
 export const getEditedProduction = ({ productions }) =>
   productions.editedProduction;
+export const getNewProduction = ({ productions }) => productions.newProduction;
 
 // requests
 export const getUpdateRequest = ({ requests }) => requests.updateRequest;

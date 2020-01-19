@@ -9,40 +9,20 @@ import currentFromSquareMeters from '../../../utils/currentFromSquareMeters';
 import cutText from '../../../utils/cutText';
 // components
 import OrderListTable from '../../common/OrderList/OrderListTable/OrderListTable';
-import OrderlistTrAdd from '../../common/OrderList/OrderlistTrAdd/OrderlistTrAdd';
-import OrderlistEditProduction from '../../common/OrderList/OrderlistEditProduction/OrderlistEditProduction';
+import AddProduction from '../../features/AddProduction/AddProductionContainer';
+import EditProduction from '../../features/EditProduction/EditProductionContainer';
 import EditButton from '../../common/Buttons/EditButton/EditButton';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
-import Modal from '../../common/Modal/Modal';
 import './AllProductions.scss';
 
 class AllProductions extends React.Component {
   constructor(props) {
     super(props);
-    let initialNewProduction = {
-      orderNumber: '',
-      clientName: '',
-      downpayment: '',
-      productionTerm: '',
-      finalPayment: false,
-      type: '',
-      colorOutside: '',
-      colorInside: '',
-      core: '',
-      thickness: '',
-      finished: false,
-      canceled: false,
-      transported: false,
-      m2: '',
-      csa: ''
-    };
     this.state = {
       allProductions: this.props.allProductions,
       isEdited: false,
       request: this.props.request,
-      newProduction: initialNewProduction,
-      editedProduction: {},
       startDate: new Date()
     };
   }
@@ -55,6 +35,7 @@ class AllProductions extends React.Component {
       sortParams.direction
     ).then(this.setState({ allProductions: this.props.allProductions }));
   }
+
   componentDidUpdate(prevState) {
     const { loadAllProductions, sortParams } = this.props;
     if (
@@ -67,45 +48,17 @@ class AllProductions extends React.Component {
       ).then(this.setState({ allProductions: this.props.allProductions }));
     }
   }
-  handleChange = e => {
-    const { newProduction } = this.state;
-    this.setState({
-      newProduction: { ...newProduction, [e.target.name]: e.target.value }
-    });
-  };
-
-  handleDateChange = date => {
-    const { newProduction } = this.state;
-    this.setState({
-      newProduction: { ...newProduction, downpayment: date }
-    });
-  };
-
-  handleCheckBoxChange = e => {
-    const { newProduction } = this.state;
-    const target = e.target;
-    this.setState({
-      newProduction: {
-        ...newProduction,
-        finalPayment: target.checked === true ? true : false
-      }
-    });
-  };
-
-  handleDateSelect = date => {
-    const { newProduction } = this.state;
-    this.setState({
-      newProduction: { ...newProduction, downpayment: date }
-    });
-  };
 
   handleAddForm = e => {
     e.preventDefault();
-    const { addProduction, loadAllProductions } = this.props;
-    const { newProduction } = this.state;
-    addProduction(newProduction, loadAllProductions).then(
-      this.setState({ newProduction: {} })
-    );
+    const {
+      addProduction,
+      loadAllProductions,
+      newProduction,
+      resetNew
+    } = this.props;
+    addProduction(newProduction, loadAllProductions).then(resetNew());
+    resetNew();
   };
 
   closeEdit = () => {
@@ -113,63 +66,12 @@ class AllProductions extends React.Component {
   };
 
   editHandler = id => {
-    const { loadEditedProduction, editedProduction } = this.props;
+    const { loadEditedProduction } = this.props;
     const loadEdited = async () => {
       await loadEditedProduction(id);
-      this.setState({ editedProduction: editedProduction, isEdited: true });
+      this.setState({ isEdited: true });
     };
     loadEdited();
-  };
-
-  handleEditChange = e => {
-    const { editedProduction } = this.props;
-    this.setState({
-      editedProduction: { ...editedProduction, [e.target.name]: e.target.value }
-    });
-  };
-
-  handleEditDateSelect = date => {
-    const { editedProduction } = this.state;
-    this.setState({
-      editedProduction: { ...editedProduction, downpayment: date }
-    });
-  };
-
-  handleEditDateChange = date => {
-    const { editedProduction } = this.state;
-    this.setState({
-      editedProduction: { ...editedProduction, downpayment: date }
-    });
-  };
-
-  handleEditCheckBoxChange = e => {
-    const { editedProduction } = this.state;
-    const target = e.target;
-    this.setState({
-      editedProduction: {
-        ...editedProduction,
-        finalPayment: target.checked === true ? true : false
-      }
-    });
-  };
-
-  handleEditForm = e => {
-    e.preventDefault();
-    const {
-      updateProduction,
-      loadAllProductions,
-      loadEditedProduction
-    } = this.props;
-    const { editedProduction } = this.state;
-    const loadEdited = async id => {
-      await loadEditedProduction(id);
-      this.setState({ editedProduction: editedProduction, isEdited: false });
-    };
-    updateProduction(
-      editedProduction.id,
-      editedProduction,
-      loadAllProductions
-    ).then(loadEdited(editedProduction.id));
   };
 
   finishHandler = id => {
@@ -198,24 +100,15 @@ class AllProductions extends React.Component {
   };
 
   render() {
+    const { handleSort } = this;
+    const { handleEditForm, closeEdit } = this;
     const {
-      handleChange,
-      handleDateSelect,
-      handleDateChange,
-      handleCheckBoxChange,
-      handleSort
-    } = this;
-    const {
-      handleEditChange,
-      handleEditDateSelect,
-      handleEditDateChange,
-      handleEditCheckBoxChange,
-      handleEditForm,
-      closeEdit
-    } = this;
-
-    const { allProductions, updateRequest, request } = this.props;
-    const { newProduction, startDate } = this.state;
+      allProductions,
+      updateRequest,
+      request,
+      newProduction
+    } = this.props;
+    const { startDate, isEdited } = this.state;
     const tdClass = 'production-list-td';
 
     if (updateRequest.error)
@@ -229,17 +122,13 @@ class AllProductions extends React.Component {
       return (
         <div>
           {this.state.isEdited && (
-            <Modal handleModal={closeEdit}>
-              <OrderlistEditProduction
-                handleChange={handleEditChange}
-                editedProduction={this.props.editedProduction}
-                handleDateChange={handleEditDateChange}
-                handleCheckBoxChange={handleEditCheckBoxChange}
-                handleDateSelect={handleEditDateSelect}
-                startDate={startDate}
-                handleForm={handleEditForm}
-              />
-            </Modal>
+            <EditProduction
+              editedProduction={this.props.editedProduction}
+              startDate={startDate}
+              handleForm={handleEditForm}
+              isEdited={isEdited}
+              closeEdit={closeEdit}
+            />
           )}
 
           <form onSubmit={this.handleAddForm} autoComplete="off">
@@ -333,12 +222,8 @@ class AllProductions extends React.Component {
                   </tr>
                 );
               })}
-              <OrderlistTrAdd
-                handleChange={handleChange}
+              <AddProduction
                 newProduction={newProduction}
-                handleDateChange={handleDateChange}
-                handleCheckBoxChange={handleCheckBoxChange}
-                handleDateSelect={handleDateSelect}
                 startDate={startDate}
               />
             </OrderListTable>

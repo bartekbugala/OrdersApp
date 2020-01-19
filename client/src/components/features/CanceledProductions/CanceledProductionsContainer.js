@@ -9,11 +9,11 @@ import {
   getRequest,
   getSortParams
 } from '../../../redux/selectors';
-import { loadCanceledProductionsRequest } from '../../../redux/thunks/productionsThunks';
+import { loadCanceledProductionsRequest } from '../../../redux/thunks/productionsReadRequest.thunks';
 import {
   deleteProductionRequest,
   toggleCancelProductionRequest
-} from '../../../redux/thunks/productionsHandlersThunks';
+} from '../../../redux/thunks/productionsRequest.thunks';
 import { sortCanceledProductions } from '../../../redux/thunks/sortingThunks';
 import CanceledProductions from './CanceledProductions';
 

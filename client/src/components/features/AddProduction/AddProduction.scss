@@ -1,0 +1,12 @@
+@import '../../../styles/global.scss';
+
+.row-production-canceled {
+  color: rgb(224, 224, 224);
+  background: rgb(250, 255, 202);
+}
+.row-production-transported {
+  background: rgb(176, 237, 255);
+}
+.row-production-finished {
+  background: rgb(199, 255, 207);
+}

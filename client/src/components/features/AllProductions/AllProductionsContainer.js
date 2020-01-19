@@ -8,20 +8,18 @@ import {
   getUpdateRequest,
   getRequest,
   getSortParams,
-  getEditedProduction
+  getEditedProduction,
+  getNewProduction
 } from '../../../redux/selectors';
 import { sortAllProductions } from '../../../redux/thunks/sortingThunks';
-import {
-  loadAllProductionsRequest,
-  loadEditedProductionRequest
-} from '../../../redux/thunks/productionsThunks';
+import { resetNew } from '../../../redux/thunks/productions.thunks';
+import { loadAllProductionsRequest } from '../../../redux/thunks/productionsReadRequest.thunks';
 import {
   addProductionRequest,
-  updateProductionRequest,
   toggleCancelProductionRequest,
   toggleFinishProductionRequest,
   toggleTransportProductionRequest
-} from '../../../redux/thunks/productionsHandlersThunks';
+} from '../../../redux/thunks/productionsRequest.thunks';
 import AllProductions from './AllProductions';
 
 const mapStateToProps = state => ({
@@ -29,29 +27,26 @@ const mapStateToProps = state => ({
   updateRequest: getUpdateRequest(state),
   sortParams: getSortParams(state),
   request: getRequest(state),
-  editedProduction: getEditedProduction(state)
+  editedProduction: getEditedProduction(state),
+  newProduction: getNewProduction(state)
 });
-
 const mapDispatchToProps = dispatch => ({
   loadAllProductions: (
     key = 'orderNumber',
     valueType = 'number',
     direction = 'asc'
   ) => dispatch(loadAllProductionsRequest(key, valueType, direction)),
-
   sortAllProductions: (allProductions, key, valueType, direction) =>
     dispatch(sortAllProductions(allProductions, key, valueType, direction)),
   addProduction: (production, thunk) =>
     dispatch(addProductionRequest(production, thunk)),
-  updateProduction: (id, production, thunk) =>
-    dispatch(updateProductionRequest(id, production, thunk)),
   /* cancelProduction: (id, thunk) =>
     dispatch(toggleCancelProductionRequest(id, thunk)),
   finishProduction: (id, thunk) =>
     dispatch(toggleFinishProductionRequest(id, thunk)),
   transportProduction: (id, thunk) =>
     dispatch(toggleTransportProductionRequest(id, thunk)), */
-  loadEditedProduction: id => dispatch(loadEditedProductionRequest(id)),
+  resetNew: () => dispatch(resetNew()),
   resetRequest: () => dispatch(resetRequest()),
   resetUpdateRequest: () => dispatch(resetUpdateRequest())
 });

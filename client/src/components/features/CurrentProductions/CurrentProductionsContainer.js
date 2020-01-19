@@ -9,12 +9,12 @@ import {
   getRequest,
   getSortParams
 } from '../../../redux/selectors';
-import { loadCurrentProductionsRequest } from '../../../redux/thunks/productionsThunks';
+import { loadCurrentProductionsRequest } from '../../../redux/thunks/productionsReadRequest.thunks';
 import {
   toggleCancelProductionRequest,
   toggleFinishProductionRequest,
   addProductionRequest
-} from '../../../redux/thunks/productionsHandlersThunks';
+} from '../../../redux/thunks/productionsRequest.thunks';
 import { sortCurrentProductions } from '../../../redux/thunks/sortingThunks';
 import CurrentProductions from './CurrentProductions';
 

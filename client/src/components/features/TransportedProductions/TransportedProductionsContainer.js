@@ -9,8 +9,8 @@ import {
   getRequest,
   getSortParams
 } from '../../../redux/selectors';
-import { loadTransportedProductionsRequest } from '../../../redux/thunks/productionsThunks';
-import { toggleTransportProductionRequest } from '../../../redux/thunks/productionsHandlersThunks';
+import { loadTransportedProductionsRequest } from '../../../redux/thunks/productionsReadRequest.thunks';
+import { toggleTransportProductionRequest } from '../../../redux/thunks/productionsRequest.thunks';
 import { sortTransportedProductions } from '../../../redux/thunks/sortingThunks';
 import TransportedProductions from './TransportedProductions';
 const mapStateToProps = state => ({
