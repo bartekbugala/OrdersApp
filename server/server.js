@@ -8,7 +8,10 @@ const mongoSanitize = require('mongo-sanitize');
 const loadTestData = require('./testData');
 
 // import routes
-const productionsRoutes = require('./routes/productions.routes');
+const createProductionsRoutes = require('./routes/createProductions.routes');
+const readProductionsRoutes = require('./routes/readProductions.routes');
+const updateProductionsRoutes = require('./routes/updateProductions.routes');
+const deleteProductionsRoutes = require('./routes/deleteProductions.routes');
 
 const app = express();
 
@@ -23,7 +26,11 @@ app.use((req, res, next) => {
   mongoSanitize(req.body);
   next();
 });
-app.use('/api', productionsRoutes);
+
+app.use('/api', createProductionsRoutes);
+app.use('/api', readProductionsRoutes);
+app.use('/api', updateProductionsRoutes);
+app.use('/api', deleteProductionsRoutes);
 
 // Serve static files from the React app
 /* app.use(express.static(path.join(__dirname, '../client/build')));

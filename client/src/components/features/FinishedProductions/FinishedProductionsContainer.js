@@ -9,11 +9,11 @@ import {
   getRequest,
   getSortParams
 } from '../../../redux/selectors';
-import { loadFinishedProductionsRequest } from '../../../redux/thunks/productionsThunks';
+import { loadFinishedProductionsRequest } from '../../../redux/thunks/productionsReadRequest.thunks';
 import {
   toggleFinishProductionRequest,
   toggleTransportProductionRequest
-} from '../../../redux/thunks/productionsHandlersThunks';
+} from '../../../redux/thunks/productionsRequest.thunks';
 import { sortFinishedProductions } from '../../../redux/thunks/sortingThunks';
 import FinishedProductions from './FinishedProductions';
 

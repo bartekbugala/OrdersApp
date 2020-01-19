@@ -1,12 +1,40 @@
-import initialState from '../initialState';
-
 import {
   LOAD_ALL,
   LOAD_CURRENT,
   LOAD_CANCELED,
   LOAD_FINISHED,
-  LOAD_TRANSPORTED
+  LOAD_TRANSPORTED,
+  LOAD_EDITED,
+  LOAD_NEW
 } from '../actions/productionsActions';
+
+export const emptyNewProduction = {
+  orderNumber: '',
+  clientName: '',
+  downpayment: '',
+  productionTerm: '',
+  finalPayment: false,
+  type: '',
+  colorOutside: '',
+  colorInside: '',
+  core: '',
+  thickness: '',
+  finished: false,
+  canceled: false,
+  transported: false,
+  m2: '',
+  csa: ''
+};
+
+const initialState = {
+  allProductions: [],
+  currentProductions: [],
+  finishedProductions: [],
+  transportedProductions: [],
+  canceledProductions: [],
+  editedProduction: {},
+  newProduction: emptyNewProduction
+};
 
 //// Reducer
 export default function reducer(statePart = initialState, action = {}) {
@@ -21,6 +49,10 @@ export default function reducer(statePart = initialState, action = {}) {
       return { ...statePart, finishedProductions: action.payload };
     case LOAD_TRANSPORTED:
       return { ...statePart, transportedProductions: action.payload };
+    case LOAD_EDITED:
+      return { ...statePart, editedProduction: action.payload };
+    case LOAD_NEW:
+      return { ...statePart, newProduction: action.payload };
     default:
       return statePart;
   }

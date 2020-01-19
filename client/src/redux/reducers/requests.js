@@ -1,5 +1,3 @@
-import initialState from '../initialState';
-
 import {
   START_REQUEST,
   END_REQUEST,
@@ -10,6 +8,19 @@ import {
   RESET_UPDATE_REQUEST,
   ERROR_UPDATE_REQUEST
 } from '../actions/requestsActions';
+
+const initialState = {
+  updateRequest: {
+    pending: false,
+    error: null,
+    success: null
+  },
+  request: {
+    pending: false,
+    error: null,
+    success: null
+  }
+};
 
 //// Reducer
 export default function reducer(statePart = initialState, action = {}) {

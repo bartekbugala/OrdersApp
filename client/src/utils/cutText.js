@@ -1,6 +1,10 @@
-export default function cutText(content = '-', maxLength) {
+export default function cutText(content = 'Hello', maxLength) {
+  if (content === null) {
+    console.error('CutText content is null');
+    return;
+  }
   if (maxLength < 1) {
-    return console.log(`Error, maxLength lower than 1`);
+    return console.error(`Error, maxLength lower than 1`);
   }
   if (content.length <= maxLength) {
     return content;

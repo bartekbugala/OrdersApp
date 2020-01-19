@@ -30,6 +30,18 @@ export const deleteProductionRequest = (id, thunk) => {
     }
   };
 };
+export const updateProductionRequest = (id, production, thunk) => {
+  return async dispatch => {
+    dispatch(startUpdateRequest());
+    try {
+      await axios.put(`${API_URL}/productions/update/${id}`, production);
+      dispatch(thunk);
+      dispatch(endUpdateRequest());
+    } catch (e) {
+      dispatch(errorUpdateRequest(JSON.stringify(e)));
+    }
+  };
+};
 export const toggleCancelProductionRequest = (id, thunk) => {
   return async dispatch => {
     dispatch(startUpdateRequest());

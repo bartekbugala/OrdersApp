@@ -1,4 +1,13 @@
-import initialState from '../initialState';
+const initialState = {
+  menuLinks: [
+    { path: '/current', title: 'Bieżące' },
+    { path: '/finished', title: 'Wyprodukowane' },
+    { path: '/transported', title: 'Wywiezione' },
+    { path: '/canceled', title: 'Anulowane' },
+    { path: '/all', title: 'Wszystkie' },
+    { path: '/stats', title: 'Statystyki' }
+  ]
+};
 
 //// Reducer
 export default function reducer(statePart = initialState, action = {}) {
