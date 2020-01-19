@@ -36,9 +36,9 @@ class EditProduction extends React.Component {
       loadEditedProduction
     } = this.props;
     const { editedProduction } = this.props;
-    const loadEdited = async id => {
-      await loadEditedProduction(id);
-      this.setState({ isEdited: false });
+    const loadEdited = id => {
+      loadEditedProduction(id);
+      this.props.closeEdit();
     };
     updateProduction(
       editedProduction.id,
@@ -52,11 +52,13 @@ class EditProduction extends React.Component {
       handleEditChange,
       handleEditDateSelect,
       handleEditDateChange,
-      handleEditCheckBoxChange
+      handleEditCheckBoxChange,
+      handleEditForm
     } = this;
     const { startDate, closeEdit, editedProduction, handleForm } = this.props;
     return (
       <Modal handleModal={closeEdit}>
+        <h3>Edycja pozycji</h3>
         <OrderlistEditProduction
           handleChange={handleEditChange}
           editedProduction={editedProduction}
@@ -64,7 +66,7 @@ class EditProduction extends React.Component {
           handleCheckBoxChange={handleEditCheckBoxChange}
           handleDateSelect={handleEditDateSelect}
           startDate={startDate}
-          handleForm={handleForm}
+          handleForm={handleEditForm}
           closeEdit={closeEdit}
         />
       </Modal>

@@ -69,25 +69,6 @@ class AllProductions extends React.Component {
     loadEdited();
   };
 
-  handleEditForm = e => {
-    e.preventDefault();
-    const {
-      updateProduction,
-      loadAllProductions,
-      loadEditedProduction
-    } = this.props;
-    const { editedProduction } = this.props;
-    const loadEdited = async id => {
-      await loadEditedProduction(id);
-      this.setState({ isEdited: false });
-    };
-    updateProduction(
-      editedProduction.id,
-      editedProduction,
-      loadAllProductions
-    ).then(loadEdited(editedProduction.id));
-  };
-
   closeEdit = () => {
     this.setState({ isEdited: false });
   };
@@ -118,8 +99,7 @@ class AllProductions extends React.Component {
   };
 
   render() {
-    const { handleSort } = this;
-    const { handleEditForm, closeEdit } = this;
+    const { handleSort, closeEdit } = this;
     const {
       allProductions,
       updateRequest,
@@ -127,16 +107,12 @@ class AllProductions extends React.Component {
       newProduction,
       editedProduction
     } = this.props;
-    const { startDate, isEdited } = this.state;
+    const { startDate } = this.state;
     const tdClass = 'production-list-td';
 
     if (updateRequest.error)
       return <Alert variant="error">{`${updateRequest.error}`}</Alert>;
-    /*     if (updateRequest.success) return <Alert variant="success">Post has been updated!</Alert>; */ else if (
-      updateRequest.pending &&
-      request.pending
-    )
-      return <Spinner />;
+    else if (updateRequest.pending && request.pending) return <Spinner />;
     else
       return (
         <div>
@@ -144,8 +120,6 @@ class AllProductions extends React.Component {
             <EditProduction
               editedProduction={editedProduction}
               startDate={startDate}
-              handleForm={handleEditForm}
-              isEdited={isEdited}
               closeEdit={closeEdit}
             />
           )}
