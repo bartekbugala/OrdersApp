@@ -1,27 +1,23 @@
 import React from 'react';
 import OrderlistTrAdd from '../../common/OrderList/OrderlistTrAdd/OrderlistTrAdd';
 
-class AddProduction extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  handleChange = e => {
+const AddProduction = ({ newProduction, startDate }) => {
+  const handleChange = e => {
     const { newProduction, updateNew } = this.props;
     updateNew({ ...newProduction, [e.target.name]: e.target.value });
   };
 
-  handleDateSelect = date => {
+  const handleDateSelect = date => {
     const { newProduction, updateNew } = this.props;
     updateNew({ ...newProduction, downpayment: date });
   };
 
-  handleDateChange = date => {
+  const handleDateChange = date => {
     const { newProduction, updateNew } = this.props;
     updateNew({ ...newProduction, downpayment: date });
   };
 
-  handleCheckBoxChange = e => {
+  const handleCheckBoxChange = e => {
     const { newProduction, updateNew } = this.props;
     const target = e.target;
     updateNew({
@@ -30,24 +26,16 @@ class AddProduction extends React.Component {
     });
   };
 
-  render() {
-    const {
-      handleChange,
-      handleDateSelect,
-      handleDateChange,
-      handleCheckBoxChange
-    } = this;
-    const { newProduction, startDate } = this.props;
-    return (
-      <OrderlistTrAdd
-        handleChange={handleChange}
-        newProduction={newProduction}
-        handleDateChange={handleDateChange}
-        handleCheckBoxChange={handleCheckBoxChange}
-        handleDateSelect={handleDateSelect}
-        startDate={startDate}
-      />
-    );
-  }
-}
+  return (
+    <OrderlistTrAdd
+      handleChange={handleChange}
+      newProduction={newProduction}
+      handleDateChange={handleDateChange}
+      handleCheckBoxChange={handleCheckBoxChange}
+      handleDateSelect={handleDateSelect}
+      startDate={startDate}
+    />
+  );
+};
+
 export default AddProduction;

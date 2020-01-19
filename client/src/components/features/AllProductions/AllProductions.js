@@ -58,7 +58,6 @@ class AllProductions extends React.Component {
       resetNew
     } = this.props;
     addProduction(newProduction, loadAllProductions).then(resetNew());
-    resetNew();
   };
 
   editHandler = id => {
