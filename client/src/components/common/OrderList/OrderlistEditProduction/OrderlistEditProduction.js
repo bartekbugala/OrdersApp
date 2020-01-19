@@ -72,6 +72,7 @@ const OrderlistEditProduction = ({
               name="finalPayment"
               type="checkbox"
               defaultValue={editedProduction.finalPayment}
+              checked={editedProduction.finalPayment}
               onChange={handleCheckBoxChange}
             />
           </td>
