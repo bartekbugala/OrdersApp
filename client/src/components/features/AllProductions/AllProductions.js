@@ -1,17 +1,13 @@
 import React from 'react';
-import { MdAttachMoney, MdMoneyOff } from 'react-icons/md';
+
 import { PropTypes } from 'prop-types';
 import { isEqual } from 'lodash';
-// utils
-import formatDate from '../../../utils/formatDate';
-import countDaysLeft from '../../../utils/countDaysLeft';
-import currentFromSquareMeters from '../../../utils/currentFromSquareMeters';
-import cutText from '../../../utils/cutText';
+
 // components
-import OrderListTable from '../../common/OrderList/OrderListTable/OrderListTable';
 import AddProduction from '../../features/AddProduction/AddProductionContainer';
 import EditProduction from '../../features/EditProduction/EditProductionContainer';
-import ProductionButtons from '../../features/ProductionButtons/ProductionButtonsContainer';
+import ProductionsList from '../../features/ProductionsList/ProductionsList';
+
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
 import './AllProductions.scss';
@@ -27,7 +23,6 @@ class AllProductions extends React.Component {
       startDate: new Date()
     };
   }
-
   componentDidMount() {
     const { loadAllProductions, sortParams } = this.props;
     loadAllProductions(
@@ -84,7 +79,7 @@ class AllProductions extends React.Component {
   };
 
   render() {
-    const { handleSort, closeEdit } = this;
+    const { handleSort, closeEdit, editHandler } = this;
     const {
       allProductions,
       updateRequest,
@@ -94,7 +89,6 @@ class AllProductions extends React.Component {
       loadAllProductions
     } = this.props;
     const { startDate } = this.state;
-    const tdClass = 'production-list-td';
 
     if (updateRequest.error)
       return <Alert variant="error">{`${updateRequest.error}`}</Alert>;
@@ -111,99 +105,18 @@ class AllProductions extends React.Component {
           )}
 
           <form onSubmit={this.handleAddForm} autoComplete="off">
-            <OrderListTable
-              sortColumn={(key, valueType) => {
-                handleSort(key, valueType);
-              }}>
-              {allProductions.map(production => {
-                let rowBgclass;
-                switch (true) {
-                  case production.canceled === true:
-                    rowBgclass = 'row-production-canceled';
-                    break;
-                  case production.transported === true:
-                    rowBgclass = 'row-production-transported';
-                    break;
-                  case production.finished === true:
-                    rowBgclass = 'row-production-finished';
-                    break;
-                  default:
-                    break;
-                }
-                let daysLeft =
-                  countDaysLeft(
-                    production.downpayment,
-                    production.productionTerm
-                  ) || '';
-                let daysLeftClass = 'text-default';
-                switch (true) {
-                  case daysLeft <= 7 && daysLeft > 2:
-                    daysLeftClass = 'text-warning';
-                    break;
-                  case daysLeft < 3:
-                    daysLeftClass = 'text-danger';
-                    break;
-                  default:
-                    daysLeftClass = 'text-default';
-                }
-                return (
-                  <tr
-                    key={production.id}
-                    className={`production-list ${rowBgclass}`}>
-                    <td className={`${tdClass} short-column`}>
-                      {production.orderNumber}
-                    </td>
-                    <td className={`${tdClass} name-column`}>
-                      {cutText(production.clientName, 25)}
-                    </td>
-                    <td className={`${tdClass} date-column`}>
-                      {formatDate(production.downpayment)}
-                    </td>
-                    <td className={`${tdClass} short-column ${daysLeftClass}`}>
-                      {daysLeft}
-                    </td>
-                    <td className={`${tdClass} short-column`}>
-                      {production.finalPayment === true ? (
-                        <MdAttachMoney className="text-success" />
-                      ) : (
-                        <MdMoneyOff className="text-danger" />
-                      )}
-                    </td>
-                    <td className={`${tdClass} short-column`}>
-                      {production.type}
-                    </td>
-                    <td className={`${tdClass}`}>{production.colorOutside}</td>
-                    <td className={`${tdClass}`}>{production.colorInside}</td>
-                    <td className={`${tdClass} short-column`}>
-                      {production.core}
-                    </td>
-                    <td className={`${tdClass} short-column`}>
-                      {production.thickness}
-                    </td>
-
-                    <td className={`${tdClass}`}>{production.m2}</td>
-                    <td className={`${tdClass}`}>
-                      {currentFromSquareMeters(production.type, production.m2)}
-                    </td>
-                    <td className={`${tdClass} short-column`}>
-                      {production.csa}
-                    </td>
-                    <td
-                      className={`${tdClass} production-list-buttons noprint`}>
-                      <ProductionButtons
-                        production={production}
-                        loadProductions={loadAllProductions}
-                        editHandler={this.editHandler}
-                      />
-                    </td>
-                  </tr>
-                );
-              })}
+            <ProductionsList
+              handleSort={handleSort}
+              productions={allProductions}
+              newProduction={newProduction}
+              loadProductions={loadAllProductions}
+              editHandler={editHandler}
+              startDate={startDate}>
               <AddProduction
                 newProduction={newProduction}
                 startDate={startDate}
               />
-            </OrderListTable>
+            </ProductionsList>
           </form>
         </div>
       );
