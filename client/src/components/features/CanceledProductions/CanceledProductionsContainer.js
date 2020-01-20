@@ -7,21 +7,24 @@ import {
   getCanceledProductions,
   getUpdateRequest,
   getRequest,
-  getSortParams
+  getSortParams,
+  getEditedProduction
 } from '../../../redux/selectors';
-import { loadCanceledProductionsRequest } from '../../../redux/thunks/productionsReadRequest.thunks';
-import {
-  deleteProductionRequest,
-  toggleCancelProductionRequest
-} from '../../../redux/thunks/productionsRequest.thunks';
 import { sortCanceledProductions } from '../../../redux/thunks/sortingThunks';
+import {
+  loadCanceledProductionsRequest,
+  loadEditedProductionRequest
+} from '../../../redux/thunks/productionsReadRequest.thunks';
+import { updateProductionRequest } from '../../../redux/thunks/productionsRequest.thunks';
+
 import CanceledProductions from './CanceledProductions';
 
 const mapStateToProps = state => ({
   canceledProductions: getCanceledProductions(state),
   updateRequest: getUpdateRequest(state),
   sortParams: getSortParams(state),
-  request: getRequest(state)
+  request: getRequest(state),
+  editedProduction: getEditedProduction(state)
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -30,15 +33,15 @@ const mapDispatchToProps = dispatch => ({
     valueType = 'number',
     direction = 'asc'
   ) => dispatch(loadCanceledProductionsRequest(key, valueType, direction)),
+  loadEditedProduction: id => dispatch(loadEditedProductionRequest(id)),
   sortCanceledProductions: (canceledProductions, key, valueType, direction) =>
     dispatch(
       sortCanceledProductions(canceledProductions, key, valueType, direction)
     ),
-  cancelProduction: (id, thunk) =>
-    dispatch(toggleCancelProductionRequest(id, thunk)),
-  deleteProduction: (id, thunk) => dispatch(deleteProductionRequest(id, thunk)),
-  resetRequest: () => dispatch(resetRequest()),
-  resetUpdateRequest: () => dispatch(resetUpdateRequest())
+  updateProduction: (id, production, thunk) =>
+    dispatch(updateProductionRequest(id, production, thunk)),
+  resetUpdateRequest: () => dispatch(resetUpdateRequest()),
+  resetRequest: () => dispatch(resetRequest())
 });
 
 export default connect(
