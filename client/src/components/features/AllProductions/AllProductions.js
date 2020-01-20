@@ -20,7 +20,6 @@ class AllProductions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      allProductions: this.props.allProductions,
       updateRequest: this.props.updateRequest,
       request: this.props.request,
       isEdited: false,
@@ -35,31 +34,30 @@ class AllProductions extends React.Component {
       sortParams.key,
       sortParams.valueType,
       sortParams.direction
-    ).then(this.setState({ allProductions: this.props.allProductions }));
+    );
   }
 
-  componentDidUpdate(prevState) {
-    const { loadAllProductions, sortParams } = this.props;
-    if (
-      isEqual(this.state.allProductions, prevState.allProductions) === false
-    ) {
+  componentDidUpdate(prevProps) {
+    const {
+      loadAllProductions,
+      sortParams,
+      allProductions,
+      resetNew
+    } = this.props;
+    if (isEqual(allProductions, prevProps.allProductions) === false) {
       loadAllProductions(
         sortParams.key,
         sortParams.valueType,
         sortParams.direction
-      ).then(this.setState({ allProductions: this.props.allProductions }));
+      );
+      resetNew();
     }
   }
 
   handleAddForm = e => {
     e.preventDefault();
-    const {
-      addProduction,
-      loadAllProductions,
-      newProduction,
-      resetNew
-    } = this.props;
-    addProduction(newProduction, loadAllProductions).then(resetNew());
+    const { addProduction, loadAllProductions, newProduction } = this.props;
+    addProduction(newProduction, loadAllProductions);
   };
 
   editHandler = id => {
@@ -80,7 +78,7 @@ class AllProductions extends React.Component {
     valueType = 'number',
     direction = 'asc'
   ) => {
-    const { allProductions } = this.state;
+    const { allProductions } = this.props;
     const { sortAllProductions } = this.props;
     sortAllProductions(allProductions, key, valueType, direction);
   };
