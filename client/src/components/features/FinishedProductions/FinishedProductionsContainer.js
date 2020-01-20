@@ -7,21 +7,24 @@ import {
   getFinishedProductions,
   getUpdateRequest,
   getRequest,
-  getSortParams
+  getSortParams,
+  getEditedProduction
 } from '../../../redux/selectors';
-import { loadFinishedProductionsRequest } from '../../../redux/thunks/productionsReadRequest.thunks';
-import {
-  toggleFinishProductionRequest,
-  toggleTransportProductionRequest
-} from '../../../redux/thunks/productionsRequest.thunks';
 import { sortFinishedProductions } from '../../../redux/thunks/sortingThunks';
+import {
+  loadFinishedProductionsRequest,
+  loadEditedProductionRequest
+} from '../../../redux/thunks/productionsReadRequest.thunks';
+import { updateProductionRequest } from '../../../redux/thunks/productionsRequest.thunks';
+
 import FinishedProductions from './FinishedProductions';
 
 const mapStateToProps = state => ({
   finishedProductions: getFinishedProductions(state),
   updateRequest: getUpdateRequest(state),
   sortParams: getSortParams(state),
-  request: getRequest(state)
+  request: getRequest(state),
+  editedProduction: getEditedProduction(state)
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -30,16 +33,15 @@ const mapDispatchToProps = dispatch => ({
     valueType = 'number',
     direction = 'asc'
   ) => dispatch(loadFinishedProductionsRequest(key, valueType, direction)),
+  loadEditedProduction: id => dispatch(loadEditedProductionRequest(id)),
   sortFinishedProductions: (finishedProductions, key, valueType, direction) =>
     dispatch(
       sortFinishedProductions(finishedProductions, key, valueType, direction)
     ),
-  finishProduction: (id, thunk) =>
-    dispatch(toggleFinishProductionRequest(id, thunk)),
-  transportProduction: (id, thunk) =>
-    dispatch(toggleTransportProductionRequest(id, thunk)),
-  resetRequest: () => dispatch(resetRequest()),
-  resetUpdateRequest: () => dispatch(resetUpdateRequest())
+  updateProduction: (id, production, thunk) =>
+    dispatch(updateProductionRequest(id, production, thunk)),
+  resetUpdateRequest: () => dispatch(resetUpdateRequest()),
+  resetRequest: () => dispatch(resetRequest())
 });
 
 export default connect(
