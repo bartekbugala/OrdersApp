@@ -139,7 +139,7 @@ class TransportedProductions extends React.Component {
                 {currentFromSquareMeters(production.type, production.m2)}
               </td>
               <td className={`${tdClass} short-column`}>{production.csa}</td>
-              <td className={`${tdClass} list-buttons noprint`}>
+              <td className={`${tdClass} production-list-buttons noprint`}>
                 <span className="buttons-nowrap">
                   <EditButton />
 

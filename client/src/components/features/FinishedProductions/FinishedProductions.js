@@ -77,8 +77,8 @@ class FinishedProductions extends React.Component {
 
   render() {
     const { handleSort } = this;
-    const { updateRequest, request } = this.props;
     const { finishedProductions } = this.state;
+    const { updateRequest, request } = this.props;
     const tdClass = 'production-list-td';
 
     if (updateRequest.error || request.error)
