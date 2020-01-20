@@ -11,7 +11,7 @@ import cutText from '../../../utils/cutText';
 import OrderListTable from '../../common/OrderList/OrderListTable/OrderListTable';
 import AddProduction from '../../features/AddProduction/AddProductionContainer';
 import EditProduction from '../../features/EditProduction/EditProductionContainer';
-import EditButton from '../../common/Buttons/EditButton/EditButton';
+import ProductionButtons from '../../features/ProductionButtons/ProductionButtonsContainer';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
 import './AllProductions.scss';
@@ -21,6 +21,8 @@ class AllProductions extends React.Component {
     super(props);
     this.state = {
       allProductions: this.props.allProductions,
+      updateRequest: this.props.updateRequest,
+      request: this.props.request,
       isEdited: false,
       request: this.props.request,
       startDate: new Date()
@@ -73,21 +75,6 @@ class AllProductions extends React.Component {
     this.setState({ isEdited: false });
   };
 
-  finishHandler = id => {
-    const { finishProduction, loadAllProductions } = this.props;
-    finishProduction(id, loadAllProductions);
-  };
-
-  cancelHandler = id => {
-    const { cancelProduction, loadAllProductions } = this.props;
-    cancelProduction(id, loadAllProductions);
-  };
-
-  transportHandler = id => {
-    const { transportProduction, loadAllProductions } = this.props;
-    transportProduction(id, loadAllProductions);
-  };
-
   handleSort = (
     key = 'orderNumber',
     valueType = 'number',
@@ -105,7 +92,8 @@ class AllProductions extends React.Component {
       updateRequest,
       request,
       newProduction,
-      editedProduction
+      editedProduction,
+      loadAllProductions
     } = this.props;
     const { startDate } = this.state;
     const tdClass = 'production-list-td';
@@ -204,13 +192,11 @@ class AllProductions extends React.Component {
                     </td>
                     <td
                       className={`${tdClass} production-list-buttons noprint`}>
-                      <span className="buttons-nowrap">
-                        <EditButton
-                          clickHandler={() => {
-                            this.editHandler(production.id);
-                          }}
-                        />
-                      </span>
+                      <ProductionButtons
+                        production={production}
+                        loadProductions={loadAllProductions}
+                        editHandler={this.editHandler}
+                      />
                     </td>
                   </tr>
                 );

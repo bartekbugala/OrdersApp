@@ -13,15 +13,14 @@ import {
 } from '../../../redux/selectors';
 import { sortAllProductions } from '../../../redux/thunks/sortingThunks';
 import { resetNew } from '../../../redux/thunks/productions.thunks';
-import { loadAllProductionsRequest } from '../../../redux/thunks/productionsReadRequest.thunks';
-import { loadEditedProductionRequest } from '../../../redux/thunks/productionsReadRequest.thunks';
+import {
+  loadAllProductionsRequest,
+  loadEditedProductionRequest
+} from '../../../redux/thunks/productionsReadRequest.thunks';
 import {
   addProductionRequest,
-  toggleCancelProductionRequest,
-  toggleFinishProductionRequest,
-  toggleTransportProductionRequest
+  updateProductionRequest
 } from '../../../redux/thunks/productionsRequest.thunks';
-import { updateProductionRequest } from '../../../redux/thunks/productionsRequest.thunks';
 import AllProductions from './AllProductions';
 
 const mapStateToProps = state => ({
@@ -45,12 +44,6 @@ const mapDispatchToProps = dispatch => ({
     dispatch(addProductionRequest(production, thunk)),
   updateProduction: (id, production, thunk) =>
     dispatch(updateProductionRequest(id, production, thunk)),
-  /* cancelProduction: (id, thunk) =>
-    dispatch(toggleCancelProductionRequest(id, thunk)),
-  finishProduction: (id, thunk) =>
-    dispatch(toggleFinishProductionRequest(id, thunk)),
-  transportProduction: (id, thunk) =>
-    dispatch(toggleTransportProductionRequest(id, thunk)), */
   resetNew: () => dispatch(resetNew()),
   resetRequest: () => dispatch(resetRequest()),
   resetUpdateRequest: () => dispatch(resetUpdateRequest())
