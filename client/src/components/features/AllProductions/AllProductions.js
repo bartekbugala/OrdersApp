@@ -16,7 +16,6 @@ class AllProductions extends React.Component {
       updateRequest: this.props.updateRequest,
       request: this.props.request,
       isEdited: false,
-      request: this.props.request,
       startDate: new Date()
     };
   }
