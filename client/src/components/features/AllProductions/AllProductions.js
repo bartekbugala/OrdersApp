@@ -1,17 +1,10 @@
 import React from 'react';
-import { MdAttachMoney, MdMoneyOff } from 'react-icons/md';
 import { PropTypes } from 'prop-types';
 import { isEqual } from 'lodash';
-// utils
-import formatDate from '../../../utils/formatDate';
-import countDaysLeft from '../../../utils/countDaysLeft';
-import currentFromSquareMeters from '../../../utils/currentFromSquareMeters';
-import cutText from '../../../utils/cutText';
 // components
-import OrderListTable from '../../common/OrderList/OrderListTable/OrderListTable';
 import AddProduction from '../../features/AddProduction/AddProductionContainer';
 import EditProduction from '../../features/EditProduction/EditProductionContainer';
-import EditButton from '../../common/Buttons/EditButton/EditButton';
+import ProductionsList from '../../features/ProductionsList/ProductionsList';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
 import './AllProductions.scss';
@@ -20,47 +13,45 @@ class AllProductions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      allProductions: this.props.allProductions,
-      isEdited: false,
+      updateRequest: this.props.updateRequest,
       request: this.props.request,
+      isEdited: false,
       startDate: new Date()
     };
   }
-
   componentDidMount() {
     const { loadAllProductions, sortParams } = this.props;
     loadAllProductions(
       sortParams.key,
       sortParams.valueType,
       sortParams.direction
-    ).then(this.setState({ allProductions: this.props.allProductions }));
+    );
   }
 
-  componentDidUpdate(prevState) {
-    const { loadAllProductions, sortParams } = this.props;
-    if (
-      isEqual(this.state.allProductions, prevState.allProductions) === false
-    ) {
+  componentDidUpdate(prevProps) {
+    const {
+      loadAllProductions,
+      sortParams,
+      allProductions,
+      resetNew
+    } = this.props;
+    if (isEqual(allProductions, prevProps.allProductions) === false) {
       loadAllProductions(
         sortParams.key,
         sortParams.valueType,
         sortParams.direction
-      ).then(this.setState({ allProductions: this.props.allProductions }));
+      );
+      resetNew();
     }
   }
 
   handleAddForm = e => {
     e.preventDefault();
-    const {
-      addProduction,
-      loadAllProductions,
-      newProduction,
-      resetNew
-    } = this.props;
-    addProduction(newProduction, loadAllProductions).then(resetNew());
+    const { addProduction, loadAllProductions, newProduction } = this.props;
+    addProduction(newProduction, loadAllProductions);
   };
 
-  editHandler = id => {
+  editHandler = (id) => {
     const { loadEditedProduction } = this.props;
     const loadEdited = async () => {
       await loadEditedProduction(id);
@@ -73,42 +64,27 @@ class AllProductions extends React.Component {
     this.setState({ isEdited: false });
   };
 
-  finishHandler = id => {
-    const { finishProduction, loadAllProductions } = this.props;
-    finishProduction(id, loadAllProductions);
-  };
-
-  cancelHandler = id => {
-    const { cancelProduction, loadAllProductions } = this.props;
-    cancelProduction(id, loadAllProductions);
-  };
-
-  transportHandler = id => {
-    const { transportProduction, loadAllProductions } = this.props;
-    transportProduction(id, loadAllProductions);
-  };
-
   handleSort = (
     key = 'orderNumber',
     valueType = 'number',
     direction = 'asc'
   ) => {
-    const { allProductions } = this.state;
+    const { allProductions } = this.props;
     const { sortAllProductions } = this.props;
     sortAllProductions(allProductions, key, valueType, direction);
   };
 
   render() {
-    const { handleSort, closeEdit } = this;
+    const { handleSort, closeEdit, editHandler, handleAddForm } = this;
     const {
       allProductions,
       updateRequest,
       request,
       newProduction,
-      editedProduction
+      editedProduction,
+      loadAllProductions
     } = this.props;
     const { startDate } = this.state;
-    const tdClass = 'production-list-td';
 
     if (updateRequest.error)
       return <Alert variant="error">{`${updateRequest.error}`}</Alert>;
@@ -121,105 +97,23 @@ class AllProductions extends React.Component {
               editedProduction={editedProduction}
               startDate={startDate}
               closeEdit={closeEdit}
+              loadProductions={loadAllProductions}
             />
           )}
 
-          <form onSubmit={this.handleAddForm} autoComplete="off">
-            <OrderListTable
-              sortColumn={(key, valueType) => {
-                handleSort(key, valueType);
-              }}>
-              {allProductions.map(production => {
-                let rowBgclass;
-                switch (true) {
-                  case production.canceled === true:
-                    rowBgclass = 'row-production-canceled';
-                    break;
-                  case production.transported === true:
-                    rowBgclass = 'row-production-transported';
-                    break;
-                  case production.finished === true:
-                    rowBgclass = 'row-production-finished';
-                    break;
-                  default:
-                    break;
-                }
-                let daysLeft =
-                  countDaysLeft(
-                    production.downpayment,
-                    production.productionTerm
-                  ) || '';
-                let daysLeftClass = 'text-default';
-                switch (true) {
-                  case daysLeft <= 7 && daysLeft > 2:
-                    daysLeftClass = 'text-warning';
-                    break;
-                  case daysLeft < 3:
-                    daysLeftClass = 'text-danger';
-                    break;
-                  default:
-                    daysLeftClass = 'text-default';
-                }
-                return (
-                  <tr
-                    key={production.id}
-                    className={`production-list ${rowBgclass}`}>
-                    <td className={`${tdClass} short-column`}>
-                      {production.orderNumber}
-                    </td>
-                    <td className={`${tdClass} name-column`}>
-                      {cutText(production.clientName, 25)}
-                    </td>
-                    <td className={`${tdClass} date-column`}>
-                      {formatDate(production.downpayment)}
-                    </td>
-                    <td className={`${tdClass} short-column ${daysLeftClass}`}>
-                      {daysLeft}
-                    </td>
-                    <td className={`${tdClass} short-column`}>
-                      {production.finalPayment === true ? (
-                        <MdAttachMoney className="text-success" />
-                      ) : (
-                        <MdMoneyOff className="text-danger" />
-                      )}
-                    </td>
-                    <td className={`${tdClass} short-column`}>
-                      {production.type}
-                    </td>
-                    <td className={`${tdClass}`}>{production.colorOutside}</td>
-                    <td className={`${tdClass}`}>{production.colorInside}</td>
-                    <td className={`${tdClass} short-column`}>
-                      {production.core}
-                    </td>
-                    <td className={`${tdClass} short-column`}>
-                      {production.thickness}
-                    </td>
-
-                    <td className={`${tdClass}`}>{production.m2}</td>
-                    <td className={`${tdClass}`}>
-                      {currentFromSquareMeters(production.type, production.m2)}
-                    </td>
-                    <td className={`${tdClass} short-column`}>
-                      {production.csa}
-                    </td>
-                    <td
-                      className={`${tdClass} production-list-buttons noprint`}>
-                      <span className="buttons-nowrap">
-                        <EditButton
-                          clickHandler={() => {
-                            this.editHandler(production.id);
-                          }}
-                        />
-                      </span>
-                    </td>
-                  </tr>
-                );
-              })}
+          <form onKeyDown={e => { (e.keyCode === 13) ? e.preventDefault() : e.returnValue = false }} onSubmit={handleAddForm} autoComplete="off">
+            <ProductionsList
+              handleSort={handleSort}
+              productions={allProductions}
+              newProduction={newProduction}
+              loadProductions={loadAllProductions}
+              editHandler={editHandler}
+              startDate={startDate}>
               <AddProduction
                 newProduction={newProduction}
                 startDate={startDate}
               />
-            </OrderListTable>
+            </ProductionsList>
           </form>
         </div>
       );

@@ -7,22 +7,30 @@ import {
   getCurrentProductions,
   getUpdateRequest,
   getRequest,
-  getSortParams
+  getSortParams,
+  getEditedProduction,
+  getNewProduction
 } from '../../../redux/selectors';
-import { loadCurrentProductionsRequest } from '../../../redux/thunks/productionsReadRequest.thunks';
-import {
-  toggleCancelProductionRequest,
-  toggleFinishProductionRequest,
-  addProductionRequest
-} from '../../../redux/thunks/productionsRequest.thunks';
 import { sortCurrentProductions } from '../../../redux/thunks/sortingThunks';
+import { resetNew } from '../../../redux/thunks/productions.thunks';
+import {
+  loadCurrentProductionsRequest,
+  loadEditedProductionRequest
+} from '../../../redux/thunks/productionsReadRequest.thunks';
+import {
+  addProductionRequest,
+  updateProductionRequest
+} from '../../../redux/thunks/productionsRequest.thunks';
+
 import CurrentProductions from './CurrentProductions';
 
 const mapStateToProps = state => ({
   currentProductions: getCurrentProductions(state),
   updateRequest: getUpdateRequest(state),
   sortParams: getSortParams(state),
-  request: getRequest(state)
+  request: getRequest(state),
+  editedProduction: getEditedProduction(state),
+  newProduction: getNewProduction(state)
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -31,16 +39,14 @@ const mapDispatchToProps = dispatch => ({
     valueType = 'number',
     direction = 'asc'
   ) => dispatch(loadCurrentProductionsRequest(key, valueType, direction)),
-  sortCurrentProductions: (currentProductions, key, valueType, direction) =>
-    dispatch(
-      sortCurrentProductions(currentProductions, key, valueType, direction)
-    ),
+  loadEditedProduction: id => dispatch(loadEditedProductionRequest(id)),
+  sortCurrentProductions: (allProductions, key, valueType, direction) =>
+    dispatch(sortCurrentProductions(allProductions, key, valueType, direction)),
   addProduction: (production, thunk) =>
     dispatch(addProductionRequest(production, thunk)),
-  cancelProduction: (id, thunk) =>
-    dispatch(toggleCancelProductionRequest(id, thunk)),
-  finishProduction: (id, thunk) =>
-    dispatch(toggleFinishProductionRequest(id, thunk)),
+  updateProduction: (id, production, thunk) =>
+    dispatch(updateProductionRequest(id, production, thunk)),
+  resetNew: () => dispatch(resetNew()),
   resetUpdateRequest: () => dispatch(resetUpdateRequest()),
   resetRequest: () => dispatch(resetRequest())
 });

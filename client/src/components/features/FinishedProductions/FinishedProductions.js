@@ -1,17 +1,9 @@
 import React from 'react';
-import { MdAttachMoney, MdMoneyOff } from 'react-icons/md';
 import { PropTypes } from 'prop-types';
 import { isEqual } from 'lodash';
-// utils
-import formatDate from '../../../utils/formatDate';
-import countDaysLeft from '../../../utils/countDaysLeft';
-import currentFromSquareMeters from '../../../utils/currentFromSquareMeters';
-import cutText from '../../../utils/cutText';
 // components
-import OrderListTable from '../../common/OrderList/OrderListTable/OrderListTable';
-import EditButton from '../../common/Buttons/EditButton/EditButton';
-import RestoreButton from '../../common/Buttons/RestoreButton/RestoreButton';
-import TransportButton from '../../common/Buttons/TransportButton/TransportButton';
+import EditProduction from '../../features/EditProduction/EditProductionContainer';
+import ProductionsList from '../../features/ProductionsList/ProductionsList';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
 
@@ -19,7 +11,9 @@ class FinishedProductions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      finishedProductions: this.props.finishedProductions,
+      updateRequest: this.props.updateRequest,
+      request: this.props.request,
+      isEdited: false,
       startDate: new Date()
     };
   }
@@ -30,39 +24,35 @@ class FinishedProductions extends React.Component {
       sortParams.key,
       sortParams.valueType,
       sortParams.direction
-    ).then(
-      this.setState({
-        finishedProductions: this.props.finishedProductions
-      })
     );
   }
 
-  componentDidUpdate() {
-    const { loadFinishedProductions, sortParams } = this.props;
-    if (
-      isEqual(
-        this.state.finishedProductions,
-        this.props.finishedProductions
-      ) === false
-    ) {
+  componentDidUpdate(prevProps) {
+    const {
+      loadFinishedProductions,
+      sortParams,
+      finishedProductions
+    } = this.props;
+    if (isEqual(finishedProductions, prevProps.finishedProductions) === false) {
       loadFinishedProductions(
         sortParams.key,
         sortParams.valueType,
         sortParams.direction
-      ).then(
-        this.setState({ finishedProductions: this.props.finishedProductions })
       );
     }
   }
 
-  finishHandler = id => {
-    const { finishProduction, loadFinishedProductions } = this.props;
-    finishProduction(id, loadFinishedProductions);
+  editHandler = id => {
+    const { loadEditedProduction } = this.props;
+    const loadEdited = async () => {
+      await loadEditedProduction(id);
+      this.setState({ isEdited: true });
+    };
+    loadEdited();
   };
 
-  transportHandler = id => {
-    const { transportProduction, loadFinishedProductions } = this.props;
-    transportProduction(id, loadFinishedProductions);
+  closeEdit = () => {
+    this.setState({ isEdited: false });
   };
 
   handleSort = (
@@ -70,98 +60,49 @@ class FinishedProductions extends React.Component {
     valueType = 'number',
     direction = 'asc'
   ) => {
-    const { finishedProductions } = this.state;
+    const { finishedProductions } = this.props;
     const { sortFinishedProductions } = this.props;
     sortFinishedProductions(finishedProductions, key, valueType, direction);
   };
 
   render() {
-    const { handleSort } = this;
-    const { updateRequest, request } = this.props;
-    const { finishedProductions } = this.state;
-    const tdClass = 'production-list-td';
+    const { handleSort, closeEdit, editHandler } = this;
+    const {
+      finishedProductions,
+      updateRequest,
+      request,
+      editedProduction,
+      loadFinishedProductions
+    } = this.props;
+    const { startDate } = this.state;
 
-    if (updateRequest.error || request.error)
+    if (updateRequest.error)
       return <Alert variant="error">{`${updateRequest.error}`}</Alert>;
-    else if (updateRequest.pending && request.pending) return <Spinner />;
+    else if (request.pending && updateRequest.pending) return <Spinner />;
     return (
-      <OrderListTable
-        sortColumn={(key, valueType) => {
-          handleSort(key, valueType);
-        }}>
-        {finishedProductions.map(production => {
-          let daysLeft = countDaysLeft(
-            production.downpayment,
-            production.productionTerm
-          );
-          let daysLeftClass = 'text-default';
-          switch (true) {
-            case daysLeft <= 7 && daysLeft > 2:
-              daysLeftClass = 'text-warning';
-              break;
-            case daysLeft < 3:
-              daysLeftClass = 'text-danger';
-              break;
-            default:
-              daysLeftClass = 'text-default';
-          }
-          return (
-            <tr key={production.id} className="production-list">
-              <td className={`${tdClass} short-column`}>
-                {production.orderNumber}
-              </td>
-              <td className={`${tdClass} name-column`}>
-                {cutText(production.clientName, 25)}
-              </td>
-              <td className={`${tdClass} date-column`}>
-                {formatDate(production.downpayment)}
-              </td>
-              <td className={`${tdClass} short-column ${daysLeftClass}`}>
-                {daysLeft}
-              </td>
-              <td className={`${tdClass} short-column`}>
-                {production.finalPayment === true ? (
-                  <MdAttachMoney className="text-success" />
-                ) : (
-                  <MdMoneyOff className="text-danger" />
-                )}
-              </td>
-              <td className={`${tdClass} short-column`}>{production.type}</td>
-              <td className={`${tdClass}`}>{production.colorOutside}</td>
-              <td className={`${tdClass}`}>{production.colorInside}</td>
-              <td className={`${tdClass} short-column`}>{production.core}</td>
-              <td className={`${tdClass} short-column`}>
-                {production.thickness}
-              </td>
+      <div>
+        {this.state.isEdited && (
+          <EditProduction
+            editedProduction={editedProduction}
+            startDate={startDate}
+            closeEdit={closeEdit}
+            loadProductions={loadFinishedProductions}
+          />
+        )}
 
-              <td className={`${tdClass}`}>{production.m2}</td>
-              <td className={`${tdClass}`}>
-                {currentFromSquareMeters(production.type, production.m2)}
-              </td>
-              <td className={`${tdClass} short-column`}>{production.csa}</td>
-              <td className={`${tdClass} production-list-buttons noprint`}>
-                <span className="buttons-nowrap">
-                  <EditButton />
-                  <TransportButton
-                    clickHandler={() => {
-                      this.transportHandler(production.id);
-                    }}
-                  />
-                  <RestoreButton
-                    clickHandler={() => {
-                      this.finishHandler(production.id);
-                    }}
-                  />
-                </span>
-              </td>
-            </tr>
-          );
-        })}
-      </OrderListTable>
+        <form onSubmit={this.handleAddForm} autoComplete="off">
+          <ProductionsList
+            handleSort={handleSort}
+            productions={finishedProductions}
+            loadProductions={loadFinishedProductions}
+            editHandler={editHandler}
+            startDate={startDate}
+          />
+        </form>
+      </div>
     );
   }
 }
-
 export default FinishedProductions;
 
 FinishedProductions.propTypes = {
