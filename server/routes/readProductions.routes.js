@@ -4,7 +4,9 @@ const router = express.Router();
 const readProductionsController = require('../controllers/readProductions.controller');
 
 //get productions
-router.route('/productions').get(readProductionsController.getProductions);
+router
+  .route('/productions/:startDateFilter/:endDateFilter')
+  .get(readProductionsController.getProductions);
 // get current
 router.route('/productions/current').get(readProductionsController.getCurrent);
 //get canceled

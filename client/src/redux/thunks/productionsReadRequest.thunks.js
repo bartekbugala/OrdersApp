@@ -14,13 +14,19 @@ import {
   loadCanceledProductions,
   loadEditedProduction
 } from '../actions/productionsActions';
-
-//// Thunks
-export const loadAllProductionsRequest = (key, valueType, direction) => {
+export const loadAllProductionsRequest = (
+  key,
+  valueType,
+  direction,
+  dateFilterParams = { startDateFilter: 0, endDateFilter: 0 }
+) => {
+  const { startDateFilter, endDateFilter } = dateFilterParams;
   return async dispatch => {
     dispatch(startRequest());
     try {
-      let res = await axios.get(`${API_URL}/productions`);
+      let res = await axios.get(
+        `${API_URL}/productions/${startDateFilter}/${endDateFilter}`
+      );
       sortByColumn(res.data, key, valueType, direction);
       dispatch(loadAllProductions(res.data));
       dispatch(endRequest());

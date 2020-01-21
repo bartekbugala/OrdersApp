@@ -5,6 +5,7 @@ import { isEqual } from 'lodash';
 import AddProduction from '../../features/AddProduction/AddProductionContainer';
 import EditProduction from '../../features/EditProduction/EditProductionContainer';
 import ProductionsList from '../../features/ProductionsList/ProductionsList';
+import ProductionsListFilter from '../../features/ProductionsListFilter/ProductionsListFilterContainer';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
 import './AllProductions.scss';
@@ -20,11 +21,12 @@ class AllProductions extends React.Component {
     };
   }
   componentDidMount() {
-    const { loadAllProductions, sortParams } = this.props;
+    const { loadAllProductions, sortParams, dateFilterParams } = this.props;
     loadAllProductions(
       sortParams.key,
       sortParams.valueType,
-      sortParams.direction
+      sortParams.direction,
+      dateFilterParams
     );
   }
 
@@ -33,14 +35,24 @@ class AllProductions extends React.Component {
       loadAllProductions,
       sortParams,
       allProductions,
+      dateFilterParams,
       resetNew
     } = this.props;
     if (isEqual(allProductions, prevProps.allProductions) === false) {
       loadAllProductions(
         sortParams.key,
         sortParams.valueType,
-        sortParams.direction
+        sortParams.direction,
+        dateFilterParams
       );
+      if (isEqual(dateFilterParams, prevProps.dateFilterParams) === false) {
+        loadAllProductions(
+          sortParams.key,
+          sortParams.valueType,
+          sortParams.direction,
+          dateFilterParams
+        );
+      }
       resetNew();
     }
   }
@@ -51,7 +63,7 @@ class AllProductions extends React.Component {
     addProduction(newProduction, loadAllProductions);
   };
 
-  editHandler = (id) => {
+  editHandler = id => {
     const { loadEditedProduction } = this.props;
     const loadEdited = async () => {
       await loadEditedProduction(id);
@@ -92,7 +104,8 @@ class AllProductions extends React.Component {
     else
       return (
         <div>
-          {this.state.isEdited && (
+          {/* EDIT MODAL */
+          this.state.isEdited && (
             <EditProduction
               editedProduction={editedProduction}
               startDate={startDate}
@@ -100,8 +113,13 @@ class AllProductions extends React.Component {
               loadProductions={loadAllProductions}
             />
           )}
-
-          <form onKeyDown={e => { (e.keyCode === 13) ? e.preventDefault() : e.returnValue = false }} onSubmit={handleAddForm} autoComplete="off">
+          {<ProductionsListFilter startDate={startDate} />}
+          <form
+            onKeyDown={e => {
+              e.keyCode === 13 ? e.preventDefault() : (e.returnValue = false);
+            }}
+            onSubmit={handleAddForm}
+            autoComplete="off">
             <ProductionsList
               handleSort={handleSort}
               productions={allProductions}

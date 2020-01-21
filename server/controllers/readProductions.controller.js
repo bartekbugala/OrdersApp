@@ -3,8 +3,17 @@ const Production = require('../models/productions.model');
 
 // get all productions
 exports.getProductions = async (req, res) => {
+  const { startDateFilter, endDateFilter } = req.params;
   try {
-    res.status(200).json(await Production.find({}));
+    res.status(200).json(
+      await Production.find(
+        startDateFilter > 0 && endDateFilter > 0
+          ? {
+              downpayment: { $gte: startDateFilter, $lte: endDateFilter }
+            }
+          : {}
+      )
+    );
   } catch (err) {
     res.status(500).json(err);
   }
