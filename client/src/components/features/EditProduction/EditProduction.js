@@ -32,7 +32,7 @@ class EditProduction extends React.Component {
     e.preventDefault();
     const {
       updateProduction,
-      loadAllProductions,
+      loadProductions,
       loadEditedProduction
     } = this.props;
     const { editedProduction } = this.props;
@@ -43,7 +43,7 @@ class EditProduction extends React.Component {
     updateProduction(
       editedProduction.id,
       editedProduction,
-      loadAllProductions
+      loadProductions
     ).then(loadEdited(editedProduction.id));
   };
 

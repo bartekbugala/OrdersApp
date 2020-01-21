@@ -97,6 +97,7 @@ class AllProductions extends React.Component {
               editedProduction={editedProduction}
               startDate={startDate}
               closeEdit={closeEdit}
+              loadProductions={loadAllProductions}
             />
           )}
 

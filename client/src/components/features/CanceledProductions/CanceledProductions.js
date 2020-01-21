@@ -88,6 +88,7 @@ class CanceledProductions extends React.Component {
             editedProduction={editedProduction}
             startDate={startDate}
             closeEdit={closeEdit}
+            loadProductions={loadCanceledProductions}
           />
         )}
 

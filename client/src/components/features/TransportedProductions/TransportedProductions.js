@@ -94,6 +94,7 @@ class TransportedProductions extends React.Component {
             editedProduction={editedProduction}
             startDate={startDate}
             closeEdit={closeEdit}
+            loadProductions={loadTransportedProductions}
           />
         )}
 

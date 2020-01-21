@@ -86,6 +86,7 @@ class FinishedProductions extends React.Component {
             editedProduction={editedProduction}
             startDate={startDate}
             closeEdit={closeEdit}
+            loadProductions={loadFinishedProductions}
           />
         )}
 
