@@ -3,5 +3,5 @@ export default function countDaysLeft(startDate, term) {
   let today = new Date();
   let daysFromStart = Math.floor((today - start) / 86400000);
   let calculatedDays = term - daysFromStart;
-  return calculatedDays;
+  return (calculatedDays === 0) ? '0' : `${calculatedDays}`;
 }
