@@ -2,7 +2,8 @@ import { connect } from 'react-redux';
 import {
   toggleCancelProductionRequest,
   toggleFinishProductionRequest,
-  toggleTransportProductionRequest
+  toggleTransportProductionRequest,
+  deleteProductionRequest
 } from '../../../redux/thunks/productionsRequest.thunks';
 import ProductionButtons from './ProductionButtons';
 
@@ -14,7 +15,9 @@ const mapDispatchToProps = dispatch => ({
   finishProduction: (id, thunk) =>
     dispatch(toggleFinishProductionRequest(id, thunk)),
   transportProduction: (id, thunk) =>
-    dispatch(toggleTransportProductionRequest(id, thunk))
+    dispatch(toggleTransportProductionRequest(id, thunk)),
+  deleteProduction: (id, thunk) =>
+    dispatch(deleteProductionRequest(id, thunk))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductionButtons);

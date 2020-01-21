@@ -69,8 +69,8 @@ const ProductionsList = ({
               {production.finalPayment === true ? (
                 <MdAttachMoney className="text-success" />
               ) : (
-                <MdMoneyOff className="text-danger" />
-              )}
+                  <MdMoneyOff className="text-danger" />
+                )}
             </td>
             <td className={`${tdClass} short-column`}>{production.type}</td>
             <td className={`${tdClass}`}>{production.colorOutside}</td>
@@ -91,6 +91,7 @@ const ProductionsList = ({
                 loadProductions={loadProductions}
                 editHandler={editHandler}
               />
+
             </td>
           </tr>
         );
