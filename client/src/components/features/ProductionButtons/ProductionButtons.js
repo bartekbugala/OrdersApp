@@ -83,11 +83,8 @@ const ProductionButtons = ({
 
             }}
           /> : ''
-
-
       }
 
-      {/* DELETE BUTTON IF CANCELED  */}
       {production.canceled ? <DeleteButton
         clickHandler={() => {
           deleteHandler(production.id);
@@ -99,26 +96,3 @@ const ProductionButtons = ({
 };
 
 export default ProductionButtons;
-
-/*
-
- <RestoreButton
-          clickHandler={() => {
-            transportHandler(production.id)
-
-          }}
-        />
-
-      {production.finished || production.transported ? (
-
-      ) : (
-          <RestoreButton
-            clickHandler={() => {
-              production.finished
-                ? finishHandler(production.id)
-                : transportHandler(production.id);
-            }}
-          />
-        )}
-
-*/

@@ -100,7 +100,7 @@ class CurrentProductions extends React.Component {
           />
         )}
 
-        <form onSubmit={this.handleAddForm} autoComplete="off">
+        <form onKeyDown={e => { (e.keyCode === 13) ? e.preventDefault() : e.returnValue = false }} onSubmit={this.handleAddForm} autoComplete="off">
           <ProductionsList
             handleSort={handleSort}
             productions={currentProductions}
