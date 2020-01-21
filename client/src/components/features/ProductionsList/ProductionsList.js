@@ -24,6 +24,9 @@ const ProductionsList = ({
       }}>
       {productions.map(production => {
         let rowBgclass;
+        let daysLeft =
+          countDaysLeft(production.downpayment, production.productionTerm) ||
+          '';
         switch (true) {
           case production.canceled === true:
             rowBgclass = 'row-production-canceled';
@@ -37,19 +40,20 @@ const ProductionsList = ({
           default:
             break;
         }
-        let daysLeft =
-          countDaysLeft(production.downpayment, production.productionTerm) ||
-          '';
-        let daysLeftClass = 'text-default';
+
+        let daysLeftClass = 'bg-default';
         switch (true) {
-          case daysLeft <= 7 && daysLeft > 2:
-            daysLeftClass = 'text-warning';
+          case daysLeft <= 7 &&
+            daysLeft > 2 &&
+            !production.canceled &&
+            !production.transported:
+            daysLeftClass = 'bg-warning';
             break;
-          case daysLeft < 3:
-            daysLeftClass = 'text-danger';
+          case daysLeft < 3 && !production.canceled && !production.transported:
+            daysLeftClass = 'bg-danger font-weight-bold';
             break;
           default:
-            daysLeftClass = 'text-default';
+            daysLeftClass = 'bg-default';
         }
         return (
           <tr key={production.id} className={`production-list ${rowBgclass}`}>
@@ -69,8 +73,8 @@ const ProductionsList = ({
               {production.finalPayment === true ? (
                 <MdAttachMoney className="text-success" />
               ) : (
-                  <MdMoneyOff className="text-danger" />
-                )}
+                <MdMoneyOff className="text-danger" />
+              )}
             </td>
             <td className={`${tdClass} short-column`}>{production.type}</td>
             <td className={`${tdClass}`}>{production.colorOutside}</td>
@@ -91,7 +95,6 @@ const ProductionsList = ({
                 loadProductions={loadProductions}
                 editHandler={editHandler}
               />
-
             </td>
           </tr>
         );
