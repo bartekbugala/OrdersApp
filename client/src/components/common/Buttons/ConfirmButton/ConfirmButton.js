@@ -7,10 +7,10 @@ const ConfirmButton = ({ clickHandler }) => (
     onClick={
       clickHandler
         ? e => {
-            e.preventDefault();
-            clickHandler();
-          }
-        : console.log('click')
+          e.preventDefault();
+          clickHandler();
+        }
+        : e => { e.returnValue = false }
     }>
     <MdCheck />
   </button>
