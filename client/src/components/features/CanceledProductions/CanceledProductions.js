@@ -31,7 +31,8 @@ class CanceledProductions extends React.Component {
     const {
       loadCanceledProductions,
       sortParams,
-      canceledProductions
+      canceledProductions,
+      resetNew
     } = this.props;
     if (isEqual(canceledProductions, prevProps.canceledProductions) === false) {
       loadCanceledProductions(
@@ -39,6 +40,7 @@ class CanceledProductions extends React.Component {
         sortParams.valueType,
         sortParams.direction
       );
+      resetNew();
     }
   }
 

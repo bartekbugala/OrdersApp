@@ -7,7 +7,9 @@ import {
   loadEditedProduction,
   loadNewProduction
 } from '../actions/productionsActions';
+
 import emptyNewProduction from '../reducers/productions';
+
 export const updateEdited = editedProduction => {
   return async dispatch => {
     dispatch(startUpdateRequest());
@@ -19,6 +21,7 @@ export const updateEdited = editedProduction => {
     }
   };
 };
+
 export const updateNew = newProduction => {
   return async dispatch => {
     dispatch(startUpdateRequest());

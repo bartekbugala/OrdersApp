@@ -11,6 +11,7 @@ import {
   getEditedProduction
 } from '../../../redux/selectors';
 import { sortCanceledProductions } from '../../../redux/thunks/sortingThunks';
+import { resetNew } from '../../../redux/thunks/productions.thunks';
 import {
   loadCanceledProductionsRequest,
   loadEditedProductionRequest
@@ -38,6 +39,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(
       sortCanceledProductions(canceledProductions, key, valueType, direction)
     ),
+  resetNew: () => dispatch(resetNew()),
   updateProduction: (id, production, thunk) =>
     dispatch(updateProductionRequest(id, production, thunk)),
   resetUpdateRequest: () => dispatch(resetUpdateRequest()),
