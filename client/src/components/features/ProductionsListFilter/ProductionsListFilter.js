@@ -42,7 +42,6 @@ class ProductionsListFilter extends React.Component {
         <DatePicker
           allowSameDay="true"
           startDate={startDate}
-          locale="pl-PL"
           name="from"
           selected={dateFilterParams.startDateFilter}
           onSelect={handleStartDateSelect}
