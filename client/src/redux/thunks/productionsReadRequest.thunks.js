@@ -18,14 +18,26 @@ export const loadAllProductionsRequest = (
   key,
   valueType,
   direction,
-  dateFilterParams = { startDateFilter: 0, endDateFilter: 0 }
+  dateFilterParams
 ) => {
-  const { startDateFilter, endDateFilter } = dateFilterParams;
+  let startDate = '0';
+  let endDate = '0';
+  if (dateFilterParams.startDateFilter !== '') {
+    startDate = dateFilterParams.startDateFilter.toISOString(
+      dateFilterParams.startDateFilter
+    );
+  }
+  if (dateFilterParams.endDateFilter !== '') {
+    endDate = dateFilterParams.endDateFilter.toISOString(
+      dateFilterParams.endDateFilter
+    );
+  }
+  console.log(startDate, endDate);
   return async dispatch => {
     dispatch(startRequest());
     try {
       let res = await axios.get(
-        `${API_URL}/productions/${startDateFilter}/${endDateFilter}`
+        `${API_URL}/productions/${startDate}/${endDate}`
       );
       sortByColumn(res.data, key, valueType, direction);
       dispatch(loadAllProductions(res.data));

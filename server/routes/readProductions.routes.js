@@ -5,7 +5,7 @@ const readProductionsController = require('../controllers/readProductions.contro
 
 //get productions
 router
-  .route('/productions/:startDateFilter/:endDateFilter')
+  .route('/productions/:startDate/:endDate')
   .get(readProductionsController.getProductions);
 // get current
 router.route('/productions/current').get(readProductionsController.getCurrent);

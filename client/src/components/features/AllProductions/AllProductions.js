@@ -45,14 +45,6 @@ class AllProductions extends React.Component {
         sortParams.direction,
         dateFilterParams
       );
-      if (isEqual(dateFilterParams, prevProps.dateFilterParams) === false) {
-        loadAllProductions(
-          sortParams.key,
-          sortParams.valueType,
-          sortParams.direction,
-          dateFilterParams
-        );
-      }
       resetNew();
     }
   }
@@ -91,6 +83,7 @@ class AllProductions extends React.Component {
     const {
       allProductions,
       updateRequest,
+      sortParams,
       request,
       newProduction,
       editedProduction,
@@ -113,7 +106,13 @@ class AllProductions extends React.Component {
               loadProductions={loadAllProductions}
             />
           )}
-          {<ProductionsListFilter startDate={startDate} />}
+          {
+            <ProductionsListFilter
+              startDate={startDate}
+              loadProductions={loadAllProductions}
+              sortParams={sortParams}
+            />
+          }
           <form
             onKeyDown={e => {
               e.keyCode === 13 ? e.preventDefault() : (e.returnValue = false);
