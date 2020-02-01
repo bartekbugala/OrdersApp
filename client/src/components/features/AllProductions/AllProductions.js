@@ -51,7 +51,7 @@ class AllProductions extends React.Component {
     addProduction(newProduction, loadAllProductions);
   };
 
-  editHandler = (id) => {
+  editHandler = id => {
     const { loadEditedProduction } = this.props;
     const loadEdited = async () => {
       await loadEditedProduction(id);
@@ -65,6 +65,7 @@ class AllProductions extends React.Component {
   };
 
   handleSort = (
+    // default sorting by orderNumber
     key = 'orderNumber',
     valueType = 'number',
     direction = 'asc'
@@ -101,7 +102,12 @@ class AllProductions extends React.Component {
             />
           )}
 
-          <form onKeyDown={e => { (e.keyCode === 13) ? e.preventDefault() : e.returnValue = false }} onSubmit={handleAddForm} autoComplete="off">
+          <form
+            onKeyDown={e => {
+              e.keyCode === 13 ? e.preventDefault() : (e.returnValue = false);
+            }}
+            onSubmit={handleAddForm}
+            autoComplete="off">
             <ProductionsList
               handleSort={handleSort}
               productions={allProductions}

@@ -35,7 +35,7 @@ export const updateProductionRequest = (id, production, thunk) => {
     dispatch(startUpdateRequest());
     try {
       await axios.put(`${API_URL}/productions/update/${id}`, production);
-      dispatch(thunk);
+      //dispatch(thunk);
       dispatch(endUpdateRequest());
     } catch (e) {
       dispatch(errorUpdateRequest(JSON.stringify(e)));
