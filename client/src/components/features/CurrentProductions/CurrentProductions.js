@@ -48,7 +48,7 @@ class CurrentProductions extends React.Component {
   handleAddForm = e => {
     e.preventDefault();
     const { addProduction, loadCurrentProductions, newProduction } = this.props;
-    addProduction(newProduction, loadCurrentProductions);
+    addProduction(newProduction).then(loadCurrentProductions);
   };
 
   editHandler = id => {
@@ -69,8 +69,7 @@ class CurrentProductions extends React.Component {
     valueType = 'number',
     direction = 'asc'
   ) => {
-    const { currentProductions } = this.props;
-    const { sortCurrentProductions } = this.props;
+    const { currentProductions, sortCurrentProductions } = this.props;
     sortCurrentProductions(currentProductions, key, valueType, direction);
   };
 
@@ -100,7 +99,12 @@ class CurrentProductions extends React.Component {
           />
         )}
 
-        <form onKeyDown={e => { (e.keyCode === 13) ? e.preventDefault() : e.returnValue = false }} onSubmit={this.handleAddForm} autoComplete="off">
+        <form
+          onKeyDown={e => {
+            e.keyCode === 13 ? e.preventDefault() : (e.returnValue = false);
+          }}
+          onSubmit={this.handleAddForm}
+          autoComplete="off">
           <ProductionsList
             handleSort={handleSort}
             productions={currentProductions}

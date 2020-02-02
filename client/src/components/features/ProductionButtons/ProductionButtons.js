@@ -3,7 +3,7 @@ import EditButton from '../../common/Buttons/EditButton/EditButton';
 import ProduceButton from '../../common/Buttons/ProduceButton/ProduceButton';
 import TransportButton from '../../common/Buttons/TransportButton/TransportButton';
 import CancelButton from '../../common/Buttons/CancelButton/CancelButton';
-import DeleteButton from '../../common/Buttons/DeleteButton/DeleteButton'
+import DeleteButton from '../../common/Buttons/DeleteButton/DeleteButton';
 import RestoreButton from '../../common/Buttons/RestoreButton/RestoreButton';
 
 const ProductionButtons = ({
@@ -16,21 +16,20 @@ const ProductionButtons = ({
   deleteProduction
 }) => {
   const finishHandler = id => {
-    finishProduction(id, loadProductions);
+    finishProduction(id).then(loadProductions);
   };
 
   const cancelHandler = id => {
-    cancelProduction(id, loadProductions);
+    cancelProduction(id).then(loadProductions);
   };
 
   const transportHandler = id => {
-    transportProduction(id, loadProductions);
+    transportProduction(id).then(loadProductions);
   };
 
   const deleteHandler = id => {
-    deleteProduction(id, loadProductions);
+    deleteProduction(id).then(loadProductions);
   };
-
 
   return (
     <span className="buttons-nowrap">
@@ -40,57 +39,70 @@ const ProductionButtons = ({
         }}
       />
 
-      {!production.transported && !production.finished && !production.canceled ? (
+      {!production.transported &&
+      !production.finished &&
+      !production.canceled ? (
         <ProduceButton
           clickHandler={() => {
             finishHandler(production.id);
           }}
         />
+      ) : production.finished &&
+        !production.transported &&
+        !production.canceled ? (
+        <RestoreButton
+          clickHandler={() => {
+            finishHandler(production.id);
+          }}
+        />
       ) : (
-          (production.finished && !production.transported && !production.canceled) ?
-            <RestoreButton
-              clickHandler={() => {
-                finishHandler(production.id)
-
-              }}
-            /> : ''
-        )}
-      {production.finished && !production.transported && !production.canceled ? (
+        ''
+      )}
+      {production.finished &&
+      !production.transported &&
+      !production.canceled ? (
         <TransportButton
           clickHandler={() => {
             transportHandler(production.id);
           }}
         />
+      ) : production.transported && !production.canceled ? (
+        <RestoreButton
+          clickHandler={() => {
+            transportHandler(production.id);
+          }}
+        />
       ) : (
-          (production.transported && !production.canceled) ? <RestoreButton
-            clickHandler={() => {
-              transportHandler(production.id)
+        ''
+      )}
 
-            }}
-          /> : ''
-        )}
+      {!production.canceled &&
+      !production.finished &&
+      !production.transported ? (
+        <CancelButton
+          clickHandler={() => {
+            cancelHandler(production.id);
+          }}
+        />
+      ) : production.canceled ? (
+        <RestoreButton
+          clickHandler={() => {
+            cancelHandler(production.id);
+          }}
+        />
+      ) : (
+        ''
+      )}
 
-      {(!production.canceled && !production.finished && !production.transported) ? <CancelButton
-        clickHandler={() => {
-          cancelHandler(production.id);
-        }}
-      /> :
-
-        (production.canceled) ?
-          <RestoreButton
-            clickHandler={() => {
-              cancelHandler(production.id)
-
-            }}
-          /> : ''
-      }
-
-      {production.canceled ? <DeleteButton
-        clickHandler={() => {
-          deleteHandler(production.id);
-        }}
-      /> : ''}
-
+      {production.canceled ? (
+        <DeleteButton
+          clickHandler={() => {
+            deleteHandler(production.id);
+          }}
+        />
+      ) : (
+        ''
+      )}
     </span>
   );
 };

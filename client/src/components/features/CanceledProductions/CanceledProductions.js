@@ -62,8 +62,7 @@ class CanceledProductions extends React.Component {
     valueType = 'number',
     direction = 'asc'
   ) => {
-    const { canceledProductions } = this.props;
-    const { sortCanceledProductions } = this.props;
+    const { canceledProductions, sortCanceledProductions } = this.props;
     sortCanceledProductions(canceledProductions, key, valueType, direction);
   };
 

@@ -60,8 +60,7 @@ class FinishedProductions extends React.Component {
     valueType = 'number',
     direction = 'asc'
   ) => {
-    const { finishedProductions } = this.props;
-    const { sortFinishedProductions } = this.props;
+    const { finishedProductions, sortFinishedProductions } = this.props;
     sortFinishedProductions(finishedProductions, key, valueType, direction);
   };
 

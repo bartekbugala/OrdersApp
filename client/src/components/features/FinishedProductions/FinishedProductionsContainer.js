@@ -38,8 +38,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(
       sortFinishedProductions(finishedProductions, key, valueType, direction)
     ),
-  updateProduction: (id, production, thunk) =>
-    dispatch(updateProductionRequest(id, production, thunk)),
+  updateProduction: (id, production) =>
+    dispatch(updateProductionRequest(id, production)),
   resetUpdateRequest: () => dispatch(resetUpdateRequest()),
   resetRequest: () => dispatch(resetRequest())
 });

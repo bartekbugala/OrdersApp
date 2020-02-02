@@ -10,14 +10,10 @@ import ProductionButtons from './ProductionButtons';
 const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => ({
-  cancelProduction: (id, thunk) =>
-    dispatch(toggleCancelProductionRequest(id, thunk)),
-  finishProduction: (id, thunk) =>
-    dispatch(toggleFinishProductionRequest(id, thunk)),
-  transportProduction: (id, thunk) =>
-    dispatch(toggleTransportProductionRequest(id, thunk)),
-  deleteProduction: (id, thunk) =>
-    dispatch(deleteProductionRequest(id, thunk))
+  cancelProduction: id => dispatch(toggleCancelProductionRequest(id)),
+  finishProduction: id => dispatch(toggleFinishProductionRequest(id)),
+  transportProduction: id => dispatch(toggleTransportProductionRequest(id)),
+  deleteProduction: id => dispatch(deleteProductionRequest(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProductionButtons);

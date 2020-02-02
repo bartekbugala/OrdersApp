@@ -40,8 +40,7 @@ const mapDispatchToProps = dispatch => ({
   loadEditedProduction: id => dispatch(loadEditedProductionRequest(id)),
   sortAllProductions: (allProductions, key, valueType, direction) =>
     dispatch(sortAllProductions(allProductions, key, valueType, direction)),
-  addProduction: (production, thunk) =>
-    dispatch(addProductionRequest(production, thunk)),
+  addProduction: production => dispatch(addProductionRequest(production)),
   updateProduction: (id, production, thunk) =>
     dispatch(updateProductionRequest(id, production, thunk)),
   resetNew: () => dispatch(resetNew()),
