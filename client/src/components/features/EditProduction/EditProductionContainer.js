@@ -8,8 +8,8 @@ const mapStateToProps = state => ({});
 
 const mapDispatchToProps = dispatch => ({
   updateEdited: editedProduction => dispatch(updateEdited(editedProduction)),
-  updateProduction: (id, production, thunk) =>
-    dispatch(updateProductionRequest(id, production, thunk)),
+  updateProduction: (id, production) =>
+    dispatch(updateProductionRequest(id, production)),
   loadEditedProduction: id => dispatch(loadEditedProductionRequest(id))
 });
 

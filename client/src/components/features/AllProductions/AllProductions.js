@@ -48,7 +48,7 @@ class AllProductions extends React.Component {
   handleAddForm = e => {
     e.preventDefault();
     const { addProduction, loadAllProductions, newProduction } = this.props;
-    addProduction(newProduction, loadAllProductions);
+    addProduction(newProduction).then(loadAllProductions);
   };
 
   editHandler = id => {
@@ -70,8 +70,7 @@ class AllProductions extends React.Component {
     valueType = 'number',
     direction = 'asc'
   ) => {
-    const { allProductions } = this.props;
-    const { sortAllProductions } = this.props;
+    const { allProductions, sortAllProductions } = this.props;
     sortAllProductions(allProductions, key, valueType, direction);
   };
 

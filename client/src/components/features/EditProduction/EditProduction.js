@@ -42,7 +42,7 @@ class EditProduction extends React.Component {
     };
     updateProduction(editedProduction.id, editedProduction, loadProductions)
       .then(loadEdited(editedProduction.id))
-      .then(() => loadProductions());
+      .then(loadProductions);
   };
 
   render() {
