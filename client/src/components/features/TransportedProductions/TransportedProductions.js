@@ -125,7 +125,6 @@ class TransportedProductions extends React.Component {
   }
 }
 export default TransportedProductions;
-
 TransportedProductions.propTypes = {
   updateRequest: PropTypes.object.isRequired,
   transportedProductions: PropTypes.arrayOf(
