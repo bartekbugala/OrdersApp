@@ -1,22 +1,54 @@
 import React from 'react';
 import DatePicker from 'react-datepicker';
+import { isEqual } from 'lodash';
 import 'react-datepicker/dist/react-datepicker.css';
 import ConfirmButton from '../../common/Buttons/ConfirmButton/ConfirmButton';
+import CancelButton from '../../common/Buttons/CancelButton/CancelButton';
 
 class ProductionsListFilter extends React.Component {
-  handleStartDateSelect = date => {
+  componentDidUpdate(prevProps) {
+    const { loadProductions, sortParams, dateFilterParams } = this.props;
+    if (isEqual(dateFilterParams, prevProps.dateFilterParams) === false) {
+      loadProductions(
+        sortParams.key,
+        sortParams.valueType,
+        sortParams.direction,
+        dateFilterParams
+      );
+    }
+  }
+
+  handleStartDateSelect = (date = '') => {
     const { setDateFilterParams, dateFilterParams } = this.props;
-    const dateUtc = new Date(
-      `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
-    );
-    setDateFilterParams({ ...dateFilterParams, startDateFilter: dateUtc });
+    if ((date !== null) & (date !== undefined)) {
+      const dateUtc = new Date(
+        `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+      );
+      setDateFilterParams({ ...dateFilterParams, startDateFilter: dateUtc });
+    } else {
+      setDateFilterParams({ ...dateFilterParams, startDateFilter: '' });
+    }
   };
-  handleEndDateSelect = date => {
+
+  handleEndDateSelect = (date = '') => {
     const { setDateFilterParams, dateFilterParams } = this.props;
-    const dateUtc = new Date(
-      `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
-    );
-    setDateFilterParams({ ...dateFilterParams, endDateFilter: dateUtc });
+    if ((date !== null) & (date !== undefined)) {
+      const dateUtc = new Date(
+        `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+      );
+      setDateFilterParams({ ...dateFilterParams, endDateFilter: dateUtc });
+    } else {
+      setDateFilterParams({ ...dateFilterParams, endDateFilter: '' });
+    }
+  };
+
+  handleClearFilter = () => {
+    const { setDateFilterParams, dateFilterParams } = this.props;
+    setDateFilterParams({
+      ...dateFilterParams,
+      startDateFilter: '',
+      endDateFilter: ''
+    });
   };
 
   handleFormFilter = e => {
@@ -34,11 +66,13 @@ class ProductionsListFilter extends React.Component {
     const {
       handleStartDateSelect,
       handleEndDateSelect,
+      handleClearFilter,
       handleFormFilter
     } = this;
     const { startDate, dateFilterParams } = this.props;
     return (
       <form onSubmit={handleFormFilter} autoComplete="off">
+        {`Filtr według dat: od `}
         <DatePicker
           allowSameDay="true"
           startDate={startDate}
@@ -52,6 +86,7 @@ class ProductionsListFilter extends React.Component {
           }
           dateFormat="dd.MM.yy"
         />
+        {` do `}
         <DatePicker
           startDate={startDate}
           allowSameDay="true"
@@ -62,6 +97,7 @@ class ProductionsListFilter extends React.Component {
           dateFormat="dd.MM.yy"
         />
         <ConfirmButton />
+        <CancelButton clickHandler={handleClearFilter} />
       </form>
     );
   }

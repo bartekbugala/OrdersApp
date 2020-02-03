@@ -39,8 +39,8 @@ const mapDispatchToProps = dispatch => ({
     valueType = 'number',
     direction = 'asc',
     dateFilterParams = {
-      startDateFilter: '2019-12-17T23:00:00.000Z',
-      endDateFilter: '2020-01-21T23:00:00.000Z'
+      startDateFilter: '', //'2019-12-17T23:00:00.000Z',
+      endDateFilter: '' //'2020-01-21T23:00:00.000Z'
     }
   ) =>
     dispatch(
@@ -50,8 +50,8 @@ const mapDispatchToProps = dispatch => ({
   sortAllProductions: (allProductions, key, valueType, direction) =>
     dispatch(sortAllProductions(allProductions, key, valueType, direction)),
   addProduction: production => dispatch(addProductionRequest(production)),
-  updateProduction: (id, production, thunk) =>
-    dispatch(updateProductionRequest(id, production, thunk)),
+  updateProduction: (id, production) =>
+    dispatch(updateProductionRequest(id, production)),
   resetNew: () => dispatch(resetNew()),
   resetRequest: () => dispatch(resetRequest()),
   resetUpdateRequest: () => dispatch(resetUpdateRequest())
