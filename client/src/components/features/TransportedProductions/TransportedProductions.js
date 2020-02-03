@@ -4,6 +4,7 @@ import { isEqual } from 'lodash';
 // components
 import EditProduction from '../../features/EditProduction/EditProductionContainer';
 import ProductionsList from '../../features/ProductionsList/ProductionsList';
+import ProductionsListFilter from '../../features/ProductionsListFilter/ProductionsListFilterContainer';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
 
@@ -19,11 +20,16 @@ class TransportedProductions extends React.Component {
   }
 
   componentDidMount() {
-    const { loadTransportedProductions, sortParams } = this.props;
+    const {
+      loadTransportedProductions,
+      sortParams,
+      dateFilterParams
+    } = this.props;
     loadTransportedProductions(
       sortParams.key,
       sortParams.valueType,
-      sortParams.direction
+      sortParams.direction,
+      dateFilterParams
     );
   }
 
@@ -31,7 +37,8 @@ class TransportedProductions extends React.Component {
     const {
       loadTransportedProductions,
       sortParams,
-      transportedProductions
+      transportedProductions,
+      dateFilterParams
     } = this.props;
     if (
       isEqual(transportedProductions, prevProps.transportedProductions) ===
@@ -40,7 +47,8 @@ class TransportedProductions extends React.Component {
       loadTransportedProductions(
         sortParams.key,
         sortParams.valueType,
-        sortParams.direction
+        sortParams.direction,
+        dateFilterParams
       );
     }
   }
@@ -80,6 +88,7 @@ class TransportedProductions extends React.Component {
       updateRequest,
       request,
       editedProduction,
+      sortParams,
       loadTransportedProductions
     } = this.props;
     const { startDate } = this.state;
@@ -97,7 +106,11 @@ class TransportedProductions extends React.Component {
             loadProductions={loadTransportedProductions}
           />
         )}
-
+        <ProductionsListFilter
+          startDate={startDate}
+          loadProductions={loadTransportedProductions}
+          sortParams={sortParams}
+        />
         <form onSubmit={this.handleAddForm} autoComplete="off">
           <ProductionsList
             handleSort={handleSort}

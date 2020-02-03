@@ -103,14 +103,11 @@ class CurrentProductions extends React.Component {
             loadProductions={loadCurrentProductions}
           />
         )}
-        {
-          <ProductionsListFilter
-            startDate={startDate}
-            loadProductions={loadCurrentProductions}
-            sortParams={sortParams}
-          />
-        }
-
+        <ProductionsListFilter
+          startDate={startDate}
+          loadProductions={loadCurrentProductions}
+          sortParams={sortParams}
+        />
         <form
           onKeyDown={e => {
             e.keyCode === 13 ? e.preventDefault() : (e.returnValue = false);

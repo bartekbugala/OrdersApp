@@ -4,6 +4,7 @@ import { isEqual } from 'lodash';
 // components
 import EditProduction from '../../features/EditProduction/EditProductionContainer';
 import ProductionsList from '../../features/ProductionsList/ProductionsList';
+import ProductionsListFilter from '../../features/ProductionsListFilter/ProductionsListFilterContainer';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
 
@@ -19,11 +20,16 @@ class FinishedProductions extends React.Component {
   }
 
   componentDidMount() {
-    const { loadFinishedProductions, sortParams } = this.props;
+    const {
+      loadFinishedProductions,
+      sortParams,
+      dateFilterParams
+    } = this.props;
     loadFinishedProductions(
       sortParams.key,
       sortParams.valueType,
-      sortParams.direction
+      sortParams.direction,
+      dateFilterParams
     );
   }
 
@@ -31,13 +37,15 @@ class FinishedProductions extends React.Component {
     const {
       loadFinishedProductions,
       sortParams,
-      finishedProductions
+      finishedProductions,
+      dateFilterParams
     } = this.props;
     if (isEqual(finishedProductions, prevProps.finishedProductions) === false) {
       loadFinishedProductions(
         sortParams.key,
         sortParams.valueType,
-        sortParams.direction
+        sortParams.direction,
+        dateFilterParams
       );
     }
   }
@@ -71,6 +79,7 @@ class FinishedProductions extends React.Component {
       updateRequest,
       request,
       editedProduction,
+      sortParams,
       loadFinishedProductions
     } = this.props;
     const { startDate } = this.state;
@@ -88,7 +97,11 @@ class FinishedProductions extends React.Component {
             loadProductions={loadFinishedProductions}
           />
         )}
-
+        <ProductionsListFilter
+          startDate={startDate}
+          loadProductions={loadFinishedProductions}
+          sortParams={sortParams}
+        />
         <form onSubmit={this.handleAddForm} autoComplete="off">
           <ProductionsList
             handleSort={handleSort}

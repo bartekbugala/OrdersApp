@@ -8,7 +8,8 @@ import {
   getUpdateRequest,
   getRequest,
   getSortParams,
-  getEditedProduction
+  getEditedProduction,
+  getDateFilterParams
 } from '../../../redux/selectors';
 import { sortFinishedProductions } from '../../../redux/thunks/sortingThunks';
 import {
@@ -24,15 +25,28 @@ const mapStateToProps = state => ({
   updateRequest: getUpdateRequest(state),
   sortParams: getSortParams(state),
   request: getRequest(state),
-  editedProduction: getEditedProduction(state)
+  editedProduction: getEditedProduction(state),
+  dateFilterParams: getDateFilterParams(state)
 });
 
 const mapDispatchToProps = dispatch => ({
   loadFinishedProductions: (
     key = 'orderNumber',
     valueType = 'number',
-    direction = 'asc'
-  ) => dispatch(loadFinishedProductionsRequest(key, valueType, direction)),
+    direction = 'asc',
+    dateFilterParams = {
+      startDateFilter: '',
+      endDateFilter: ''
+    }
+  ) =>
+    dispatch(
+      loadFinishedProductionsRequest(
+        key,
+        valueType,
+        direction,
+        dateFilterParams
+      )
+    ),
   loadEditedProduction: id => dispatch(loadEditedProductionRequest(id)),
   sortFinishedProductions: (finishedProductions, key, valueType, direction) =>
     dispatch(

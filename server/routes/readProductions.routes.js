@@ -13,18 +13,18 @@ router
   .get(readProductionsController.getCurrent);
 //get canceled
 router
-  .route('/productions/canceled')
+  .route('/productions/canceled/:startDate/:endDate')
   .get(readProductionsController.getCanceled);
 //get finished
 router
-  .route('/productions/finished')
+  .route('/productions/finished/:startDate/:endDate')
   .get(readProductionsController.getFinished);
 //get transported
 router
-  .route('/productions/transported')
+  .route('/productions/transported/:startDate/:endDate')
   .get(readProductionsController.getTransported);
 
-// get productions by range
+// get productions by range - not used
 router
   .route('/productions/range/:startAt/:limit/:sortParam')
   .get(readProductionsController.getProductionsByRange);
