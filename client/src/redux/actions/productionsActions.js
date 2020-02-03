@@ -11,6 +11,7 @@ export const LOAD_FINISHED = createActionName('LOAD_FINISHED');
 export const LOAD_TRANSPORTED = createActionName('LOAD_TRANSPORTED');
 export const LOAD_EDITED = createActionName('LOAD_EDITED');
 export const LOAD_NEW = createActionName('LOAD_NEW');
+export const SET_DATE_FILTER = createActionName('SET_DATE_FILTER');
 
 // actions
 export const loadAllProductions = payload => ({
@@ -40,4 +41,8 @@ export const loadEditedProduction = payload => ({
 export const loadNewProduction = payload => ({
   payload,
   type: LOAD_NEW
+});
+export const setDateFilterParams = payload => ({
+  payload,
+  type: SET_DATE_FILTER
 });

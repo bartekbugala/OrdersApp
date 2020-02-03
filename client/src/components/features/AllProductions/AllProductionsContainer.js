@@ -9,7 +9,8 @@ import {
   getRequest,
   getSortParams,
   getEditedProduction,
-  getNewProduction
+  getNewProduction,
+  getDateFilterParams
 } from '../../../redux/selectors';
 import { sortAllProductions } from '../../../redux/thunks/sortingThunks';
 import { resetNew } from '../../../redux/thunks/productions.thunks';
@@ -29,20 +30,28 @@ const mapStateToProps = state => ({
   sortParams: getSortParams(state),
   request: getRequest(state),
   editedProduction: getEditedProduction(state),
-  newProduction: getNewProduction(state)
+  newProduction: getNewProduction(state),
+  dateFilterParams: getDateFilterParams(state)
 });
 const mapDispatchToProps = dispatch => ({
   loadAllProductions: (
     key = 'orderNumber',
     valueType = 'number',
-    direction = 'asc'
-  ) => dispatch(loadAllProductionsRequest(key, valueType, direction)),
+    direction = 'asc',
+    dateFilterParams = {
+      startDateFilter: '',
+      endDateFilter: ''
+    }
+  ) =>
+    dispatch(
+      loadAllProductionsRequest(key, valueType, direction, dateFilterParams)
+    ),
   loadEditedProduction: id => dispatch(loadEditedProductionRequest(id)),
   sortAllProductions: (allProductions, key, valueType, direction) =>
     dispatch(sortAllProductions(allProductions, key, valueType, direction)),
   addProduction: production => dispatch(addProductionRequest(production)),
-  updateProduction: (id, production, thunk) =>
-    dispatch(updateProductionRequest(id, production, thunk)),
+  updateProduction: (id, production) =>
+    dispatch(updateProductionRequest(id, production)),
   resetNew: () => dispatch(resetNew()),
   resetRequest: () => dispatch(resetRequest()),
   resetUpdateRequest: () => dispatch(resetUpdateRequest())

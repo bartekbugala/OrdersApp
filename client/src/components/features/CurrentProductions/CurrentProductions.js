@@ -5,6 +5,7 @@ import { isEqual } from 'lodash';
 import AddProduction from '../../features/AddProduction/AddProductionContainer';
 import EditProduction from '../../features/EditProduction/EditProductionContainer';
 import ProductionsList from '../../features/ProductionsList/ProductionsList';
+import ProductionsListFilter from '../../features/ProductionsListFilter/ProductionsListFilterContainer';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
 
@@ -20,11 +21,12 @@ class CurrentProductions extends React.Component {
   }
 
   componentDidMount() {
-    const { loadCurrentProductions, sortParams } = this.props;
+    const { loadCurrentProductions, sortParams, dateFilterParams } = this.props;
     loadCurrentProductions(
       sortParams.key,
       sortParams.valueType,
-      sortParams.direction
+      sortParams.direction,
+      dateFilterParams
     );
   }
 
@@ -33,13 +35,15 @@ class CurrentProductions extends React.Component {
       loadCurrentProductions,
       sortParams,
       currentProductions,
+      dateFilterParams,
       resetNew
     } = this.props;
     if (isEqual(currentProductions, prevProps.currentProductions) === false) {
       loadCurrentProductions(
         sortParams.key,
         sortParams.valueType,
-        sortParams.direction
+        sortParams.direction,
+        dateFilterParams
       );
       resetNew();
     }
@@ -81,6 +85,7 @@ class CurrentProductions extends React.Component {
       request,
       newProduction,
       editedProduction,
+      sortParams,
       loadCurrentProductions
     } = this.props;
     const { startDate } = this.state;
@@ -98,7 +103,11 @@ class CurrentProductions extends React.Component {
             loadProductions={loadCurrentProductions}
           />
         )}
-
+        <ProductionsListFilter
+          startDate={startDate}
+          loadProductions={loadCurrentProductions}
+          sortParams={sortParams}
+        />
         <form
           onKeyDown={e => {
             e.keyCode === 13 ? e.preventDefault() : (e.returnValue = false);

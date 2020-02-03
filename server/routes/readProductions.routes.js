@@ -4,23 +4,27 @@ const router = express.Router();
 const readProductionsController = require('../controllers/readProductions.controller');
 
 //get productions
-router.route('/productions').get(readProductionsController.getProductions);
+router
+  .route('/productions/:startDate/:endDate')
+  .get(readProductionsController.getProductions);
 // get current
-router.route('/productions/current').get(readProductionsController.getCurrent);
+router
+  .route('/productions/current/:startDate/:endDate')
+  .get(readProductionsController.getCurrent);
 //get canceled
 router
-  .route('/productions/canceled')
+  .route('/productions/canceled/:startDate/:endDate')
   .get(readProductionsController.getCanceled);
 //get finished
 router
-  .route('/productions/finished')
+  .route('/productions/finished/:startDate/:endDate')
   .get(readProductionsController.getFinished);
 //get transported
 router
-  .route('/productions/transported')
+  .route('/productions/transported/:startDate/:endDate')
   .get(readProductionsController.getTransported);
 
-// get productions by range
+// get productions by range - not used
 router
   .route('/productions/range/:startAt/:limit/:sortParam')
   .get(readProductionsController.getProductionsByRange);

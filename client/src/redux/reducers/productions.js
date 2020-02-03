@@ -5,10 +5,11 @@ import {
   LOAD_FINISHED,
   LOAD_TRANSPORTED,
   LOAD_EDITED,
-  LOAD_NEW
+  LOAD_NEW,
+  SET_DATE_FILTER
 } from '../actions/productionsActions';
 
-export const emptyNewProduction = {
+export const emptyProduction = {
   orderNumber: '',
   clientName: '',
   downpayment: '',
@@ -32,8 +33,9 @@ const initialState = {
   finishedProductions: [],
   transportedProductions: [],
   canceledProductions: [],
-  editedProduction: {},
-  newProduction: emptyNewProduction
+  editedProduction: emptyProduction,
+  newProduction: emptyProduction,
+  dateFilterParams: { startDateFilter: '', endDateFilter: '' }
 };
 
 //// Reducer
@@ -53,6 +55,8 @@ export default function reducer(statePart = initialState, action = {}) {
       return { ...statePart, editedProduction: action.payload };
     case LOAD_NEW:
       return { ...statePart, newProduction: action.payload };
+    case SET_DATE_FILTER:
+      return { ...statePart, dateFilterParams: action.payload };
     default:
       return statePart;
   }

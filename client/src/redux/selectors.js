@@ -4,6 +4,10 @@ export const getMenuLinks = ({ main }) => main.menuLinks;
 // sorting selectors
 export const getSortParams = ({ sorting }) => sorting.sortParams;
 
+// filter selectors
+export const getDateFilterParams = ({ productions }) =>
+  productions.dateFilterParams;
+
 // productions selectors
 export const getAllProductions = ({ productions }) =>
   productions.allProductions;

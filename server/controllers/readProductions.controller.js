@@ -3,48 +3,97 @@ const Production = require('../models/productions.model');
 
 // get all productions
 exports.getProductions = async (req, res) => {
+  const { startDate, endDate } = req.params;
+  const query =
+    startDate !== '0' && endDate !== '0'
+      ? {
+          downpayment: {
+            $gte: `${startDate}`,
+            $lte: `${endDate}`
+          }
+        }
+      : {};
   try {
-    res.status(200).json(await Production.find({}));
+    res.status(200).json(await Production.find(query));
   } catch (err) {
     res.status(500).json(err);
   }
 };
 
 exports.getCurrent = async (req, res) => {
+  const { startDate, endDate } = req.params;
+  const query =
+    startDate !== '0' && endDate !== '0'
+      ? {
+          canceled: false,
+          finished: false,
+          downpayment: {
+            $gte: `${startDate}`,
+            $lte: `${endDate}`
+          }
+        }
+      : { canceled: false, finished: false };
   try {
-    res
-      .status(200)
-      .json(await Production.find({ canceled: false, finished: false }));
+    res.status(200).json(await Production.find(query));
   } catch (err) {
     res.status(500).json(err);
   }
 };
 
 exports.getCanceled = async (req, res) => {
+  const { startDate, endDate } = req.params;
+  const query =
+    startDate !== '0' && endDate !== '0'
+      ? {
+          canceled: true,
+          downpayment: {
+            $gte: `${startDate}`,
+            $lte: `${endDate}`
+          }
+        }
+      : { canceled: true };
   try {
-    res.status(200).json(await Production.find({ canceled: true }));
+    res.status(200).json(await Production.find(query));
   } catch (err) {
     res.status(500).json(err);
   }
 };
 
 exports.getFinished = async (req, res) => {
+  const { startDate, endDate } = req.params;
+  const query =
+    startDate !== '0' && endDate !== '0'
+      ? {
+          canceled: false,
+          finished: true,
+          transported: false,
+          downpayment: {
+            $gte: `${startDate}`,
+            $lte: `${endDate}`
+          }
+        }
+      : { canceled: false, finished: true, transported: false };
   try {
-    res.status(200).json(
-      await Production.find({
-        canceled: false,
-        finished: true,
-        transported: false
-      })
-    );
+    res.status(200).json(await Production.find(query));
   } catch (err) {
     res.status(500).json(err);
   }
 };
 
 exports.getTransported = async (req, res) => {
+  const { startDate, endDate } = req.params;
+  const query =
+    startDate !== '0' && endDate !== '0'
+      ? {
+          transported: true,
+          downpayment: {
+            $gte: `${startDate}`,
+            $lte: `${endDate}`
+          }
+        }
+      : { transported: true };
   try {
-    res.status(200).json(await Production.find({ transported: true }));
+    res.status(200).json(await Production.find(query));
   } catch (err) {
     res.status(500).json(err);
   }

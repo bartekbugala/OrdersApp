@@ -5,6 +5,7 @@ import { isEqual } from 'lodash';
 import AddProduction from '../../features/AddProduction/AddProductionContainer';
 import EditProduction from '../../features/EditProduction/EditProductionContainer';
 import ProductionsList from '../../features/ProductionsList/ProductionsList';
+import ProductionsListFilter from '../../features/ProductionsListFilter/ProductionsListFilterContainer';
 import Alert from '../../common/Alert/Alert';
 import Spinner from '../../common/Spinner/Spinner';
 import './AllProductions.scss';
@@ -20,11 +21,12 @@ class AllProductions extends React.Component {
     };
   }
   componentDidMount() {
-    const { loadAllProductions, sortParams } = this.props;
+    const { loadAllProductions, sortParams, dateFilterParams } = this.props;
     loadAllProductions(
       sortParams.key,
       sortParams.valueType,
-      sortParams.direction
+      sortParams.direction,
+      dateFilterParams
     );
   }
 
@@ -33,13 +35,15 @@ class AllProductions extends React.Component {
       loadAllProductions,
       sortParams,
       allProductions,
+      dateFilterParams,
       resetNew
     } = this.props;
     if (isEqual(allProductions, prevProps.allProductions) === false) {
       loadAllProductions(
         sortParams.key,
         sortParams.valueType,
-        sortParams.direction
+        sortParams.direction,
+        dateFilterParams
       );
       resetNew();
     }
@@ -65,7 +69,6 @@ class AllProductions extends React.Component {
   };
 
   handleSort = (
-    // default sorting by orderNumber
     key = 'orderNumber',
     valueType = 'number',
     direction = 'asc'
@@ -82,6 +85,7 @@ class AllProductions extends React.Component {
       request,
       newProduction,
       editedProduction,
+      sortParams,
       loadAllProductions
     } = this.props;
     const { startDate } = this.state;
@@ -100,6 +104,13 @@ class AllProductions extends React.Component {
               loadProductions={loadAllProductions}
             />
           )}
+          {
+            <ProductionsListFilter
+              startDate={startDate}
+              loadProductions={loadAllProductions}
+              sortParams={sortParams}
+            />
+          }
 
           <form
             onKeyDown={e => {

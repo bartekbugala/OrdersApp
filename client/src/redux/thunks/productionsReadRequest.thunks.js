@@ -15,12 +15,30 @@ import {
   loadEditedProduction
 } from '../actions/productionsActions';
 
-//// Thunks
-export const loadAllProductionsRequest = (key, valueType, direction) => {
+export const loadAllProductionsRequest = (
+  key,
+  valueType,
+  direction,
+  dateFilterParams
+) => {
+  let startDate = '0';
+  let endDate = '0';
+  if (dateFilterParams.startDateFilter !== '') {
+    startDate = dateFilterParams.startDateFilter.toISOString(
+      dateFilterParams.startDateFilter
+    );
+  }
+  if (dateFilterParams.endDateFilter !== '') {
+    endDate = dateFilterParams.endDateFilter.toISOString(
+      dateFilterParams.endDateFilter
+    );
+  }
   return async dispatch => {
     dispatch(startRequest());
     try {
-      let res = await axios.get(`${API_URL}/productions`);
+      let res = await axios.get(
+        `${API_URL}/productions/${startDate}/${endDate}`
+      );
       sortByColumn(res.data, key, valueType, direction);
       dispatch(loadAllProductions(res.data));
       dispatch(endRequest());
@@ -29,11 +47,31 @@ export const loadAllProductionsRequest = (key, valueType, direction) => {
     }
   };
 };
-export const loadCurrentProductionsRequest = (key, valueType, direction) => {
+
+export const loadCurrentProductionsRequest = (
+  key,
+  valueType,
+  direction,
+  dateFilterParams
+) => {
+  let startDate = '0';
+  let endDate = '0';
+  if (dateFilterParams.startDateFilter !== '') {
+    startDate = dateFilterParams.startDateFilter.toISOString(
+      dateFilterParams.startDateFilter
+    );
+  }
+  if (dateFilterParams.endDateFilter !== '') {
+    endDate = dateFilterParams.endDateFilter.toISOString(
+      dateFilterParams.endDateFilter
+    );
+  }
   return async dispatch => {
     dispatch(startRequest());
     try {
-      let res = await axios.get(`${API_URL}/productions/current`);
+      let res = await axios.get(
+        `${API_URL}/productions/current/${startDate}/${endDate}`
+      );
       sortByColumn(res.data, key, valueType, direction);
       dispatch(loadCurrentProductions(res.data));
       dispatch(endRequest());
@@ -42,11 +80,31 @@ export const loadCurrentProductionsRequest = (key, valueType, direction) => {
     }
   };
 };
-export const loadFinishedProductionsRequest = (key, valueType, direction) => {
+
+export const loadFinishedProductionsRequest = (
+  key,
+  valueType,
+  direction,
+  dateFilterParams
+) => {
+  let startDate = '0';
+  let endDate = '0';
+  if (dateFilterParams.startDateFilter !== '') {
+    startDate = dateFilterParams.startDateFilter.toISOString(
+      dateFilterParams.startDateFilter
+    );
+  }
+  if (dateFilterParams.endDateFilter !== '') {
+    endDate = dateFilterParams.endDateFilter.toISOString(
+      dateFilterParams.endDateFilter
+    );
+  }
   return async dispatch => {
     dispatch(startRequest());
     try {
-      let res = await axios.get(`${API_URL}/productions/finished`);
+      let res = await axios.get(
+        `${API_URL}/productions/finished/${startDate}/${endDate}`
+      );
       sortByColumn(res.data, key, valueType, direction);
       dispatch(loadFinishedProductions(res.data));
       dispatch(endRequest());
@@ -55,11 +113,31 @@ export const loadFinishedProductionsRequest = (key, valueType, direction) => {
     }
   };
 };
-export const loadCanceledProductionsRequest = (key, valueType, direction) => {
+
+export const loadCanceledProductionsRequest = (
+  key,
+  valueType,
+  direction,
+  dateFilterParams
+) => {
+  let startDate = '0';
+  let endDate = '0';
+  if (dateFilterParams.startDateFilter !== '') {
+    startDate = dateFilterParams.startDateFilter.toISOString(
+      dateFilterParams.startDateFilter
+    );
+  }
+  if (dateFilterParams.endDateFilter !== '') {
+    endDate = dateFilterParams.endDateFilter.toISOString(
+      dateFilterParams.endDateFilter
+    );
+  }
   return async dispatch => {
     dispatch(startRequest());
     try {
-      let res = await axios.get(`${API_URL}/productions/canceled`);
+      let res = await axios.get(
+        `${API_URL}/productions/canceled/${startDate}/${endDate}`
+      );
       sortByColumn(res.data, key, valueType, direction);
       dispatch(loadCanceledProductions(res.data));
       dispatch(endRequest());
@@ -68,15 +146,31 @@ export const loadCanceledProductionsRequest = (key, valueType, direction) => {
     }
   };
 };
+
 export const loadTransportedProductionsRequest = (
   key,
   valueType,
-  direction
+  direction,
+  dateFilterParams
 ) => {
+  let startDate = '0';
+  let endDate = '0';
+  if (dateFilterParams.startDateFilter !== '') {
+    startDate = dateFilterParams.startDateFilter.toISOString(
+      dateFilterParams.startDateFilter
+    );
+  }
+  if (dateFilterParams.endDateFilter !== '') {
+    endDate = dateFilterParams.endDateFilter.toISOString(
+      dateFilterParams.endDateFilter
+    );
+  }
   return async dispatch => {
     dispatch(startRequest());
     try {
-      let res = await axios.get(`${API_URL}/productions/transported`);
+      let res = await axios.get(
+        `${API_URL}/productions/transported/${startDate}/${endDate}`
+      );
       sortByColumn(res.data, key, valueType, direction);
       dispatch(loadTransportedProductions(res.data));
       dispatch(endRequest());
@@ -85,6 +179,7 @@ export const loadTransportedProductionsRequest = (
     }
   };
 };
+
 // load edited productrion
 export const loadEditedProductionRequest = id => {
   return async dispatch => {
