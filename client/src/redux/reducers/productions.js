@@ -9,7 +9,7 @@ import {
   SET_DATE_FILTER
 } from '../actions/productionsActions';
 
-export const emptyNewProduction = {
+export const emptyProduction = {
   orderNumber: '',
   clientName: '',
   downpayment: '',
@@ -33,8 +33,8 @@ const initialState = {
   finishedProductions: [],
   transportedProductions: [],
   canceledProductions: [],
-  editedProduction: {},
-  newProduction: emptyNewProduction,
+  editedProduction: emptyProduction,
+  newProduction: emptyProduction,
   dateFilterParams: { startDateFilter: '', endDateFilter: '' }
 };
 

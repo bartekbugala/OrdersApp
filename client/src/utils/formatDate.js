@@ -9,5 +9,5 @@ export default function formatDate(dateToFormat, short = false) {
       : date.getMonth() + 1) +
     yearPart;
 
-  return isNaN(date) ? '-' : formatted_date;
+  return isNaN(date) ? 0 : formatted_date;
 }
