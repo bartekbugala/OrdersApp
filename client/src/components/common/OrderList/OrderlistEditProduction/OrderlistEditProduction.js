@@ -40,21 +40,28 @@ const OrderlistEditProduction = ({
         <tr className="noprint">
           <td className={`${tdClass}`}>
             <label>Data wpłaty zaliczki</label>
+            {/* Null ISO String: 1970-01-01T00:00:00.000Z */}
             <DatePicker
               allowSameDay="true"
               name="downpayment"
               selected={
                 !isNaN(editedProduction.downpayment)
-                  ? editedProduction.downpayment
+                  ? editedProduction.downpayment.toISOString() !=
+                    '1970-01-01T00:00:00.000Z'
+                    ? editedProduction.downpayment
+                    : ''
                   : ''
               }
               onSelect={handleDateSelect}
               value={
                 !isNaN(editedProduction.downpayment)
-                  ? editedProduction.downpayment
+                  ? editedProduction.downpayment.toISOString() !=
+                    '1970-01-01T00:00:00.000Z'
+                    ? editedProduction.downpayment
+                    : startDate
                   : startDate
               }
-              dateFormat="dd.MM.yy"
+              dateFormat="dd.MM.yyyy"
             />
           </td>
         </tr>

@@ -1,4 +1,4 @@
-export default function cutText(content = 'Hello', maxLength) {
+export default function cutText(content = '', maxLength) {
   if (content === null) {
     console.error('CutText content is null');
     return;

@@ -64,7 +64,9 @@ const ProductionsList = ({
               {cutText(production.clientName, 25)}
             </td>
             <td className={`${tdClass} date-column`}>
-              {formatDate(production.downpayment)}
+              {production.downpayment !== null
+                ? formatDate(production.downpayment)
+                : ''}
             </td>
             <td className={`${tdClass} short-column ${daysLeftClass}`}>
               {daysLeft}
