@@ -3,7 +3,7 @@ export const getMenuLinks = ({ main }) => main.menuLinks;
 
 // sorting selectors
 export const getSortParams = ({ sorting }) => sorting.sortParams;
-// sorting selectors
+// filter selectors
 export const getDateFilterParams = ({ productions }) =>
   productions.dateFilterParams;
 
