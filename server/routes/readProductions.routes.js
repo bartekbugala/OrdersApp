@@ -8,7 +8,9 @@ router
   .route('/productions/:startDate/:endDate')
   .get(readProductionsController.getProductions);
 // get current
-router.route('/productions/current').get(readProductionsController.getCurrent);
+router
+  .route('/productions/current/:startDate/:endDate')
+  .get(readProductionsController.getCurrent);
 //get canceled
 router
   .route('/productions/canceled')

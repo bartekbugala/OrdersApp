@@ -14,6 +14,7 @@ import {
   loadCanceledProductions,
   loadEditedProduction
 } from '../actions/productionsActions';
+
 export const loadAllProductionsRequest = (
   key,
   valueType,
@@ -32,7 +33,6 @@ export const loadAllProductionsRequest = (
       dateFilterParams.endDateFilter
     );
   }
-  console.log(startDate, endDate);
   return async dispatch => {
     dispatch(startRequest());
     try {
@@ -47,7 +47,46 @@ export const loadAllProductionsRequest = (
     }
   };
 };
-export const loadCurrentProductionsRequest = (key, valueType, direction) => {
+
+export const loadCurrentProductionsRequest = (
+  key,
+  valueType,
+  direction,
+  dateFilterParams
+) => {
+  let startDate = '0';
+  let endDate = '0';
+  if (dateFilterParams.startDateFilter !== '') {
+    startDate = dateFilterParams.startDateFilter.toISOString(
+      dateFilterParams.startDateFilter
+    );
+  }
+  if (dateFilterParams.endDateFilter !== '') {
+    endDate = dateFilterParams.endDateFilter.toISOString(
+      dateFilterParams.endDateFilter
+    );
+  }
+  return async dispatch => {
+    dispatch(startRequest());
+    try {
+      let res = await axios.get(
+        `${API_URL}/productions/current/${startDate}/${endDate}`
+      );
+      sortByColumn(res.data, key, valueType, direction);
+      dispatch(loadCurrentProductions(res.data));
+      dispatch(endRequest());
+    } catch (e) {
+      dispatch(errorRequest(e.message));
+    }
+  };
+};
+
+/* export const loadCurrentProductionsRequest = (
+  key,
+  valueType,
+  direction,
+  dateFilterParams
+) => {
   return async dispatch => {
     dispatch(startRequest());
     try {
@@ -59,7 +98,8 @@ export const loadCurrentProductionsRequest = (key, valueType, direction) => {
       dispatch(errorRequest(e.message));
     }
   };
-};
+}; */
+
 export const loadFinishedProductionsRequest = (key, valueType, direction) => {
   return async dispatch => {
     dispatch(startRequest());

@@ -69,7 +69,6 @@ class AllProductions extends React.Component {
   };
 
   handleSort = (
-    // default sorting by orderNumber
     key = 'orderNumber',
     valueType = 'number',
     direction = 'asc'
@@ -83,10 +82,10 @@ class AllProductions extends React.Component {
     const {
       allProductions,
       updateRequest,
-      sortParams,
       request,
       newProduction,
       editedProduction,
+      sortParams,
       loadAllProductions
     } = this.props;
     const { startDate } = this.state;
@@ -97,8 +96,7 @@ class AllProductions extends React.Component {
     else
       return (
         <div>
-          {/* EDIT MODAL */
-          this.state.isEdited && (
+          {this.state.isEdited && (
             <EditProduction
               editedProduction={editedProduction}
               startDate={startDate}

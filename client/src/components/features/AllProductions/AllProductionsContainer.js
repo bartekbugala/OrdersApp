@@ -39,8 +39,8 @@ const mapDispatchToProps = dispatch => ({
     valueType = 'number',
     direction = 'asc',
     dateFilterParams = {
-      startDateFilter: '', //'2019-12-17T23:00:00.000Z',
-      endDateFilter: '' //'2020-01-21T23:00:00.000Z'
+      startDateFilter: '',
+      endDateFilter: ''
     }
   ) =>
     dispatch(

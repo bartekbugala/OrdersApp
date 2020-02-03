@@ -14,26 +14,37 @@ exports.getProductions = async (req, res) => {
         }
       : {};
   try {
-    res.status(200).json(
-      await Production.find(
-        /* 
-        startDate > 0 && endDate > 0
-          ? { */
-        query
-        /* }
-          : {} */
-      )
-    );
+    res.status(200).json(await Production.find(query));
   } catch (err) {
     res.status(500).json(err);
   }
 };
 
-exports.getCurrent = async (req, res) => {
+/* exports.getCurrent = async (req, res) => {
   try {
     res
       .status(200)
       .json(await Production.find({ canceled: false, finished: false }));
+  } catch (err) {
+    res.status(500).json(err);
+  }
+}; */
+
+exports.getCurrent = async (req, res) => {
+  const { startDate, endDate } = req.params;
+  const query =
+    startDate !== '0' && endDate !== '0'
+      ? {
+          canceled: false,
+          finished: false,
+          downpayment: {
+            $gte: `${startDate}`,
+            $lte: `${endDate}`
+          }
+        }
+      : { canceled: false, finished: false };
+  try {
+    res.status(200).json(await Production.find(query));
   } catch (err) {
     res.status(500).json(err);
   }
