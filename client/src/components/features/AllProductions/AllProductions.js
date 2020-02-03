@@ -52,7 +52,7 @@ class AllProductions extends React.Component {
   handleAddForm = e => {
     e.preventDefault();
     const { addProduction, loadAllProductions, newProduction } = this.props;
-    addProduction(newProduction, loadAllProductions);
+    addProduction(newProduction).then(loadAllProductions);
   };
 
   editHandler = id => {
@@ -69,12 +69,12 @@ class AllProductions extends React.Component {
   };
 
   handleSort = (
+    // default sorting by orderNumber
     key = 'orderNumber',
     valueType = 'number',
     direction = 'asc'
   ) => {
-    const { allProductions } = this.props;
-    const { sortAllProductions } = this.props;
+    const { allProductions, sortAllProductions } = this.props;
     sortAllProductions(allProductions, key, valueType, direction);
   };
 
@@ -113,6 +113,7 @@ class AllProductions extends React.Component {
               sortParams={sortParams}
             />
           }
+
           <form
             onKeyDown={e => {
               e.keyCode === 13 ? e.preventDefault() : (e.returnValue = false);

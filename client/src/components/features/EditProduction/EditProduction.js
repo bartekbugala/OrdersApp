@@ -40,11 +40,9 @@ class EditProduction extends React.Component {
       loadEditedProduction(id);
       this.props.closeEdit();
     };
-    updateProduction(
-      editedProduction.id,
-      editedProduction,
-      loadProductions
-    ).then(loadEdited(editedProduction.id));
+    updateProduction(editedProduction.id, editedProduction, loadProductions)
+      .then(loadEdited(editedProduction.id))
+      .then(loadProductions);
   };
 
   render() {
