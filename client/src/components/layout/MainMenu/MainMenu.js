@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Logo from '../Logo/Logo';
+import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
+import { logoutUser } from '../../../redux/thunks/auth.thunks';
+import store from '../../../redux/store';
 import {
   Collapse,
   Navbar,
@@ -12,7 +15,7 @@ import {
 } from 'reactstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const MainMenu = ({ menuLinks, location }) => {
+const MainMenu = ({ menuLinks, location, auth }) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   return (
@@ -26,13 +29,34 @@ const MainMenu = ({ menuLinks, location }) => {
           {menuLinks.map((link, index) => {
             return (
               <NavItem key={index}>
-                <Link
+                {auth.isAuthenticated && link.title === 'Login' ? (
+                  <Link
+                    className={`nav-link active`}
+                    to={'/'}
+                    onClick={() => {
+                      // Logout user
+                      store.dispatch(logoutUser());
+                      // Redirect to login
+                      window.location.href = './login';
+                    }}>
+                    Logout
+                  </Link>
+                ) : (
+                  <Link
+                    className={`nav-link ${(location.pathname === link.path &&
+                      'active') ||
+                      ''}`}
+                    to={link.path}>
+                    {link.title}
+                  </Link>
+                )}
+                {/*                 <Link
                   className={`nav-link ${(location.pathname === link.path &&
                     'active') ||
                     ''}`}
                   to={link.path}>
                   {link.title}
-                </Link>
+                </Link> */}
               </NavItem>
             );
           })}
@@ -43,6 +67,7 @@ const MainMenu = ({ menuLinks, location }) => {
 };
 
 MainMenu.propTypes = {
+  auth: PropTypes.object.isRequired,
   menuLinks: PropTypes.arrayOf(
     PropTypes.shape({
       path: PropTypes.string.isRequired,
@@ -51,4 +76,10 @@ MainMenu.propTypes = {
   )
 };
 
-export default withRouter(props => <MainMenu {...props} />);
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(mapStateToProps)(
+  withRouter(props => <MainMenu {...props} />)
+);
