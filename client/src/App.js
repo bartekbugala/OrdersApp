@@ -1,6 +1,8 @@
 import React from 'react';
-
 import { Switch, Route } from 'react-router-dom';
+import PrivateRoute from './components/private-route/PrivateRoute';
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
 
 // routes
 import HomePage from './components/pages/HomePage/HomePage';
@@ -17,10 +19,12 @@ class App extends React.Component {
       <MainLayout>
         <Switch>
           <Route path="/" exact component={CurrentProductionsPage} />
-          <Route path="/all" exact component={AllProductionsPage} />
+          <PrivateRoute path="/all" exact component={AllProductionsPage} />
           <Route path="/current" exact component={CurrentProductionsPage} />
           <Route path="/finished" exact component={FinishedProductionsPage} />
           <Route path="/canceled" exact component={CanceledProductionsPage} />
+          <Route exact path="/register" component={Register} />
+          <Route exact path="/login" component={Login} />
           <Route
             path="/transported"
             exact
