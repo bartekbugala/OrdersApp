@@ -8,7 +8,7 @@ import store from './redux/store';
 import jwt_decode from 'jwt-decode';
 import setAuthToken from './utils/setAuthToken';
 
-import { logoutUser } from './redux/thunks/authThunks';
+import { logoutUser } from './redux/thunks/auth.thunks';
 import { setCurrentUser } from './redux/actions/authActions';
 
 // Check for token to keep user logged in

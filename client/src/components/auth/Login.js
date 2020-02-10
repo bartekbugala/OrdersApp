@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { loginUser } from '../../redux/thunks/authThunks';
+import { loginUser } from '../../redux/thunks/auth.thunks';
 import classnames from 'classnames';
 import { isEqual } from 'lodash';
 class Login extends Component {
