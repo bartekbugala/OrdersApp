@@ -46,7 +46,7 @@ const OrderlistEditProduction = ({
               name="downpayment"
               selected={
                 !isNaN(editedProduction.downpayment)
-                  ? editedProduction.downpayment.toISOString() !=
+                  ? editedProduction.downpayment.toISOString() !==
                     '1970-01-01T00:00:00.000Z'
                     ? editedProduction.downpayment
                     : ''
@@ -55,7 +55,7 @@ const OrderlistEditProduction = ({
               onSelect={handleDateSelect}
               value={
                 !isNaN(editedProduction.downpayment)
-                  ? editedProduction.downpayment.toISOString() !=
+                  ? editedProduction.downpayment.toISOString() !==
                     '1970-01-01T00:00:00.000Z'
                     ? editedProduction.downpayment
                     : startDate

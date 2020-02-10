@@ -31,7 +31,7 @@ const MainMenu = ({ menuLinks, location, auth }) => {
               <NavItem key={index}>
                 {auth.isAuthenticated && link.title === 'Login' ? (
                   <Link
-                    className={`nav-link active`}
+                    className={`nav-link`}
                     to={'/'}
                     onClick={() => {
                       // Logout user

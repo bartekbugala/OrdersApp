@@ -3,7 +3,6 @@ import { Switch, Route } from 'react-router-dom';
 import PrivateRoute from './components/private-route/PrivateRoute';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
-import { logoutUser } from './redux/thunks/auth.thunks';
 
 // routes
 import HomePage from './components/pages/HomePage/HomePage';

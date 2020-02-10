@@ -6,7 +6,7 @@ const initialState = {
     { path: '/canceled', title: 'Anulowane' },
     { path: '/all', title: 'Wszystkie' },
     { path: '/stats', title: 'Statystyki' },
-    { path: '/register', title: 'Register' },
+    //{ path: '/register', title: 'Register' },
     { path: '/login', title: 'Login' }
   ]
 };
