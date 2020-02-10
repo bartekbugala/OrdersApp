@@ -21,7 +21,7 @@ class Register extends Component {
       errors: {}
     };
   }
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(nextProps) {
     if (nextProps.errors) {
       this.setState({
         errors: nextProps.errors
@@ -29,9 +29,9 @@ class Register extends Component {
     }
   }
   componentDidMount() {
-    // If logged in and user navigates to Register page, should redirect them to dashboard
+    // If logged in and user navigates to Register page, should redirect them to default route '/'
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push('/dashboard');
+      this.props.history.push('/');
     }
   }
 
