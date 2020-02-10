@@ -1,4 +1,8 @@
-import { SET_CURRENT_USER, USER_LOADING } from '../actions/authActions';
+import {
+  SET_CURRENT_USER,
+  USER_LOADING,
+  GET_ERRORS
+} from '../actions/authActions';
 
 const isEmpty = require('is-empty');
 const initialState = {
@@ -19,6 +23,8 @@ export default function(state = initialState, action) {
         ...state,
         loading: true
       };
+    case GET_ERRORS:
+      return action.payload;
     default:
       return state;
   }
