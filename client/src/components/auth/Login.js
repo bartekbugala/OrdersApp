@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { loginUser } from '../../redux/thunks/authThunks';
 import classnames from 'classnames';
+import { isEqual } from 'lodash';
 class Login extends Component {
   constructor() {
     super();
@@ -13,20 +14,24 @@ class Login extends Component {
       errors: {}
     };
   }
-  componentDidUpdate(nextProps) {
-    if (nextProps.auth.isAuthenticated) {
-      this.props.history.push('/dashboard'); // push user to dashboard when they login
+  componentDidUpdate(prevProps) {
+    const { auth, errors } = this.props;
+    if (
+      isEqual(auth.isAuthenticated, prevProps.auth.isAuthenticated) === false
+    ) {
+      this.props.history.push('/');
     }
-    if (nextProps.errors) {
+    if (isEqual(errors, prevProps.errors) === false) {
       this.setState({
-        errors: nextProps.errors
+        errors: errors
       });
     }
   }
+
   componentDidMount() {
-    // If logged in and user navigates to Login page, should redirect them to dashboard
+    // If logged in and user navigates to Login page, should redirect them to default '/'
     if (this.props.auth.isAuthenticated) {
-      this.props.history.push('/dashboard');
+      this.props.history.push('/');
     }
   }
   onChange = e => {

@@ -4,12 +4,8 @@ import { connect } from 'react-redux';
 import { registerUser } from '../../redux/thunks/authThunks';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { isEqual } from 'lodash';
 
-/*
-[1]   Line 107:24:  'mapStateToProps' is not defined  no-undef
-[1]   Line 107:43:  'registerUser' is not defined     no-undef
-[1]   Line 107:59:  'withRouter' is not defined       no-undef
-*/
 class Register extends Component {
   constructor() {
     super();
@@ -21,13 +17,15 @@ class Register extends Component {
       errors: {}
     };
   }
-  componentDidUpdate(nextProps) {
-    if (nextProps.errors) {
+  componentDidUpdate(prevProps) {
+    const { errors } = this.props;
+    if (isEqual(errors, prevProps.errors) === false) {
       this.setState({
-        errors: nextProps.errors
+        errors: errors
       });
     }
   }
+
   componentDidMount() {
     // If logged in and user navigates to Register page, should redirect them to default route '/'
     if (this.props.auth.isAuthenticated) {
