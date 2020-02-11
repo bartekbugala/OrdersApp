@@ -29,13 +29,41 @@ export function filterExclusiveTypeArray(
   return productionsArray.filter(isType);
 }
 
-////////////////// RDZENIE
+////////////////// CORE TYPES
 
 export function countCoreM3(productionsArray) {
   function singleCoreM3(m2, thickness) {
     return (m2 * thickness) / 1000;
   }
   let m3 = 0;
-  productionsArray.forEach(el => (m3 += singleCoreM3(el.m2, el.thickness)));
+  productionsArray.forEach(el =>
+    el.type === 'D'
+      ? (m3 += singleCoreM3(el.m2, el.thickness) + el.m2 * 0.015)
+      : (m3 += singleCoreM3(el.m2, el.thickness))
+  );
   return Math.round(m3 * 100) / 100;
+}
+
+/////////// STEEL SHEETS
+export function colorsArray(productionsArray, colorPropName) {
+  let colorsArray = [];
+  productionsArray.forEach(el => {
+    if (!colorsArray.includes(el[colorPropName])) {
+      colorsArray.push(el[colorPropName]);
+    }
+  });
+  return colorsArray;
+}
+
+export function countM(productionsArray) {
+  let meters = 0;
+  productionsArray.forEach(el => {
+    if (el.type === 'S') {
+      meters += el.m2 / 1.175;
+    }
+    if (el.type === 'D') {
+      meters += el.m2;
+    }
+  });
+  return Math.round((meters * 100) / 100);
 }

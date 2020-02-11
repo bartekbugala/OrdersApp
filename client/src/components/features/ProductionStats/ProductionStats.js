@@ -6,7 +6,9 @@ import {
   filterByType,
   filterByTypeArray,
   countCoreM3,
-  filterExclusiveTypeArray
+  filterExclusiveTypeArray,
+  colorsArray,
+  countM
 } from '../../../utils/stats';
 // components
 import Alert from '../../common/Alert/Alert';
@@ -34,12 +36,13 @@ class CurrentProductions extends React.Component {
       <div className="row">
         <div className="col-3">
           <h5>Zamówienia bieżące:</h5>
-          <table className="table table-bordered table-responsive-md table-hover text-center">
+          <table className="table table-info table-bordered table-responsive-md table-hover text-center">
             <thead>
               <tr>
-                <th>Rodzaj Zestawienia</th>
-                <th>Wartość</th>
-                <th>JM</th>
+                <th>Typ / Rdzeń</th>
+                <th>
+                  Wartość (m<sup>2</sup>)
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -54,9 +57,6 @@ class CurrentProductions extends React.Component {
                     )
                   )}
                 </td>
-                <td>
-                  m<sup>2</sup>
-                </td>
               </tr>
               <tr>
                 <td>S-St</td>
@@ -68,9 +68,6 @@ class CurrentProductions extends React.Component {
                       'S'
                     )
                   )}
-                </td>
-                <td>
-                  m<sup>2</sup>
                 </td>
               </tr>
               <tr>
@@ -84,9 +81,6 @@ class CurrentProductions extends React.Component {
                     )
                   )}
                 </td>
-                <td>
-                  m<sup>2</sup>
-                </td>
               </tr>
               <tr>
                 <td>S-Wm</td>
@@ -99,9 +93,6 @@ class CurrentProductions extends React.Component {
                     )
                   )}
                 </td>
-                <td>
-                  m<sup>2</sup>
-                </td>
               </tr>
               <tr>
                 <td>Inne</td>
@@ -113,17 +104,84 @@ class CurrentProductions extends React.Component {
                     ])
                   )}
                 </td>
-                <td>
-                  m<sup>2</sup>
-                </td>
               </tr>
               <tr>
                 <td>RAZEM</td>
                 <td>{countM2(currentProductions)}</td>
-                <td>
-                  m<sup>2</sup>
-                </td>
               </tr>
+            </tbody>
+          </table>
+        </div>
+        <div className="col-4">
+          <h5>Potrzebne Blachy Zewnętrzne:</h5>
+          <table className="table table-success table-striped table-bordered table-responsive-md table-hover text-center">
+            <thead>
+              <tr>
+                <th>Kolor</th>
+                <th>Szerokość (mm)</th>
+                <th>Ilość (mb)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {colorsArray(currentProductions, 'colorOutside').map(el => {
+                return (
+                  <tr>
+                    <td>{el}</td>
+                    <td>1250</td>
+                    <td>
+                      {countM(
+                        filterByType(currentProductions, 'colorOutside', el)
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <h5>Potrzebne Blachy Wewnętrzne:</h5>
+          <table className="table table-success table-striped table-bordered table-responsive-md table-hover text-center">
+            <thead>
+              <tr>
+                <th>Kolor</th>
+                <th>Szerokość (mm)</th>
+                <th>Ilość (mb)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {colorsArray(currentProductions, 'colorInside').map(el => {
+                return (
+                  <tr>
+                    <td>{el}</td>
+                    <td>1065</td>
+                    <td>
+                      {countM(
+                        filterByType(
+                          filterByType(currentProductions, 'type', 'D'),
+                          'colorInside',
+                          el
+                        )
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+              {colorsArray(currentProductions, 'colorInside').map(el => {
+                return (
+                  <tr>
+                    <td>{el}</td>
+                    <td>1250</td>
+                    <td>
+                      {countM(
+                        filterByType(
+                          filterByType(currentProductions, 'type', 'S'),
+                          'colorInside',
+                          el
+                        )
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -133,8 +191,9 @@ class CurrentProductions extends React.Component {
             <thead>
               <tr>
                 <th>Rodzaj</th>
-                <th>Wartość</th>
-                <th>JM</th>
+                <th>
+                  Ilość (m<sup>3</sup>)
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -149,9 +208,6 @@ class CurrentProductions extends React.Component {
                     )
                   )}
                 </td>
-                <td>
-                  m<sup>3</sup>
-                </td>
               </tr>
               <tr>
                 <td>Styropian Ściana</td>
@@ -164,17 +220,11 @@ class CurrentProductions extends React.Component {
                     )
                   )}
                 </td>
-                <td>
-                  m<sup>3</sup>
-                </td>
               </tr>
               <tr>
                 <td>Wełna Mineralna</td>
                 <td>
                   {countCoreM3(filterByType(currentProductions, 'core', 'Wm'))}
-                </td>
-                <td>
-                  m<sup>3</sup>
                 </td>
               </tr>
               <tr>
@@ -182,17 +232,11 @@ class CurrentProductions extends React.Component {
                 <td>
                   {countCoreM3(filterByType(currentProductions, 'core', 'PUR'))}
                 </td>
-                <td>
-                  m<sup>3</sup>
-                </td>
               </tr>
               <tr>
                 <td>XPS</td>
                 <td>
                   {countCoreM3(filterByType(currentProductions, 'core', 'XPS'))}
-                </td>
-                <td>
-                  m<sup>3</sup>
                 </td>
               </tr>
             </tbody>
