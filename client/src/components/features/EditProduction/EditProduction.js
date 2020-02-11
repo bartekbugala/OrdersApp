@@ -19,6 +19,18 @@ class EditProduction extends React.Component {
     updateEdited({ ...editedProduction, downpayment: date });
   };
 
+  ///
+  handleEditProductionDateSelect = date => {
+    const { editedProduction, updateEdited } = this.props;
+    updateEdited({ ...editedProduction, productionDate: date });
+  };
+
+  handleEditProductionDateChange = date => {
+    const { editedProduction, updateEdited } = this.props;
+    updateEdited({ ...editedProduction, productionDate: date });
+  };
+  ///
+
   handleEditCheckBoxChange = e => {
     const { editedProduction, updateEdited } = this.props;
     const target = e.target;
@@ -49,11 +61,12 @@ class EditProduction extends React.Component {
     const {
       handleEditChange,
       handleEditDateSelect,
+      handleEditProductionDateSelect,
       handleEditDateChange,
       handleEditCheckBoxChange,
       handleEditForm
     } = this;
-    const { startDate, closeEdit, editedProduction, handleForm } = this.props;
+    const { startDate, closeEdit, editedProduction } = this.props;
     return (
       <Modal handleModal={closeEdit}>
         <h3>Edycja pozycji</h3>
@@ -63,6 +76,7 @@ class EditProduction extends React.Component {
           handleDateChange={handleEditDateChange}
           handleCheckBoxChange={handleEditCheckBoxChange}
           handleDateSelect={handleEditDateSelect}
+          handleProductionDateSelect={handleEditProductionDateSelect}
           startDate={startDate}
           handleForm={handleEditForm}
           closeEdit={closeEdit}

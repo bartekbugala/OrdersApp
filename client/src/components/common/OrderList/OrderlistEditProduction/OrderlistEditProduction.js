@@ -12,6 +12,7 @@ const OrderlistEditProduction = ({
   handleChange,
   handleCheckBoxChange,
   handleDateSelect,
+  handleProductionDateSelect,
   handleForm
 }) => (
   <form onSubmit={handleForm} autoComplete="off">
@@ -72,6 +73,34 @@ const OrderlistEditProduction = ({
               name="productionTerm"
               onChange={handleChange}
               defaultValue={editedProduction.productionTerm}
+            />
+          </td>
+        </tr>
+        <tr className="noprint">
+          <td className={`${tdClass}`}>
+            <label>Data produkcji</label>
+            {/* Null ISO String: 1970-01-01T00:00:00.000Z */}
+            <DatePicker
+              allowSameDay="true"
+              name="productionDate"
+              selected={
+                !isNaN(editedProduction.productionDate)
+                  ? editedProduction.productionDate.toISOString() !=
+                    '1970-01-01T00:00:00.000Z'
+                    ? editedProduction.productionDate
+                    : ''
+                  : ''
+              }
+              onSelect={handleProductionDateSelect}
+              value={
+                !isNaN(editedProduction.productionDate)
+                  ? editedProduction.productionDate.toISOString() !=
+                    '1970-01-01T00:00:00.000Z'
+                    ? editedProduction.productionDate
+                    : startDate
+                  : startDate
+              }
+              dateFormat="dd.MM.yyyy"
             />
           </td>
         </tr>
