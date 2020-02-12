@@ -10,7 +10,6 @@ import {
   loadTransportedProductionsRequest
 } from '../../../redux/thunks/productionsReadRequest.thunks';
 import ProductionStats from './ProductionStats';
-import TransportedProductions from '../TransportedProductions/TransportedProductions';
 
 const mapStateToProps = state => ({
   currentProductions: getCurrentProductions(state),
