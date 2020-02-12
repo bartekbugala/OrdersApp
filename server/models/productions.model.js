@@ -9,6 +9,7 @@ const Production = new Schema({
   productionTerm: { type: 'Number', required: false },
   finalPayment: { type: 'Boolean', required: false },
   finished: { type: 'Boolean', required: false },
+  productionDate: { type: 'Date', required: false },
   canceled: { type: 'Boolean', required: false },
   transported: { type: 'Boolean', required: false },
   csa: { type: 'String', required: false },

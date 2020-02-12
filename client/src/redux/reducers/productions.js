@@ -21,6 +21,7 @@ export const emptyProduction = {
   core: '',
   thickness: '',
   finished: false,
+  productionDate: '',
   canceled: false,
   transported: false,
   m2: '',

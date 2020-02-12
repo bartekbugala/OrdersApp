@@ -17,6 +17,7 @@ exports.updateProduction = async (req, res) => {
       m2,
       csa,
       finished,
+      productionDate,
       canceled,
       transported
     } = req.body;
@@ -36,6 +37,7 @@ exports.updateProduction = async (req, res) => {
         m2: m2,
         csa: csa,
         finished: finished,
+        productionDate: productionDate,
         canceled: canceled,
         transported: transported
       }
@@ -64,7 +66,10 @@ exports.toggleFinishProduction = async (req, res) => {
     let currentProduction = await Production.findOne({ id: req.params.id });
     const productionFinished = await Production.findOneAndUpdate(
       { id: req.params.id },
-      { finished: currentProduction.finished === false ? true : false }
+      {
+        finished: currentProduction.finished === false ? true : false,
+        productionDate: currentProduction.finished === false ? Date.now() : ''
+      }
     );
     res.status(200).json(productionFinished);
   } catch (err) {

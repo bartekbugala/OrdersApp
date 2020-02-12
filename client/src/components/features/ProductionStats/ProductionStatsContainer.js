@@ -1,10 +1,21 @@
 import { connect } from 'react-redux';
-import { getCurrentProductions } from '../../../redux/selectors';
-import { loadCurrentProductionsRequest } from '../../../redux/thunks/productionsReadRequest.thunks';
+import {
+  getCurrentProductions,
+  getFinishedProductions,
+  getTransportedProductions
+} from '../../../redux/selectors';
+import {
+  loadCurrentProductionsRequest,
+  loadFinishedProductionsRequest,
+  loadTransportedProductionsRequest
+} from '../../../redux/thunks/productionsReadRequest.thunks';
 import ProductionStats from './ProductionStats';
+import TransportedProductions from '../TransportedProductions/TransportedProductions';
 
 const mapStateToProps = state => ({
-  currentProductions: getCurrentProductions(state)
+  currentProductions: getCurrentProductions(state),
+  finishedProductions: getFinishedProductions(state),
+  transportedProductions: getTransportedProductions(state)
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -19,6 +30,40 @@ const mapDispatchToProps = dispatch => ({
   ) =>
     dispatch(
       loadCurrentProductionsRequest(key, valueType, direction, dateFilterParams)
+    ),
+  loadTransportedProductions: (
+    key = 'orderNumber',
+    valueType = 'number',
+    direction = 'asc',
+    dateFilterParams = {
+      startDateFilter: '',
+      endDateFilter: ''
+    }
+  ) =>
+    dispatch(
+      loadTransportedProductionsRequest(
+        key,
+        valueType,
+        direction,
+        dateFilterParams
+      )
+    ),
+  loadFinishedProductions: (
+    key = 'orderNumber',
+    valueType = 'number',
+    direction = 'asc',
+    dateFilterParams = {
+      startDateFilter: '',
+      endDateFilter: ''
+    }
+  ) =>
+    dispatch(
+      loadFinishedProductionsRequest(
+        key,
+        valueType,
+        direction,
+        dateFilterParams
+      )
     )
 });
 

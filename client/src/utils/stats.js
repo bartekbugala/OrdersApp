@@ -45,14 +45,14 @@ export function countCoreM3(productionsArray) {
 }
 
 /////////// STEEL SHEETS
-export function colorsArray(productionsArray, colorPropName) {
-  let colorsArray = [];
+export function propsArrayFromArray(productionsArray, propName) {
+  let propsArray = [];
   productionsArray.forEach(el => {
-    if (!colorsArray.includes(el[colorPropName])) {
-      colorsArray.push(el[colorPropName]);
+    if (!propsArray.includes(el[propName])) {
+      propsArray.push(el[propName]);
     }
   });
-  return colorsArray;
+  return propsArray;
 }
 
 export function countM(productionsArray) {
@@ -66,4 +66,19 @@ export function countM(productionsArray) {
     }
   });
   return Math.round((meters * 100) / 100);
+}
+////////////// PRODUCTIONS
+export function filterByMonth(productionsArray, datePropName, month) {
+  function isType(el, index, array) {
+    let date = new Date(el[datePropName]);
+    return (date.getMonth() + 1).toString() === month;
+  }
+  return productionsArray.filter(isType);
+}
+export function filterByYear(productionsArray, datePropName, year) {
+  function isType(el, index, array) {
+    let date = new Date(el[datePropName]);
+    return date.getFullYear().toString() === year;
+  }
+  return productionsArray.filter(isType);
 }
