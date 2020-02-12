@@ -1,10 +1,17 @@
 import { connect } from 'react-redux';
-import { getCurrentProductions } from '../../../redux/selectors';
-import { loadCurrentProductionsRequest } from '../../../redux/thunks/productionsReadRequest.thunks';
+import {
+  getCurrentProductions,
+  getFinishedProductions
+} from '../../../redux/selectors';
+import {
+  loadCurrentProductionsRequest,
+  loadFinishedProductionsRequest
+} from '../../../redux/thunks/productionsReadRequest.thunks';
 import ProductionStats from './ProductionStats';
 
 const mapStateToProps = state => ({
-  currentProductions: getCurrentProductions(state)
+  currentProductions: getCurrentProductions(state),
+  finishedProductions: getFinishedProductions(state)
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -19,6 +26,23 @@ const mapDispatchToProps = dispatch => ({
   ) =>
     dispatch(
       loadCurrentProductionsRequest(key, valueType, direction, dateFilterParams)
+    ),
+  loadFinishedProductions: (
+    key = 'orderNumber',
+    valueType = 'number',
+    direction = 'asc',
+    dateFilterParams = {
+      startDateFilter: '',
+      endDateFilter: ''
+    }
+  ) =>
+    dispatch(
+      loadFinishedProductionsRequest(
+        key,
+        valueType,
+        direction,
+        dateFilterParams
+      )
     )
 });
 
