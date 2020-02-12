@@ -6,13 +6,15 @@ import productions from './reducers/productions.js';
 import requests from './reducers/requests';
 import sorting from './reducers/sorting';
 import main from './reducers/main';
+import auth from './reducers/auth';
 
 // combine reducers
 const rootReducer = combineReducers({
   main,
   productions,
   requests,
-  sorting
+  sorting,
+  auth
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
