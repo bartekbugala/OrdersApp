@@ -1,10 +1,8 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { isEqual } from 'lodash';
 import {
   countM2,
   filterByType,
-  filterByTypeArray,
   filterByMonth,
   filterByYear,
   countCoreM3,
@@ -12,9 +10,6 @@ import {
   propsArrayFromArray,
   countM
 } from '../../../utils/stats';
-// components
-import Alert from '../../common/Alert/Alert';
-import Spinner from '../../common/Spinner/Spinner';
 
 class CurrentProductions extends React.Component {
   constructor(props) {
@@ -41,7 +36,6 @@ class CurrentProductions extends React.Component {
       finishedProductions,
       transportedProductions
     } = this.props;
-    const { startDate } = this.state;
     let fullYear = new Date(Date.now()).getFullYear();
     let finishedAndTranspotedProd = finishedProductions.concat(
       transportedProductions
@@ -51,13 +45,17 @@ class CurrentProductions extends React.Component {
       'productionDate',
       `${fullYear}`
     );
-    // let m2RoofMw = currentProductions.filter(el.);
+    let lastYearFinishedProductions = filterByYear(
+      finishedAndTranspotedProd,
+      'productionDate',
+      `${fullYear - 1}`
+    );
     console.log(currentProductions);
     return (
       <div className="row">
-        <div className="col-3">
+        <div className="col-4">
           <h5>Zamówienia bieżące:</h5>
-          <table className="table table-info table-bordered table-responsive-md table-hover text-center">
+          <table className="table table-info table-bordered table-responsive-md table-striped table-hover text-center">
             <thead>
               <tr>
                 <th>Typ / Rdzeń</th>
@@ -132,89 +130,8 @@ class CurrentProductions extends React.Component {
               </tr>
             </tbody>
           </table>
-        </div>
-        <div className="col-4">
-          <h5>Potrzebne Blachy Zewnętrzne:</h5>
-          <table className="table table-success table-striped table-bordered table-responsive-md table-hover text-center">
-            <thead>
-              <tr>
-                <th>Kolor</th>
-                <th>Szerokość (mm)</th>
-                <th>Ilość (mb)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {propsArrayFromArray(currentProductions, 'colorOutside').map(
-                el => {
-                  return (
-                    <tr>
-                      <td>{el}</td>
-                      <td>1250</td>
-                      <td>
-                        {countM(
-                          filterByType(currentProductions, 'colorOutside', el)
-                        )}
-                      </td>
-                    </tr>
-                  );
-                }
-              )}
-            </tbody>
-          </table>
-          <h5>Potrzebne Blachy Wewnętrzne:</h5>
-          <table className="table table-secondary table-striped table-bordered table-responsive-md table-hover text-center">
-            <thead>
-              <tr>
-                <th>Kolor</th>
-                <th>Szerokość (mm)</th>
-                <th>Ilość (mb)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {propsArrayFromArray(currentProductions, 'colorInside').map(
-                el => {
-                  return (
-                    <tr>
-                      <td>{el}</td>
-                      <td>1065</td>
-                      <td>
-                        {countM(
-                          filterByType(
-                            filterByType(currentProductions, 'type', 'D'),
-                            'colorInside',
-                            el
-                          )
-                        )}
-                      </td>
-                    </tr>
-                  );
-                }
-              )}
-              {propsArrayFromArray(currentProductions, 'colorInside').map(
-                el => {
-                  return (
-                    <tr>
-                      <td>{el}</td>
-                      <td>1250</td>
-                      <td>
-                        {countM(
-                          filterByType(
-                            filterByType(currentProductions, 'type', 'S'),
-                            'colorInside',
-                            el
-                          )
-                        )}
-                      </td>
-                    </tr>
-                  );
-                }
-              )}
-            </tbody>
-          </table>
-        </div>
-        <div className="col-3">
           <h5>Potrzebne Rdzenie:</h5>
-          <table className="table-secondary table table-bordered table-responsive-md table-hover text-center">
+          <table className="table-secondary table table-bordered table-striped table-responsive-md table-hover text-center">
             <thead>
               <tr>
                 <th>Rodzaj</th>
@@ -269,13 +186,140 @@ class CurrentProductions extends React.Component {
             </tbody>
           </table>
         </div>
+        <div className="col-4">
+          <h5>Potrzebne Blachy Zewnętrzne:</h5>
+          <table className="table table-success table-striped table-bordered table-responsive-md table-hover text-center">
+            <thead>
+              <tr>
+                <th>Kolor</th>
+                <th>Szerokość (mm)</th>
+                <th>Ilość (mb)</th>
+                <th>Waga (kg)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {propsArrayFromArray(currentProductions, 'colorOutside').map(
+                el => {
+                  return (
+                    <tr>
+                      <td>{el}</td>
+                      <td>1250</td>
+                      <td>
+                        {countM(
+                          filterByType(currentProductions, 'colorOutside', el)
+                        )}
+                      </td>
+                      <td>
+                        {Math.ceil(
+                          countM(
+                            filterByType(currentProductions, 'colorOutside', el)
+                          ) * 4.9
+                        )}
+                      </td>
+                    </tr>
+                  );
+                }
+              )}
+            </tbody>
+          </table>
+        </div>
+        <div className="col-4">
+          <h5>Blachy Wewnętrzne na Ściany</h5>
+          <table className="table table-info table-striped table-bordered table-responsive-md table-hover text-center">
+            <thead>
+              <tr>
+                <th>Kolor</th>
+                <th>Szerokość (mm)</th>
+                <th>Ilość (mb)</th>
+                <th>Waga (kg)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {propsArrayFromArray(
+                filterByType(currentProductions, 'type', 'S'),
+                'colorInside'
+              ).map(el => {
+                return (
+                  <tr>
+                    <td>{el}</td>
+                    <td>1250</td>
+                    <td>
+                      {countM(
+                        filterByType(
+                          filterByType(currentProductions, 'type', 'S'),
+                          'colorInside',
+                          el
+                        )
+                      )}
+                    </td>
+                    <td>
+                      {Math.ceil(
+                        countM(
+                          filterByType(
+                            filterByType(currentProductions, 'type', 'S'),
+                            'colorInside',
+                            el
+                          )
+                        ) * 4.9
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <h5>Blachy Wewnętrzne na dachy:</h5>
+          <table className="table table-secondary table-striped table-bordered table-responsive-md table-hover text-center">
+            <thead>
+              <tr>
+                <th>Kolor</th>
+                <th>Szerokość (mm)</th>
+                <th>Ilość (mb)</th>
+                <th>Waga (kg)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {propsArrayFromArray(
+                filterByType(currentProductions, 'type', 'D'),
+                'colorInside'
+              ).map(el => {
+                return (
+                  <tr>
+                    <td>{el}</td>
+                    <td>1065</td>
+                    <td>
+                      {countM(
+                        filterByType(
+                          filterByType(currentProductions, 'type', 'D'),
+                          'colorInside',
+                          el
+                        )
+                      )}
+                    </td>
+                    <td>
+                      {Math.ceil(
+                        countM(
+                          filterByType(
+                            filterByType(currentProductions, 'type', 'D'),
+                            'colorInside',
+                            el
+                          )
+                        ) * 4.18
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
         <div className="row">
           <div className="col col-12">
             <h5>
               Produkcja w m<sup>2</sup> w roku{' '}
               {new Date(Date.now()).getFullYear()} według miesięcy:
             </h5>
-            <table className="table table-warning table-bordered table-responsive-md table-hover text-center">
+            <table className="table table-warning table-striped table-bordered table-responsive-md table-hover text-center">
               <tbody>
                 <tr>
                   <th>Kod</th>
@@ -570,6 +614,305 @@ class CurrentProductions extends React.Component {
                 </tr>
               </tbody>
             </table>
+            <h5>
+              Produkcja w m<sup>2</sup> w roku{' '}
+              {new Date(Date.now()).getFullYear() - 1} według miesięcy:
+            </h5>
+            <table className="table table-secondary table-striped table-bordered table-responsive-md table-hover text-center">
+              <tbody>
+                <tr>
+                  <th>Kod</th>
+                  <th>STY</th>
+                  <th>LUT</th>
+                  <th>MAR</th>
+                  <th>KWI</th>
+                  <th>MAJ</th>
+                  <th>CZE</th>
+                  <th>LIP</th>
+                  <th>SIE</th>
+                  <th>WRZ</th>
+                  <th>PAŹ</th>
+                  <th>LIS</th>
+                  <th>GRU</th>
+                </tr>
+                {propsArrayFromArray(lastYearFinishedProductions, 'csa').map(
+                  el => {
+                    return (
+                      <tr>
+                        <td>{el}</td>
+                        <td>
+                          {countM2(
+                            filterByMonth(
+                              filterByType(
+                                lastYearFinishedProductions,
+                                'csa',
+                                `${el}`
+                              ),
+                              'productionDate',
+                              '1'
+                            )
+                          )}
+                        </td>
+                        <td>
+                          {countM2(
+                            filterByMonth(
+                              filterByType(
+                                lastYearFinishedProductions,
+                                'csa',
+                                `${el}`
+                              ),
+                              'productionDate',
+                              '2'
+                            )
+                          )}
+                        </td>
+                        <td>
+                          {countM2(
+                            filterByMonth(
+                              filterByType(
+                                lastYearFinishedProductions,
+                                'csa',
+                                `${el}`
+                              ),
+                              'productionDate',
+                              '3'
+                            )
+                          )}
+                        </td>
+                        <td>
+                          {countM2(
+                            filterByMonth(
+                              filterByType(
+                                lastYearFinishedProductions,
+                                'csa',
+                                `${el}`
+                              ),
+                              'productionDate',
+                              '4'
+                            )
+                          )}
+                        </td>
+                        <td>
+                          {countM2(
+                            filterByMonth(
+                              filterByType(
+                                lastYearFinishedProductions,
+                                'csa',
+                                `${el}`
+                              ),
+                              'productionDate',
+                              '5'
+                            )
+                          )}
+                        </td>
+                        <td>
+                          {countM2(
+                            filterByMonth(
+                              filterByType(
+                                lastYearFinishedProductions,
+                                'csa',
+                                `${el}`
+                              ),
+                              'productionDate',
+                              '6'
+                            )
+                          )}
+                        </td>
+                        <td>
+                          {countM2(
+                            filterByMonth(
+                              filterByType(
+                                lastYearFinishedProductions,
+                                'csa',
+                                `${el}`
+                              ),
+                              'productionDate',
+                              '7'
+                            )
+                          )}
+                        </td>
+                        <td>
+                          {countM2(
+                            filterByMonth(
+                              filterByType(
+                                lastYearFinishedProductions,
+                                'csa',
+                                `${el}`
+                              ),
+                              'productionDate',
+                              '8'
+                            )
+                          )}
+                        </td>
+                        <td>
+                          {countM2(
+                            filterByMonth(
+                              filterByType(
+                                lastYearFinishedProductions,
+                                'csa',
+                                `${el}`
+                              ),
+                              'productionDate',
+                              '9'
+                            )
+                          )}
+                        </td>
+                        <td>
+                          {countM2(
+                            filterByMonth(
+                              filterByType(
+                                lastYearFinishedProductions,
+                                'csa',
+                                `${el}`
+                              ),
+                              'productionDate',
+                              '10'
+                            )
+                          )}
+                        </td>
+                        <td>
+                          {countM2(
+                            filterByMonth(
+                              filterByType(
+                                lastYearFinishedProductions,
+                                'csa',
+                                `${el}`
+                              ),
+                              'productionDate',
+                              '11'
+                            )
+                          )}
+                        </td>
+                        <td>
+                          {countM2(
+                            filterByMonth(
+                              filterByType(
+                                lastYearFinishedProductions,
+                                'csa',
+                                `${el}`
+                              ),
+                              'productionDate',
+                              '12'
+                            )
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  }
+                )}
+                <tr>
+                  <td>RAZEM</td>
+                  <td>
+                    {countM2(
+                      filterByMonth(
+                        lastYearFinishedProductions,
+                        'productionDate',
+                        '1'
+                      )
+                    )}
+                  </td>
+                  <td>
+                    {countM2(
+                      filterByMonth(
+                        lastYearFinishedProductions,
+                        'productionDate',
+                        '2'
+                      )
+                    )}
+                  </td>
+                  <td>
+                    {countM2(
+                      filterByMonth(
+                        lastYearFinishedProductions,
+                        'productionDate',
+                        '3'
+                      )
+                    )}
+                  </td>
+                  <td>
+                    {countM2(
+                      filterByMonth(
+                        lastYearFinishedProductions,
+                        'productionDate',
+                        '4'
+                      )
+                    )}
+                  </td>
+                  <td>
+                    {countM2(
+                      filterByMonth(
+                        lastYearFinishedProductions,
+                        'productionDate',
+                        '5'
+                      )
+                    )}
+                  </td>
+                  <td>
+                    {countM2(
+                      filterByMonth(
+                        lastYearFinishedProductions,
+                        'productionDate',
+                        '6'
+                      )
+                    )}
+                  </td>
+                  <td>
+                    {countM2(
+                      filterByMonth(
+                        lastYearFinishedProductions,
+                        'productionDate',
+                        '7'
+                      )
+                    )}
+                  </td>
+                  <td>
+                    {countM2(
+                      filterByMonth(
+                        lastYearFinishedProductions,
+                        'productionDate',
+                        '8'
+                      )
+                    )}
+                  </td>
+                  <td>
+                    {countM2(
+                      filterByMonth(
+                        lastYearFinishedProductions,
+                        'productionDate',
+                        '9'
+                      )
+                    )}
+                  </td>
+                  <td>
+                    {countM2(
+                      filterByMonth(
+                        lastYearFinishedProductions,
+                        'productionDate',
+                        '10'
+                      )
+                    )}
+                  </td>
+                  <td>
+                    {countM2(
+                      filterByMonth(
+                        lastYearFinishedProductions,
+                        'productionDate',
+                        '11'
+                      )
+                    )}
+                  </td>
+                  <td>
+                    {countM2(
+                      filterByMonth(
+                        lastYearFinishedProductions,
+                        'productionDate',
+                        '12'
+                      )
+                    )}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -597,5 +940,4 @@ CurrentProductions.propTypes = {
       csa: PropTypes.string
     })
   )
-  //loadPostsByPage: PropTypes.func
 };
