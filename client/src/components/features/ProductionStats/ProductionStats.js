@@ -150,7 +150,7 @@ class CurrentProductions extends React.Component {
             </tbody>
           </table>
           <h5>Potrzebne Blachy Wewnętrzne:</h5>
-          <table className="table table-success table-striped table-bordered table-responsive-md table-hover text-center">
+          <table className="table table-secondary table-striped table-bordered table-responsive-md table-hover text-center">
             <thead>
               <tr>
                 <th>Kolor</th>
