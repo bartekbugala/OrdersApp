@@ -25,17 +25,29 @@ class CurrentProductions extends React.Component {
   }
 
   componentDidMount() {
-    const { loadCurrentProductions, loadFinishedProductions } = this.props;
+    const {
+      loadCurrentProductions,
+      loadFinishedProductions,
+      loadTransportedProductions
+    } = this.props;
     loadCurrentProductions();
     loadFinishedProductions();
+    loadTransportedProductions();
   }
 
   render() {
-    const { currentProductions, finishedProductions } = this.props;
+    const {
+      currentProductions,
+      finishedProductions,
+      transportedProductions
+    } = this.props;
     const { startDate } = this.state;
     let fullYear = new Date(Date.now()).getFullYear();
+    let finishedAndTranspotedProd = finishedProductions.concat(
+      transportedProductions
+    );
     let thisYearFinishedProductions = filterByYear(
-      finishedProductions,
+      finishedAndTranspotedProd,
       'productionDate',
       `${fullYear}`
     );
