@@ -1,10 +1,8 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { isEqual } from 'lodash';
 import {
   countM2,
   filterByType,
-  filterByTypeArray,
   filterByMonth,
   filterByYear,
   countCoreM3,
@@ -12,9 +10,6 @@ import {
   propsArrayFromArray,
   countM
 } from '../../../utils/stats';
-// components
-import Alert from '../../common/Alert/Alert';
-import Spinner from '../../common/Spinner/Spinner';
 
 class CurrentProductions extends React.Component {
   constructor(props) {
@@ -41,7 +36,6 @@ class CurrentProductions extends React.Component {
       finishedProductions,
       transportedProductions
     } = this.props;
-    const { startDate } = this.state;
     let fullYear = new Date(Date.now()).getFullYear();
     let finishedAndTranspotedProd = finishedProductions.concat(
       transportedProductions
@@ -51,7 +45,6 @@ class CurrentProductions extends React.Component {
       'productionDate',
       `${fullYear}`
     );
-    // let m2RoofMw = currentProductions.filter(el.);
     console.log(currentProductions);
     return (
       <div className="row">
@@ -141,6 +134,7 @@ class CurrentProductions extends React.Component {
                 <th>Kolor</th>
                 <th>Szerokość (mm)</th>
                 <th>Ilość (mb)</th>
+                <th>Waga (kg)</th>
               </tr>
             </thead>
             <tbody>
@@ -153,6 +147,13 @@ class CurrentProductions extends React.Component {
                       <td>
                         {countM(
                           filterByType(currentProductions, 'colorOutside', el)
+                        )}
+                      </td>
+                      <td>
+                        {Math.ceil(
+                          countM(
+                            filterByType(currentProductions, 'colorOutside', el)
+                          ) * 4.9
                         )}
                       </td>
                     </tr>
@@ -168,6 +169,7 @@ class CurrentProductions extends React.Component {
                 <th>Kolor</th>
                 <th>Szerokość (mm)</th>
                 <th>Ilość (mb)</th>
+                <th>Waga (kg)</th>
               </tr>
             </thead>
             <tbody>
@@ -184,6 +186,17 @@ class CurrentProductions extends React.Component {
                             'colorInside',
                             el
                           )
+                        )}
+                      </td>
+                      <td>
+                        {Math.ceil(
+                          countM(
+                            filterByType(
+                              filterByType(currentProductions, 'type', 'D'),
+                              'colorInside',
+                              el
+                            )
+                          ) * 4.18
                         )}
                       </td>
                     </tr>
@@ -203,6 +216,17 @@ class CurrentProductions extends React.Component {
                             'colorInside',
                             el
                           )
+                        )}
+                      </td>
+                      <td>
+                        {Math.ceil(
+                          countM(
+                            filterByType(
+                              filterByType(currentProductions, 'type', 'S'),
+                              'colorInside',
+                              el
+                            )
+                          ) * 4.9
                         )}
                       </td>
                     </tr>
