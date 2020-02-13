@@ -24,9 +24,10 @@ const ProductionsList = ({
       }}>
       {productions.map(production => {
         let rowBgclass;
-        let daysLeft =
-          countDaysLeft(production.downpayment, production.productionTerm) ||
-          '';
+        let daysLeft = countDaysLeft(
+          production.downpayment,
+          production.productionTerm
+        );
         switch (true) {
           case production.canceled === true:
             rowBgclass = 'row-production-canceled';
