@@ -67,10 +67,12 @@ const OrderlistEditProduction = ({
           </td>
         </tr>
         <tr className="noprint">
-          <td className={`${tdClass}`}>
+          <td className={`${tdClass} rm-arrows`}>
             <label>Termin produkcji</label>
             <input
               name="productionTerm"
+              type="number"
+              step="1"
               onChange={handleChange}
               defaultValue={editedProduction.productionTerm}
             />
@@ -117,62 +119,144 @@ const OrderlistEditProduction = ({
           </td>
         </tr>
         <tr className="noprint">
-          <td className={`${tdClass}`}>
-            <label>Typ płyty (D,S,SP)</label>
+          <td className={`${tdClass}  rm-arrows`}>
+            <label>Typ płyty</label>
             <input
+              list="types"
               name="type"
               onChange={handleChange}
-              defaultValue={editedProduction.type}
+              value={editedProduction.type}
             />
+            <datalist
+              id="types"
+              name="type"
+              onChange={handleChange}
+              value={editedProduction.type}>
+              <option>D</option>
+              <option>S</option>
+              <option>SP-L</option>
+              <option>SP</option>
+            </datalist>
           </td>
         </tr>
         <tr className="noprint">
-          <td className="form-td">
+          <td className={`${tdClass} rm-arrows`}>
             <label>Kolor zewnętrzny</label>
             <input
+              list="outsideColors"
               name="colorOutside"
               onChange={handleChange}
-              defaultValue={editedProduction.colorOutside}
+              value={editedProduction.colorOutside}
             />
+            <datalist
+              id="outsideColors"
+              onChange={handleChange}
+              value={editedProduction.colorOutside}>
+              <option>BIAŁY</option>
+              <option>9006</option>
+              <option>9002</option>
+              <option>9010</option>
+              <option>9016</option>
+              <option>7035</option>
+              <option>1015</option>
+              <option>7024</option>
+              <option>3011</option>
+              <option>8017</option>
+              <option>NR</option>
+              <option>PERF</option>
+              <option>STAND</option>
+            </datalist>
           </td>
         </tr>
         <tr className="noprint">
-          <td className={`${tdClass}`}>
+          <td className={`${tdClass} rm-arrows`}>
             <label>Kolor wewnętrzny</label>
             <input
+              list="insideColors"
               name="colorInside"
               onChange={handleChange}
-              defaultValue={editedProduction.colorInside}
+              value={editedProduction.colorInside}
             />
+            <datalist
+              id="insideColors"
+              onChange={handleChange}
+              value={editedProduction.colorInside}>
+              <option>BIAŁY</option>
+              <option>9002</option>
+              <option>9010</option>
+              <option>9016</option>
+              <option>9006</option>
+              <option>7035</option>
+              <option>NR</option>
+              <option>PERF</option>
+              <option>STAND</option>
+            </datalist>
           </td>
         </tr>
         <tr className="noprint">
-          <td className={`${tdClass}`}>
-            <label>Rdzeń (St, Wm, XPS, PUR)</label>
+          <td className={`${tdClass} rm-arrows`}>
+            <label>Rdzeń</label>
             <input
+              list="cores"
               name="core"
               onChange={handleChange}
-              defaultValue={editedProduction.core}
+              value={editedProduction.core}
             />
-          </td>
-        </tr>
-        <tr className="noprint">
-          <td className={`${tdClass}`}>
-            <label>Grubość (mm)</label>
-            <input
-              name="thickness"
+            <datalist
+              id="cores"
+              name="core"
               onChange={handleChange}
-              defaultValue={editedProduction.thickness}
-            />
+              value={editedProduction.core}>
+              <option>Wm</option>
+              <option>St</option>
+              <option>XPS</option>
+              <option>PUR</option>
+            </datalist>
           </td>
         </tr>
         <tr className="noprint">
-          <td className={`${tdClass}`}>
-            <label>Ilość m2</label>
+          <td className={`${tdClass} rm-arrows`}>
+            <label>Grubość rdzenia</label>
+            <input
+              list="thicknessList"
+              name="thickness"
+              type="number"
+              onChange={handleChange}
+              value={editedProduction.thickness}
+            />
+            <datalist
+              id="thicknessList"
+              onChange={handleChange}
+              type="number"
+              value={editedProduction.thickness}>
+              <option>25</option>
+              <option>30</option>
+              <option>35</option>
+              <option>40</option>
+              <option>45</option>
+              <option>50</option>
+              <option>55</option>
+              <option>60</option>
+              <option>80</option>
+              <option>100</option>
+              <option>120</option>
+              <option>150</option>
+              <option>200</option>
+              <option>250</option>
+            </datalist>
+          </td>
+        </tr>
+        <tr className="noprint">
+          <td className={`${tdClass} rm-arrows`}>
+            <label>
+              m<sup>2</sup>
+            </label>
             <input
               name="m2"
+              type="number"
+              step="any"
               onChange={handleChange}
-              defaultValue={editedProduction.m2}
+              value={editedProduction.m2}
             />
           </td>
         </tr>
