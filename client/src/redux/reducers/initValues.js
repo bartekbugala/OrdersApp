@@ -13,7 +13,7 @@ export const emptyProduction = {
   productionDate: '',
   canceled: false,
   transported: false,
-  m2: '',
+  m2: 20,
   csa: ''
 };
 

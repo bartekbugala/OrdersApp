@@ -87,7 +87,7 @@ const OrderlistEditProduction = ({
               name="productionDate"
               selected={
                 !isNaN(editedProduction.productionDate)
-                  ? editedProduction.productionDate.toISOString() !=
+                  ? editedProduction.productionDate.toISOString() !==
                     '1970-01-01T00:00:00.000Z'
                     ? editedProduction.productionDate
                     : ''
@@ -96,7 +96,7 @@ const OrderlistEditProduction = ({
               onSelect={handleProductionDateSelect}
               value={
                 !isNaN(editedProduction.productionDate)
-                  ? editedProduction.productionDate.toISOString() !=
+                  ? editedProduction.productionDate.toISOString() !==
                     '1970-01-01T00:00:00.000Z'
                     ? editedProduction.productionDate
                     : startDate

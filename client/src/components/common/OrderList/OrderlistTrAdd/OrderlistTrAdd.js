@@ -18,21 +18,21 @@ const OrderlistTrAdd = ({
       <input
         name="orderNumber"
         onChange={handleChange}
-        value={newProduction.orderNumber}
+        value={newProduction.orderNumber || ''}
       />
     </td>
     <td className={`${tdClass}`}>
       <input
         name="clientName"
         onChange={handleChange}
-        value={newProduction.clientName}
+        value={newProduction.clientName || ''}
       />
     </td>
     <td className={`${tdClass}`}>
       <DatePicker
         allowSameDay="true"
         name="downpayment"
-        selected={newProduction.downpayment}
+        selected={newProduction.downpayment || ''}
         onSelect={handleDateSelect}
         value={
           !isNaN(newProduction.downpayment)
@@ -47,14 +47,14 @@ const OrderlistTrAdd = ({
         name="productionTerm"
         type="number"
         onChange={handleChange}
-        value={newProduction.productionTerm}
+        value={newProduction.productionTerm || ''}
       />
     </td>
     <td className={`${tdClass}`}>
       <input
         name="finalPayment"
         type="checkbox"
-        checked={newProduction.finalPayment}
+        checked={newProduction.finalPayment || false}
         onChange={handleCheckBoxChange}
       />
     </td>
@@ -63,7 +63,7 @@ const OrderlistTrAdd = ({
         list="types"
         name="type"
         onChange={handleChange}
-        value={newProduction.type}
+        value={newProduction.type || ''}
       />
       <datalist
         id="types"
@@ -81,7 +81,7 @@ const OrderlistTrAdd = ({
         list="outsideColors"
         name="colorOutside"
         onChange={handleChange}
-        value={newProduction.colorOutside}
+        value={newProduction.colorOutside || ''}
       />
       <datalist
         id="outsideColors"
@@ -107,7 +107,7 @@ const OrderlistTrAdd = ({
         list="insideColors"
         name="colorInside"
         onChange={handleChange}
-        value={newProduction.colorInside}
+        value={newProduction.colorInside || ''}
       />
       <datalist
         id="insideColors"
@@ -129,7 +129,7 @@ const OrderlistTrAdd = ({
         list="cores"
         name="core"
         onChange={handleChange}
-        value={newProduction.core}
+        value={newProduction.core || ''}
       />
       <datalist
         id="cores"
@@ -148,7 +148,7 @@ const OrderlistTrAdd = ({
         name="thickness"
         type="number"
         onChange={handleChange}
-        value={newProduction.thickness}
+        value={newProduction.thickness || ''}
       />
       <datalist
         id="thicknessList"
@@ -171,17 +171,15 @@ const OrderlistTrAdd = ({
       </datalist>
     </td>
     <td className={`${tdClass} rm-arrows`}>
-      <input
-        name="m2"
-        type="number"
-        step="any"
-        onChange={handleChange}
-        value={newProduction.m2}
-      />
+      <input name="m2" onChange={handleChange} value={newProduction.m2 || ''} />
     </td>
     <td className={`${tdClass}`}></td>
     <td className={`${tdClass}`}>
-      <input name="csa" onChange={handleChange} value={newProduction.csa} />
+      <input
+        name="csa"
+        onChange={handleChange}
+        value={newProduction.csa || ''}
+      />
     </td>
     <td className="form-btn">
       <AddRowButton type="submit" />
