@@ -5,7 +5,9 @@ const initialState = {
     { path: '/transported', title: 'Wywiezione' },
     { path: '/canceled', title: 'Anulowane' },
     { path: '/all', title: 'Wszystkie' },
-    { path: '/stats', title: 'Statystyki' }
+    { path: '/stats', title: 'Statystyki' },
+    //{ path: '/register', title: 'Register' },
+    { path: '/login', title: 'Login' }
   ]
 };
 

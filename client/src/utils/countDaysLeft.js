@@ -4,7 +4,8 @@ export default function countDaysLeft(startDate, term) {
     let today = new Date();
     let daysFromStart = Math.floor((today - start) / 86400000);
     let calculatedDays = term - daysFromStart;
-    return calculatedDays === 0 ? '0' : `${calculatedDays}`;
+    // calculatedDays === 0 ? '0' : `${calculatedDays}`;
+    return isNaN(calculatedDays) ? term : calculatedDays;
   } else {
     return term;
   }

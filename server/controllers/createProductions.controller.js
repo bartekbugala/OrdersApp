@@ -19,6 +19,7 @@ exports.addProduction = async (req, res) => {
       m2,
       csa,
       finished,
+      productionDate,
       canceled,
       transported
     } = req.body;
@@ -38,6 +39,7 @@ exports.addProduction = async (req, res) => {
     newProduction.m2 = m2;
     newProduction.csa = csa;
     newProduction.finished = finished || false;
+    newProduction.productionDate = productionDate || '';
     newProduction.canceled = canceled || false;
     newProduction.transported = transported || false;
 
