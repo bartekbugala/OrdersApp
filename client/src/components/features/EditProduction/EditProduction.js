@@ -1,12 +1,31 @@
 import React from 'react';
-// components
 import OrderlistEditProduction from '../../common/OrderList/OrderlistEditProduction/OrderlistEditProduction';
 import Modal from '../../common/Modal/Modal';
+import { returnFloatChar, returnIntChar } from '../../../utils/inputValidation';
 
 class EditProduction extends React.Component {
   handleEditChange = e => {
     const { editedProduction, updateEdited } = this.props;
-    updateEdited({ ...editedProduction, [e.target.name]: e.target.value });
+    updateEdited({
+      ...editedProduction,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  handleEditChangeFloat = e => {
+    const { editedProduction, updateEdited } = this.props;
+    updateEdited({
+      ...editedProduction,
+      [e.target.name]: returnFloatChar(e.target.value)
+    });
+  };
+
+  handleEditChangeInt = e => {
+    const { editedProduction, updateEdited } = this.props;
+    updateEdited({
+      ...editedProduction,
+      [e.target.name]: returnIntChar(e.target.value)
+    });
   };
 
   handleEditDateSelect = date => {
@@ -60,6 +79,8 @@ class EditProduction extends React.Component {
   render() {
     const {
       handleEditChange,
+      handleEditChangeInt,
+      handleEditChangeFloat,
       handleEditDateSelect,
       handleEditProductionDateSelect,
       handleEditDateChange,
@@ -72,6 +93,8 @@ class EditProduction extends React.Component {
         <h3>Edycja pozycji</h3>
         <OrderlistEditProduction
           handleChange={handleEditChange}
+          handleChangeInt={handleEditChangeInt}
+          handleChangeFloat={handleEditChangeFloat}
           editedProduction={editedProduction}
           handleDateChange={handleEditDateChange}
           handleCheckBoxChange={handleEditCheckBoxChange}

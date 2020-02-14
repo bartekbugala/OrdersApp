@@ -9,24 +9,15 @@ import {
   SET_DATE_FILTER
 } from '../actions/productionsActions';
 
-export const emptyProduction = {
-  orderNumber: '',
-  clientName: '',
-  downpayment: '',
-  productionTerm: '',
-  finalPayment: false,
-  type: '',
-  colorOutside: '',
-  colorInside: '',
-  core: '',
-  thickness: '',
-  finished: false,
-  productionDate: '',
-  canceled: false,
-  transported: false,
-  m2: '',
-  csa: ''
-};
+import {
+  emptyProduction,
+  insideColors,
+  outsideColors,
+  panelTypes,
+  cSAgents,
+  panelCores,
+  panelThicknesses
+} from './initValues';
 
 const initialState = {
   allProductions: [],
@@ -36,7 +27,13 @@ const initialState = {
   canceledProductions: [],
   editedProduction: emptyProduction,
   newProduction: emptyProduction,
-  dateFilterParams: { startDateFilter: '', endDateFilter: '' }
+  dateFilterParams: { startDateFilter: '', endDateFilter: '' },
+  panelThicknesses: panelThicknesses,
+  panelTypes: panelTypes,
+  panelCores: panelCores,
+  cSAgents: cSAgents,
+  insideColors: insideColors,
+  outsideColors: outsideColors
 };
 
 //// Reducer

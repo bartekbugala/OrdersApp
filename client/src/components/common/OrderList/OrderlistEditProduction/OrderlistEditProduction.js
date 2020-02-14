@@ -10,6 +10,8 @@ const OrderlistEditProduction = ({
   startDate,
   editedProduction,
   handleChange,
+  handleChangeFloat,
+  handleChangeInt,
   handleCheckBoxChange,
   handleDateSelect,
   handleProductionDateSelect,
@@ -24,7 +26,7 @@ const OrderlistEditProduction = ({
             <input
               name="orderNumber"
               onChange={handleChange}
-              defaultValue={editedProduction.orderNumber}
+              value={editedProduction.orderNumber}
             />
           </td>
         </tr>
@@ -34,7 +36,7 @@ const OrderlistEditProduction = ({
             <input
               name="clientName"
               onChange={handleChange}
-              defaultValue={editedProduction.clientName}
+              value={editedProduction.clientName}
             />
           </td>
         </tr>
@@ -46,7 +48,8 @@ const OrderlistEditProduction = ({
               allowSameDay="true"
               name="downpayment"
               selected={
-                !isNaN(editedProduction.downpayment)
+                !isNaN(editedProduction.downpayment) &&
+                editedProduction.downpayment !== null
                   ? editedProduction.downpayment.toISOString() !==
                     '1970-01-01T00:00:00.000Z'
                     ? editedProduction.downpayment
@@ -55,7 +58,8 @@ const OrderlistEditProduction = ({
               }
               onSelect={handleDateSelect}
               value={
-                !isNaN(editedProduction.downpayment)
+                !isNaN(editedProduction.downpayment) &&
+                editedProduction.downpayment !== null
                   ? editedProduction.downpayment.toISOString() !==
                     '1970-01-01T00:00:00.000Z'
                     ? editedProduction.downpayment
@@ -71,10 +75,9 @@ const OrderlistEditProduction = ({
             <label>Termin produkcji</label>
             <input
               name="productionTerm"
-              type="number"
               step="1"
-              onChange={handleChange}
-              defaultValue={editedProduction.productionTerm}
+              onChange={handleChangeInt}
+              value={editedProduction.productionTerm}
             />
           </td>
         </tr>
@@ -87,7 +90,7 @@ const OrderlistEditProduction = ({
               name="productionDate"
               selected={
                 !isNaN(editedProduction.productionDate)
-                  ? editedProduction.productionDate.toISOString() !=
+                  ? editedProduction.productionDate.toISOString() !==
                     '1970-01-01T00:00:00.000Z'
                     ? editedProduction.productionDate
                     : ''
@@ -96,7 +99,7 @@ const OrderlistEditProduction = ({
               onSelect={handleProductionDateSelect}
               value={
                 !isNaN(editedProduction.productionDate)
-                  ? editedProduction.productionDate.toISOString() !=
+                  ? editedProduction.productionDate.toISOString() !==
                     '1970-01-01T00:00:00.000Z'
                     ? editedProduction.productionDate
                     : startDate
@@ -112,7 +115,7 @@ const OrderlistEditProduction = ({
             <input
               name="finalPayment"
               type="checkbox"
-              defaultValue={editedProduction.finalPayment}
+              value={editedProduction.finalPayment}
               checked={editedProduction.finalPayment}
               onChange={handleCheckBoxChange}
             />
@@ -220,14 +223,12 @@ const OrderlistEditProduction = ({
             <input
               list="thicknessList"
               name="thickness"
-              type="number"
-              onChange={handleChange}
+              onChange={handleChangeFloat}
               value={editedProduction.thickness}
             />
             <datalist
               id="thicknessList"
               onChange={handleChange}
-              type="number"
               value={editedProduction.thickness}>
               <option>25</option>
               <option>30</option>
@@ -253,9 +254,7 @@ const OrderlistEditProduction = ({
             </label>
             <input
               name="m2"
-              type="number"
-              step="any"
-              onChange={handleChange}
+              onChange={handleChangeFloat}
               value={editedProduction.m2}
             />
           </td>
@@ -269,7 +268,7 @@ const OrderlistEditProduction = ({
             <input
               name="csa"
               onChange={handleChange}
-              defaultValue={editedProduction.csa}
+              value={editedProduction.csa}
             />
           </td>
         </tr>
