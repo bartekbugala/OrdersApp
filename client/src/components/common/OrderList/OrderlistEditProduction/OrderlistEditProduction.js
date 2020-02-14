@@ -77,7 +77,7 @@ const OrderlistEditProduction = ({
               name="productionTerm"
               step="1"
               onChange={handleChangeInt}
-              defaultValue={editedProduction.productionTerm}
+              value={editedProduction.productionTerm}
             />
           </td>
         </tr>
@@ -223,12 +223,12 @@ const OrderlistEditProduction = ({
             <input
               list="thicknessList"
               name="thickness"
-              onChange={handleChange}
+              onChange={handleChangeFloat}
               value={editedProduction.thickness}
             />
             <datalist
               id="thicknessList"
-              onChange={handleChangeInt}
+              onChange={handleChange}
               value={editedProduction.thickness}>
               <option>25</option>
               <option>30</option>
@@ -268,7 +268,7 @@ const OrderlistEditProduction = ({
             <input
               name="csa"
               onChange={handleChange}
-              defaultValue={editedProduction.csa}
+              value={editedProduction.csa}
             />
           </td>
         </tr>
