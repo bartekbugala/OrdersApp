@@ -10,6 +10,8 @@ const OrderlistTrAdd = ({
   startDate,
   newProduction,
   handleChange,
+  handleChangeFloat,
+  handleChangeInt,
   handleCheckBoxChange,
   handleDateSelect
 }) => (
@@ -45,8 +47,7 @@ const OrderlistTrAdd = ({
     <td className={`${tdClass} rm-arrows`}>
       <input
         name="productionTerm"
-        type="number"
-        onChange={handleChange}
+        onChange={handleChangeInt}
         value={newProduction.productionTerm || ''}
       />
     </td>
@@ -146,8 +147,7 @@ const OrderlistTrAdd = ({
       <input
         list="thicknessList"
         name="thickness"
-        type="number"
-        onChange={handleChange}
+        onChange={handleChangeFloat}
         value={newProduction.thickness || ''}
       />
       <datalist
@@ -171,7 +171,11 @@ const OrderlistTrAdd = ({
       </datalist>
     </td>
     <td className={`${tdClass} rm-arrows`}>
-      <input name="m2" onChange={handleChange} value={newProduction.m2 || ''} />
+      <input
+        name="m2"
+        onChange={handleChangeFloat}
+        value={newProduction.m2 || ''}
+      />
     </td>
     <td className={`${tdClass}`}></td>
     <td className={`${tdClass}`}>

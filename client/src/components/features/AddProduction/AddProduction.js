@@ -1,9 +1,27 @@
 import React from 'react';
 import OrderlistTrAdd from '../../common/OrderList/OrderlistTrAdd/OrderlistTrAdd';
+import { returnFloatChar, returnIntChar } from '../../../utils/inputValidation';
 
 const AddProduction = ({ newProduction, startDate, updateNew }) => {
   const handleChange = e => {
-    updateNew({ ...newProduction, [e.target.name]: e.target.value });
+    updateNew({
+      ...newProduction,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleChangeFloat = e => {
+    updateNew({
+      ...newProduction,
+      [e.target.name]: returnFloatChar(e.target.value)
+    });
+  };
+
+  const handleChangeInt = e => {
+    updateNew({
+      ...newProduction,
+      [e.target.name]: returnIntChar(e.target.value)
+    });
   };
 
   const handleDateSelect = date => {
@@ -25,6 +43,8 @@ const AddProduction = ({ newProduction, startDate, updateNew }) => {
   return (
     <OrderlistTrAdd
       handleChange={handleChange}
+      handleChangeFloat={handleChangeFloat}
+      handleChangeInt={handleChangeInt}
       newProduction={newProduction}
       handleDateChange={handleDateChange}
       handleCheckBoxChange={handleCheckBoxChange}
