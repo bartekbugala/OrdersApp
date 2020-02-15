@@ -6,7 +6,7 @@ class FinishedProductionsPage extends React.Component {
   render() {
     return (
       <section>
-        <Title>Wyprodukowane produkcje</Title>
+        <Title>Wyprodukowane</Title>
         <FinishedProductions />
       </section>
     );

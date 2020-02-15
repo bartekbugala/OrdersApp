@@ -6,7 +6,7 @@ class CurrentProductionsPage extends React.Component {
   render() {
     return (
       <section>
-        <Title>Statystyki - {new Date(Date.now()).toLocaleDateString()}</Title>
+        <Title>Statystyki</Title>
         <ProductionStats />
       </section>
     );

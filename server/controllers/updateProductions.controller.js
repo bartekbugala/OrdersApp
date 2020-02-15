@@ -12,17 +12,18 @@ exports.updateProduction = async (req, res) => {
       type,
       colorOutside,
       colorInside,
+      finished,
       core,
       thickness,
       m2,
       csa,
-      finished,
       productionDate,
       canceled,
       transported
     } = req.body;
     const productionUpdated = await Production.findOneAndUpdate(
       { id: req.params.id },
+
       {
         orderNumber: orderNumber,
         clientName: clientName,
@@ -36,10 +37,10 @@ exports.updateProduction = async (req, res) => {
         thickness: thickness,
         m2: m2,
         csa: csa,
-        finished: finished,
+        finished: productionDate !== null ? true : false,
         productionDate: productionDate,
         canceled: canceled,
-        transported: transported
+        transported: productionDate !== null && finished === true ? true : false
       }
     );
     res.status(200).json(productionUpdated);

@@ -33,6 +33,7 @@ class EditProduction extends React.Component {
 
   handleEditDateSelect = date => {
     const { editedProduction, updateEdited } = this.props;
+    console.log(date);
     updateEdited({ ...editedProduction, downpayment: date });
   };
 
