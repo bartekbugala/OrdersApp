@@ -2,11 +2,11 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import { isEqual } from 'lodash';
 // components
-import EditProduction from '../../features/EditProduction/EditProductionContainer';
-import ProductionsList from '../../features/ProductionsList/ProductionsList';
-import ProductionsListFilter from '../../features/ProductionsListFilter/ProductionsListFilterContainer';
-import Alert from '../../common/Alert/Alert';
-import Spinner from '../../common/Spinner/Spinner';
+import EditProduction from '../productionLists.common/EditProduction/EditProductionContainer';
+import ProductionsList from '../productionLists.common/ProductionsList/ProductionsList';
+import ProductionsListFilter from '../productionLists.common/ProductionsListFilter/ProductionsListFilterContainer';
+import Alert from '../../../common/Alert/Alert';
+import Spinner from '../../../common/Spinner/Spinner';
 
 class CanceledProductions extends React.Component {
   constructor(props) {

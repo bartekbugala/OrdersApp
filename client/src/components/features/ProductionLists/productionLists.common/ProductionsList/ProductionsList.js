@@ -1,13 +1,13 @@
 import React from 'react';
 import { MdAttachMoney, MdMoneyOff } from 'react-icons/md';
 // utils
-import formatDate from '../../../utils/formatDate';
-import countDaysLeft from '../../../utils/countDaysLeft';
-import currentFromSquareMeters from '../../../utils/currentFromSquareMeters';
-import cutText from '../../../utils/cutText';
+import formatDate from '../../../../../utils/formatDate';
+import countDaysLeft from '../../../../../utils/countDaysLeft';
+import currentFromSquareMeters from '../../../../../utils/currentFromSquareMeters';
+import cutText from '../../../../../utils/cutText';
 // components
-import OrderListTable from '../../common/OrderList/OrderListTable/OrderListTable';
-import ProductionButtons from '../../features/ProductionButtons/ProductionButtonsContainer';
+import OrderListTable from '../../../../common/OrderList/OrderListTable/OrderListTable';
+import ProductionButtons from '../ProductionButtons/ProductionButtonsContainer';
 
 const tdClass = 'production-list-td';
 const ProductionsList = ({

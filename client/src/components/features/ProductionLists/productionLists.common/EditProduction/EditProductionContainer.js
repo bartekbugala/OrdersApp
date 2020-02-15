@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
-import { updateEdited } from '../../../redux/thunks/productions.thunks';
-import { updateProductionRequest } from '../../../redux/thunks/productionsRequest.thunks';
-import { loadEditedProductionRequest } from '../../../redux/thunks/productionsReadRequest.thunks';
+import { updateEdited } from '../../../../../redux/thunks/productions.thunks';
+import { updateProductionRequest } from '../../../../../redux/thunks/productionsRequest.thunks';
+import { loadEditedProductionRequest } from '../../../../../redux/thunks/productionsReadRequest.thunks';
 import EditProduction from './EditProduction';
 
 const mapStateToProps = state => ({});

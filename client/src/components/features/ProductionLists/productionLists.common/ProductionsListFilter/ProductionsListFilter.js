@@ -2,8 +2,8 @@ import React from 'react';
 import DatePicker from 'react-datepicker';
 import { isEqual } from 'lodash';
 import 'react-datepicker/dist/react-datepicker.css';
-import ConfirmButton from '../../common/Buttons/ConfirmButton/ConfirmButton';
-import CancelButton from '../../common/Buttons/CancelButton/CancelButton';
+import ConfirmButton from '../../../../common/Buttons/ConfirmButton/ConfirmButton';
+import CancelButton from '../../../../common/Buttons/CancelButton/CancelButton';
 
 class ProductionsListFilter extends React.Component {
   componentDidUpdate(prevProps) {

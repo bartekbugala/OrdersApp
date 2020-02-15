@@ -2,26 +2,27 @@ import { connect } from 'react-redux';
 import {
   resetUpdateRequest,
   resetRequest
-} from '../../../redux/actions/requestsActions';
+} from '../../../../redux/actions/requestsActions';
 import {
-  getTransportedProductions,
+  getCanceledProductions,
   getUpdateRequest,
   getRequest,
   getSortParams,
   getEditedProduction,
   getDateFilterParams
-} from '../../../redux/selectors';
-import { sortTransportedProductions } from '../../../redux/thunks/sortingThunks';
+} from '../../../../redux/selectors';
+import { sortCanceledProductions } from '../../../../redux/thunks/sortingThunks';
+import { resetNew } from '../../../../redux/thunks/productions.thunks';
 import {
-  loadTransportedProductionsRequest,
+  loadCanceledProductionsRequest,
   loadEditedProductionRequest
-} from '../../../redux/thunks/productionsReadRequest.thunks';
-import { updateProductionRequest } from '../../../redux/thunks/productionsRequest.thunks';
+} from '../../../../redux/thunks/productionsReadRequest.thunks';
+import { updateProductionRequest } from '../../../../redux/thunks/productionsRequest.thunks';
 
-import TransportedProductions from './TransportedProductions';
+import CanceledProductions from './CanceledProductions';
 
 const mapStateToProps = state => ({
-  transportedProductions: getTransportedProductions(state),
+  canceledProductions: getCanceledProductions(state),
   updateRequest: getUpdateRequest(state),
   sortParams: getSortParams(state),
   request: getRequest(state),
@@ -30,7 +31,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  loadTransportedProductions: (
+  loadCanceledProductions: (
     key = 'orderNumber',
     valueType = 'number',
     direction = 'asc',
@@ -40,7 +41,7 @@ const mapDispatchToProps = dispatch => ({
     }
   ) =>
     dispatch(
-      loadTransportedProductionsRequest(
+      loadCanceledProductionsRequest(
         key,
         valueType,
         direction,
@@ -48,22 +49,13 @@ const mapDispatchToProps = dispatch => ({
       )
     ),
   loadEditedProduction: id => dispatch(loadEditedProductionRequest(id)),
-  sortTransportedProductions: (
-    transportedProductions,
-    key,
-    valueType,
-    direction
-  ) =>
+  sortCanceledProductions: (canceledProductions, key, valueType, direction) =>
     dispatch(
-      sortTransportedProductions(
-        transportedProductions,
-        key,
-        valueType,
-        direction
-      )
+      sortCanceledProductions(canceledProductions, key, valueType, direction)
     ),
-  updateProduction: (id, production, thunk) =>
-    dispatch(updateProductionRequest(id, production, thunk)),
+  resetNew: () => dispatch(resetNew()),
+  updateProduction: (id, production) =>
+    dispatch(updateProductionRequest(id, production)),
   resetUpdateRequest: () => dispatch(resetUpdateRequest()),
   resetRequest: () => dispatch(resetRequest())
 });
@@ -71,4 +63,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(TransportedProductions);
+)(CanceledProductions);

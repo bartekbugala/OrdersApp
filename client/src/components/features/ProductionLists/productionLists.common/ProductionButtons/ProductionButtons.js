@@ -1,10 +1,10 @@
 import React from 'react';
-import EditButton from '../../common/Buttons/EditButton/EditButton';
-import ProduceButton from '../../common/Buttons/ProduceButton/ProduceButton';
-import TransportButton from '../../common/Buttons/TransportButton/TransportButton';
-import CancelButton from '../../common/Buttons/CancelButton/CancelButton';
-import DeleteButton from '../../common/Buttons/DeleteButton/DeleteButton';
-import RestoreButton from '../../common/Buttons/RestoreButton/RestoreButton';
+import EditButton from '../../../../common/Buttons/EditButton/EditButton';
+import ProduceButton from '../../../../common/Buttons/ProduceButton/ProduceButton';
+import TransportButton from '../../../../common/Buttons/TransportButton/TransportButton';
+import CancelButton from '../../../../common/Buttons/CancelButton/CancelButton';
+import DeleteButton from '../../../../common/Buttons/DeleteButton/DeleteButton';
+import RestoreButton from '../../../../common/Buttons/RestoreButton/RestoreButton';
 
 const ProductionButtons = ({
   production,

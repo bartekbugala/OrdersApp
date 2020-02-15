@@ -2,30 +2,31 @@ import { connect } from 'react-redux';
 import {
   resetUpdateRequest,
   resetRequest
-} from '../../../redux/actions/requestsActions';
+} from '../../../../redux/actions/requestsActions';
 import {
-  getAllProductions,
+  getCurrentProductions,
   getUpdateRequest,
   getRequest,
   getSortParams,
   getEditedProduction,
   getNewProduction,
   getDateFilterParams
-} from '../../../redux/selectors';
-import { sortAllProductions } from '../../../redux/thunks/sortingThunks';
-import { resetNew } from '../../../redux/thunks/productions.thunks';
+} from '../../../../redux/selectors';
+import { sortCurrentProductions } from '../../../../redux/thunks/sortingThunks';
+import { resetNew } from '../../../../redux/thunks/productions.thunks';
 import {
-  loadAllProductionsRequest,
+  loadCurrentProductionsRequest,
   loadEditedProductionRequest
-} from '../../../redux/thunks/productionsReadRequest.thunks';
+} from '../../../../redux/thunks/productionsReadRequest.thunks';
 import {
   addProductionRequest,
   updateProductionRequest
-} from '../../../redux/thunks/productionsRequest.thunks';
-import AllProductions from './AllProductions';
+} from '../../../../redux/thunks/productionsRequest.thunks';
+
+import CurrentProductions from './CurrentProductions';
 
 const mapStateToProps = state => ({
-  allProductions: getAllProductions(state),
+  currentProductions: getCurrentProductions(state),
   updateRequest: getUpdateRequest(state),
   sortParams: getSortParams(state),
   request: getRequest(state),
@@ -33,8 +34,9 @@ const mapStateToProps = state => ({
   newProduction: getNewProduction(state),
   dateFilterParams: getDateFilterParams(state)
 });
+
 const mapDispatchToProps = dispatch => ({
-  loadAllProductions: (
+  loadCurrentProductions: (
     key = 'orderNumber',
     valueType = 'number',
     direction = 'asc',
@@ -44,17 +46,17 @@ const mapDispatchToProps = dispatch => ({
     }
   ) =>
     dispatch(
-      loadAllProductionsRequest(key, valueType, direction, dateFilterParams)
+      loadCurrentProductionsRequest(key, valueType, direction, dateFilterParams)
     ),
   loadEditedProduction: id => dispatch(loadEditedProductionRequest(id)),
-  sortAllProductions: (allProductions, key, valueType, direction) =>
-    dispatch(sortAllProductions(allProductions, key, valueType, direction)),
+  sortCurrentProductions: (allProductions, key, valueType, direction) =>
+    dispatch(sortCurrentProductions(allProductions, key, valueType, direction)),
   addProduction: production => dispatch(addProductionRequest(production)),
   updateProduction: (id, production) =>
     dispatch(updateProductionRequest(id, production)),
   resetNew: () => dispatch(resetNew()),
-  resetRequest: () => dispatch(resetRequest()),
-  resetUpdateRequest: () => dispatch(resetUpdateRequest())
+  resetUpdateRequest: () => dispatch(resetUpdateRequest()),
+  resetRequest: () => dispatch(resetRequest())
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AllProductions);
+export default connect(mapStateToProps, mapDispatchToProps)(CurrentProductions);

@@ -2,13 +2,13 @@ import React from 'react';
 import { PropTypes } from 'prop-types';
 import { isEqual } from 'lodash';
 // components
-import EditProduction from '../../features/EditProduction/EditProductionContainer';
-import ProductionsList from '../../features/ProductionsList/ProductionsList';
-import ProductionsListFilter from '../../features/ProductionsListFilter/ProductionsListFilterContainer';
-import Alert from '../../common/Alert/Alert';
-import Spinner from '../../common/Spinner/Spinner';
+import EditProduction from '../productionLists.common/EditProduction/EditProductionContainer';
+import ProductionsList from '../productionLists.common/ProductionsList/ProductionsList';
+import ProductionsListFilter from '../productionLists.common/ProductionsListFilter/ProductionsListFilterContainer';
+import Alert from '../../../common/Alert/Alert';
+import Spinner from '../../../common/Spinner/Spinner';
 
-class FinishedProductions extends React.Component {
+class TransportedProductions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,11 +21,11 @@ class FinishedProductions extends React.Component {
 
   componentDidMount() {
     const {
-      loadFinishedProductions,
+      loadTransportedProductions,
       sortParams,
       dateFilterParams
     } = this.props;
-    loadFinishedProductions(
+    loadTransportedProductions(
       sortParams.key,
       sortParams.valueType,
       sortParams.direction,
@@ -35,13 +35,16 @@ class FinishedProductions extends React.Component {
 
   componentDidUpdate(prevProps) {
     const {
-      loadFinishedProductions,
+      loadTransportedProductions,
       sortParams,
-      finishedProductions,
+      transportedProductions,
       dateFilterParams
     } = this.props;
-    if (isEqual(finishedProductions, prevProps.finishedProductions) === false) {
-      loadFinishedProductions(
+    if (
+      isEqual(transportedProductions, prevProps.transportedProductions) ===
+      false
+    ) {
+      loadTransportedProductions(
         sortParams.key,
         sortParams.valueType,
         sortParams.direction,
@@ -68,19 +71,25 @@ class FinishedProductions extends React.Component {
     valueType = 'number',
     direction = 'asc'
   ) => {
-    const { finishedProductions, sortFinishedProductions } = this.props;
-    sortFinishedProductions(finishedProductions, key, valueType, direction);
+    const { transportedProductions } = this.props;
+    const { sortTransportedProductions } = this.props;
+    sortTransportedProductions(
+      transportedProductions,
+      key,
+      valueType,
+      direction
+    );
   };
 
   render() {
     const { handleSort, closeEdit, editHandler } = this;
     const {
-      finishedProductions,
+      transportedProductions,
       updateRequest,
       request,
       editedProduction,
       sortParams,
-      loadFinishedProductions
+      loadTransportedProductions
     } = this.props;
     const { startDate } = this.state;
 
@@ -94,19 +103,19 @@ class FinishedProductions extends React.Component {
             editedProduction={editedProduction}
             startDate={startDate}
             closeEdit={closeEdit}
-            loadProductions={loadFinishedProductions}
+            loadProductions={loadTransportedProductions}
           />
         )}
         <ProductionsListFilter
           startDate={startDate}
-          loadProductions={loadFinishedProductions}
+          loadProductions={loadTransportedProductions}
           sortParams={sortParams}
         />
         <form onSubmit={this.handleAddForm} autoComplete="off">
           <ProductionsList
             handleSort={handleSort}
-            productions={finishedProductions}
-            loadProductions={loadFinishedProductions}
+            productions={transportedProductions}
+            loadProductions={loadTransportedProductions}
             editHandler={editHandler}
             startDate={startDate}
           />
@@ -115,11 +124,10 @@ class FinishedProductions extends React.Component {
     );
   }
 }
-export default FinishedProductions;
-
-FinishedProductions.propTypes = {
+export default TransportedProductions;
+TransportedProductions.propTypes = {
   updateRequest: PropTypes.object.isRequired,
-  finishedProductions: PropTypes.arrayOf(
+  transportedProductions: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
       orderNumber: PropTypes.string,

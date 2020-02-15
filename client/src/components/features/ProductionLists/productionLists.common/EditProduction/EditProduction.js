@@ -1,7 +1,10 @@
 import React from 'react';
-import OrderlistEditProduction from '../../common/OrderList/OrderlistEditProduction/OrderlistEditProduction';
-import Modal from '../../common/Modal/Modal';
-import { returnFloatChar, returnIntChar } from '../../../utils/inputValidation';
+import OrderlistEditProduction from '../../../../common/OrderList/OrderlistEditProduction/OrderlistEditProduction';
+import Modal from '../../../../common/Modal/Modal';
+import {
+  returnFloatChar,
+  returnIntChar
+} from '../../../../../utils/inputValidation';
 
 class EditProduction extends React.Component {
   handleEditChange = e => {

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { updateNew } from '../../../redux/thunks/productions.thunks';
+import { updateNew } from '../../../../../redux/thunks/productions.thunks';
 import AddProduction from './AddProduction';
 
 const mapStateToProps = state => ({});

@@ -4,7 +4,7 @@ import {
   toggleFinishProductionRequest,
   toggleTransportProductionRequest,
   deleteProductionRequest
-} from '../../../redux/thunks/productionsRequest.thunks';
+} from '../../../../../redux/thunks/productionsRequest.thunks';
 import ProductionButtons from './ProductionButtons';
 
 const mapStateToProps = state => ({});

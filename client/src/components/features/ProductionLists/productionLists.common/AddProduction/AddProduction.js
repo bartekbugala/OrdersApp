@@ -1,6 +1,9 @@
 import React from 'react';
-import OrderlistTrAdd from '../../common/OrderList/OrderlistTrAdd/OrderlistTrAdd';
-import { returnFloatChar, returnIntChar } from '../../../utils/inputValidation';
+import OrderlistTrAdd from '../../../../common/OrderList/OrderlistTrAdd/OrderlistTrAdd';
+import {
+  returnFloatChar,
+  returnIntChar
+} from '../../../../../utils/inputValidation';
 
 const AddProduction = ({ newProduction, startDate, updateNew }) => {
   const handleChange = e => {

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import ProductionsListFilter from './ProductionsListFilter';
-import { getDateFilterParams } from '../../../redux/selectors';
-import { setDateFilterParams } from '../../../redux/actions/productionsActions';
+import { getDateFilterParams } from '../../../../../redux/selectors';
+import { setDateFilterParams } from '../../../../../redux/actions/productionsActions';
 
 const mapStateToProps = state => ({
   dateFilterParams: getDateFilterParams(state)
