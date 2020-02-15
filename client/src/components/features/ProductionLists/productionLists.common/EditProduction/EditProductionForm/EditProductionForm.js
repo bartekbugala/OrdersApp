@@ -43,28 +43,19 @@ const EditProductionForm = ({
         <tr className="noprint">
           <td className={`${tdClass}`}>
             <label>Data wpłaty zaliczki</label>
-            {/* Null ISO String: 1970-01-01T00:00:00.000Z */}
             <DatePicker
               allowSameDay="true"
               name="downpayment"
               selected={
-                !isNaN(editedProduction.downpayment) &&
-                editedProduction.downpayment !== null
-                  ? editedProduction.downpayment.toISOString() !==
-                    '1970-01-01T00:00:00.000Z'
-                    ? editedProduction.downpayment
-                    : ''
-                  : ''
+                editedProduction.downpayment === null
+                  ? ''
+                  : new Date(editedProduction.downpayment)
               }
               onSelect={handleDateSelect}
               value={
-                !isNaN(editedProduction.downpayment) &&
-                editedProduction.downpayment !== null
-                  ? editedProduction.downpayment.toISOString() !==
-                    '1970-01-01T00:00:00.000Z'
-                    ? editedProduction.downpayment
-                    : startDate
-                  : startDate
+                editedProduction.downpayment === null
+                  ? ''
+                  : new Date(editedProduction.downpayment)
               }
               dateFormat="dd.MM.yyyy"
             />
@@ -84,26 +75,19 @@ const EditProductionForm = ({
         <tr className="noprint">
           <td className={`${tdClass}`}>
             <label>Data produkcji</label>
-            {/* Null ISO String: 1970-01-01T00:00:00.000Z */}
             <DatePicker
               allowSameDay="true"
               name="productionDate"
               selected={
-                !isNaN(editedProduction.productionDate)
-                  ? editedProduction.productionDate.toISOString() !==
-                    '1970-01-01T00:00:00.000Z'
-                    ? editedProduction.productionDate
-                    : ''
-                  : ''
+                editedProduction.productionDate === null
+                  ? ''
+                  : new Date(editedProduction.productionDate)
               }
               onSelect={handleProductionDateSelect}
               value={
-                !isNaN(editedProduction.productionDate)
-                  ? editedProduction.productionDate.toISOString() !==
-                    '1970-01-01T00:00:00.000Z'
-                    ? editedProduction.productionDate
-                    : startDate
-                  : startDate
+                editedProduction.productionDate === null
+                  ? ''
+                  : new Date(editedProduction.productionDate)
               }
               dateFormat="dd.MM.yyyy"
             />
