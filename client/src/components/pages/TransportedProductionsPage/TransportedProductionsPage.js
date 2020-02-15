@@ -1,5 +1,5 @@
 import React from 'react';
-import TransportedProductions from '../../features/TransportedProductions/TransportedProductionsContainer';
+import TransportedProductions from '../../features/ProductionLists/TransportedProductions/TransportedProductionsContainer';
 import Title from '../../common/Title/Title';
 
 class TransportedProductionsPage extends React.Component {

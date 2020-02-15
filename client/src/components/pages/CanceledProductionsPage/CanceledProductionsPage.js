@@ -1,5 +1,5 @@
 import React from 'react';
-import CanceledProductions from '../../features/CanceledProductions/CanceledProductionsContainer';
+import CanceledProductions from '../../features/ProductionLists/CanceledProductions/CanceledProductionsContainer';
 import Title from '../../common/Title/Title';
 
 class CanceledProductionsPage extends React.Component {

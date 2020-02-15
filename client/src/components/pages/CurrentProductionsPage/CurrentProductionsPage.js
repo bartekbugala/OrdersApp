@@ -1,5 +1,5 @@
 import React from 'react';
-import CurrentProductions from '../../features/CurrentProductions/CurrentProductionsContainer';
+import CurrentProductions from '../../features/ProductionLists/CurrentProductions/CurrentProductionsContainer';
 import Title from '../../common/Title/Title';
 
 class CurrentProductionsPage extends React.Component {

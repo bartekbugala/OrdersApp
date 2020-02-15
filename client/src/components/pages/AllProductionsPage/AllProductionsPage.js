@@ -1,5 +1,5 @@
 import React from 'react';
-import AllProductions from '../../features/AllProductions/AllProductionsContainer';
+import AllProductions from '../../features/ProductionLists/AllProductions/AllProductionsContainer';
 import Title from '../../common/Title/Title';
 
 class AllProductionsPage extends React.Component {
