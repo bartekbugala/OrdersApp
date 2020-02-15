@@ -10,10 +10,10 @@ import {
 import { FaUserTie } from 'react-icons/fa';
 import { AiOutlineColumnHeight } from 'react-icons/ai';
 
-import '../../../../styles/global.scss';
-import './OrderlistThead.scss';
+import '../../../../../../../styles/global.scss';
+import './ProductionsListThead.scss';
 
-const OrderlistThead = ({ sortColumn }) => {
+const ProductionsListThead = ({ sortColumn }) => {
   const thClass = 'text-center';
   return (
     <thead>
@@ -137,4 +137,4 @@ const OrderlistThead = ({ sortColumn }) => {
   );
 };
 
-export default OrderlistThead;
+export default ProductionsListThead;

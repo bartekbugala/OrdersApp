@@ -6,7 +6,7 @@ import countDaysLeft from '../../../../../utils/countDaysLeft';
 import currentFromSquareMeters from '../../../../../utils/currentFromSquareMeters';
 import cutText from '../../../../../utils/cutText';
 // components
-import OrderListTable from '../../../../common/OrderList/OrderListTable/OrderListTable';
+import ProductionsListTable from './ProductionsListTable/ProductionsListTable';
 import ProductionButtons from '../ProductionButtons/ProductionButtonsContainer';
 
 const tdClass = 'production-list-td';
@@ -18,7 +18,7 @@ const ProductionsList = ({
   children
 }) => {
   return (
-    <OrderListTable
+    <ProductionsListTable
       sortColumn={(key, valueType) => {
         handleSort(key, valueType);
       }}>
@@ -103,7 +103,7 @@ const ProductionsList = ({
         );
       })}
       {children}
-    </OrderListTable>
+    </ProductionsListTable>
   );
 };
 

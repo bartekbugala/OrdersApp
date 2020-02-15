@@ -1,5 +1,5 @@
 import React from 'react';
-import OrderlistTrAdd from '../../../../common/OrderList/OrderlistTrAdd/OrderlistTrAdd';
+import ProductionsListTrAdd from '../ProductionsList/ProductionsListTable/ProductionsListTrAdd/ProductionsListTrAdd';
 import {
   returnFloatChar,
   returnIntChar
@@ -44,7 +44,7 @@ const AddProduction = ({ newProduction, startDate, updateNew }) => {
   };
 
   return (
-    <OrderlistTrAdd
+    <ProductionsListTrAdd
       handleChange={handleChange}
       handleChangeFloat={handleChangeFloat}
       handleChangeInt={handleChangeInt}

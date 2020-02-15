@@ -1,12 +1,12 @@
 import React from 'react';
-import AddRowButton from '../../Buttons/AddRowButton/AddRowButton';
+import AddRowButton from '../../../../../../common/Buttons/AddRowButton/AddRowButton';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import './OrderlistTrAdd.scss';
+import './ProductionsListTrAdd.scss';
 
 const tdClass = 'td-class form-td';
 
-const OrderlistTrAdd = ({
+const ProductionsListTrAdd = ({
   startDate,
   newProduction,
   handleChange,
@@ -191,4 +191,4 @@ const OrderlistTrAdd = ({
   </tr>
 );
 
-export default OrderlistTrAdd;
+export default ProductionsListTrAdd;

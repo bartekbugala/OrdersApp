@@ -1,5 +1,5 @@
 import React from 'react';
-import OrderlistEditProduction from '../../../../common/OrderList/OrderlistEditProduction/OrderlistEditProduction';
+import EditProductionForm from './EditProductionForm/EditProductionForm';
 import Modal from '../../../../common/Modal/Modal';
 import {
   returnFloatChar,
@@ -94,7 +94,7 @@ class EditProduction extends React.Component {
     return (
       <Modal handleModal={closeEdit}>
         <h3>Edycja pozycji</h3>
-        <OrderlistEditProduction
+        <EditProductionForm
           handleChange={handleEditChange}
           handleChangeInt={handleEditChangeInt}
           handleChangeFloat={handleEditChangeFloat}

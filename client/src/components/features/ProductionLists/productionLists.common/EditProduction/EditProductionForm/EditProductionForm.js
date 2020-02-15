@@ -1,12 +1,12 @@
 import React from 'react';
-import ConfirmButton from '../../Buttons/ConfirmButton/ConfirmButton';
+import ConfirmButton from '../../../../../common/Buttons/ConfirmButton/ConfirmButton';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import './OrderlistEditProduction.scss';
+import './EditProductionForm.scss';
 
 const tdClass = 'td-class form-td';
 
-const OrderlistEditProduction = ({
+const EditProductionForm = ({
   startDate,
   editedProduction,
   handleChange,
@@ -283,4 +283,4 @@ const OrderlistEditProduction = ({
   </form>
 );
 
-export default OrderlistEditProduction;
+export default EditProductionForm;
