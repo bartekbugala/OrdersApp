@@ -17,7 +17,7 @@ import {
   cSAgents,
   panelCores,
   panelThicknesses
-} from './initValues';
+} from '../initValues';
 
 const initialState = {
   allProductions: [],
