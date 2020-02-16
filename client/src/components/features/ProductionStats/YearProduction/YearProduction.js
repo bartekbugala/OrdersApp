@@ -28,16 +28,16 @@ const YearProduction = ({ productions }) => {
       <tbody>
         <tr>
           <th>Kod</th>
-          {monthsArr.map(el => (
-            <th>{el}</th>
+          {monthsArr.map((el, ind) => (
+            <th key={ind}>{el}</th>
           ))}
         </tr>
-        {propsArrayFromArray(productions, 'csa').map(el => {
+        {propsArrayFromArray(productions, 'csa').map((el, indx) => {
           return (
-            <tr>
+            <tr key={indx}>
               <td>{el}</td>
               {monthsArr.map((subEl, index) => (
-                <td>
+                <td key={index}>
                   {countM2(
                     filterByMonth(
                       filterByType(productions, 'csa', `${el}`),
@@ -53,7 +53,7 @@ const YearProduction = ({ productions }) => {
         <tr>
           <td>RAZEM</td>
           {monthsArr.map((subEl, index) => (
-            <td>
+            <td key={index}>
               {countM2(
                 filterByMonth(productions, 'productionDate', `${index + 1}`)
               )}

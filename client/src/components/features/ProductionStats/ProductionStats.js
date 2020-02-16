@@ -48,7 +48,6 @@ class CurrentProductions extends React.Component {
       'productionDate',
       `${fullYear - 1}`
     );
-    console.log(currentProductions);
     return (
       <div className="row">
         <div className="col-4">
