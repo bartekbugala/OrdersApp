@@ -13,6 +13,11 @@ export function formField(label, name, value, handler, datalistArr = null) {
           name={`${name}`}
           className={`form-control`}
           onChange={handler}
+          onDoubleClick={e => {
+            if (e.target.value !== null) {
+              e.target.value = null;
+            }
+          }}
           value={value}
           list={`${datalistArr !== null ? datalistArr : ''}`}
         />
@@ -36,6 +41,11 @@ export function twoFieldsInRow(fieldObj1, fieldObj2) {
           name={`${fieldObj1.name}`}
           className="form-control col-5"
           onChange={fieldObj1.handler}
+          onDoubleClick={e => {
+            if (e.target.value !== null) {
+              e.target.value = null;
+            }
+          }}
           value={fieldObj1.value}
           list={`${
             fieldObj1.datalistArr !== null ? fieldObj1.datalistArr : ''
@@ -61,6 +71,11 @@ export function twoFieldsInRow(fieldObj1, fieldObj2) {
           name={`${fieldObj2.name}`}
           className="form-control col-5"
           onChange={fieldObj2.handler}
+          onDoubleClick={e => {
+            if (e.target.value !== null) {
+              e.target.value = null;
+            }
+          }}
           value={fieldObj2.value}
           list={`${
             fieldObj2.datalistArr !== null ? fieldObj2.datalistArr : ''
@@ -82,12 +97,7 @@ export function twoFieldsInRow(fieldObj1, fieldObj2) {
 
 export function dataList(id, name, handler, value, optArray = []) {
   return (
-    <datalist
-      id={`${id}`}
-      name={`${id}`}
-      /* value={value} */
-      /* onChange={handler} */
-    >
+    <datalist id={`${id}`} name={`${id}`}>
       {optArray.map((option, ind) => (
         <option key={ind}>{option}</option>
       ))}
