@@ -12,8 +12,6 @@ import {
 import 'react-datepicker/dist/react-datepicker.css';
 import './EditProductionForm.scss';
 
-const tdClass = 'td-class form-td';
-
 const EditProductionForm = ({
   editedProduction,
   handleChange,
