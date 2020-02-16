@@ -21,9 +21,9 @@ const RequiredSteelInsideWall = ({ productions }) => {
         {propsArrayFromArray(
           filterByType(productions, 'type', 'D'),
           'colorInside'
-        ).map(el => {
+        ).map((el, ind) => {
           return (
-            <tr>
+            <tr key={ind}>
               <td>{el}</td>
               <td>1250</td>
               <td>

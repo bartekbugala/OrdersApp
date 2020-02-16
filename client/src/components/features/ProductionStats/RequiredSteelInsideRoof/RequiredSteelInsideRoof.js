@@ -21,9 +21,9 @@ const RequiredSteelInsideRoof = ({ productions }) => {
         {propsArrayFromArray(
           filterByType(productions, 'type', 'D'),
           'colorInside'
-        ).map(el => {
+        ).map((el, ind) => {
           return (
-            <tr>
+            <tr key={ind}>
               <td>{el}</td>
               <td>1065</td>
               <td>

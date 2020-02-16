@@ -18,9 +18,9 @@ const RequiredSteelOutside = ({ productions }) => {
         </tr>
       </thead>
       <tbody>
-        {propsArrayFromArray(productions, 'colorOutside').map(el => {
+        {propsArrayFromArray(productions, 'colorOutside').map((el, ind) => {
           return (
-            <tr>
+            <tr key={ind}>
               <td>{el}</td>
               <td>1250</td>
               <td>{countM(filterByType(productions, 'colorOutside', el))}</td>
