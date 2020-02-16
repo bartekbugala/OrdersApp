@@ -1,5 +1,4 @@
 import React from 'react';
-import ConfirmButton from '../../../../../common/Buttons/ConfirmButton/ConfirmButton';
 import DatePicker from 'react-datepicker';
 import {
   outsideColors,
@@ -9,6 +8,10 @@ import {
   panelCores,
   panelThicknesses
 } from '../../../../../../redux/initValues';
+import {
+  formField,
+  twoFieldsInRow
+} from '../../../../../../utils/formGenerators';
 import 'react-datepicker/dist/react-datepicker.css';
 import './EditProductionForm.scss';
 
@@ -23,28 +26,30 @@ const EditProductionForm = ({
   handleForm
 }) => (
   <form onSubmit={handleForm} autoComplete="off">
-    <div className="form-group">
-      <div className="form-inline">
-        <label for="orderNumberField">Nr. zamówienia</label>
-        <input
-          className="form-control"
-          id="orderNumberField"
-          name="orderNumber"
-          onChange={handleChange}
-          value={editedProduction.orderNumber}
-        />
-      </div>
-      <div className="form-inline">
-        <label>Nazwa klienta</label>
-        <input
-          className="form-control"
-          name="clientName"
-          onChange={handleChange}
-          value={editedProduction.clientName}
-        />
-      </div>
-      <div className="form-inline">
-        <label>Data wpłaty zaliczki</label>
+    {twoFieldsInRow(
+      {
+        label: 'Nr. zamówienia',
+        name: 'orderNumber',
+        value: editedProduction.orderNumber,
+        handler: handleChange
+      },
+      {
+        label: 'Handlowiec',
+        name: 'csa',
+        value: editedProduction.csa,
+        handler: handleChange,
+        datalistArr: cSAgents
+      }
+    )}
+    {formField(
+      'Nazwa klienta',
+      'clientName',
+      editedProduction.clientName,
+      handleChange
+    )}
+    <div className="form-group row">
+      <label className="col-4 col-form-label">Data wpłaty zaliczki </label>
+      <div className="col-6">
         <DatePicker
           className="form-control"
           allowSameDay="true"
@@ -63,19 +68,20 @@ const EditProductionForm = ({
           dateFormat="dd.MM.yyyy"
         />
       </div>
-      <div className="form-inline">
-        <label>Termin produkcji</label>
-        <input
-          className="form-control"
-          name="productionTerm"
-          step="1"
-          onChange={handleChangeInt}
-          value={editedProduction.productionTerm}
-        />
-      </div>
-      <div className="form-inline">
-        <label>Data produkcji</label>
+    </div>
+    {formField(
+      'Termin produkcji',
+      'productionTerm',
+      editedProduction.productionTerm,
+      handleChangeInt
+    )}
+    <div className="form-group row">
+      <label htmlFor="productionDate" className="col-4 col-form-label">
+        Data produkcji
+      </label>
+      <div className="col-6">
         <DatePicker
+          id="productionDate"
           className="form-control"
           allowSameDay="true"
           name="productionDate"
@@ -93,143 +99,78 @@ const EditProductionForm = ({
           dateFormat="dd.MM.yyyy"
         />
       </div>
-      <div className="form-inline">
-        <div className="form-check">
+    </div>
+    <div className="form-group row">
+      <label className="col-4">Wpłata końcowa</label>
+      <div className="col-6">
+        <div className="custom-control custom-checkbox custom-control-inline">
           <input
-            className="form-check-input"
+            className="custom-control-input"
             name="finalPayment"
+            id="finalPayment"
             type="checkbox"
-            value={editedProduction.finalPayment}
             checked={editedProduction.finalPayment}
+            value={editedProduction.finalPayment}
             onChange={handleCheckBoxChange}
           />
-          <label className="form-check-label">Wpłata końcowa</label>
+          <label htmlFor="finalPayment" className="custom-control-label">
+            Zapłacono
+          </label>
         </div>
       </div>
-      <div className="form-inline">
-        <label>Typ płyty</label>
-        <input
-          className="form-control"
-          list="types"
-          name="type"
-          onChange={handleChange}
-          value={editedProduction.type}
-        />
-        <datalist
-          id="types"
-          name="type"
-          onChange={handleChange}
-          value={editedProduction.type}>
-          {panelTypes.map(type => (
-            <option>{type}</option>
-          ))}
-        </datalist>
-      </div>
-      <div className="form-inline">
-        <label>Kolor zewnętrzny</label>
-        <input
-          className="form-control"
-          list="outsideColors"
-          name="colorOutside"
-          onChange={handleChange}
-          value={editedProduction.colorOutside}
-        />
-        <datalist
-          id="outsideColors"
-          onChange={handleChange}
-          value={editedProduction.colorOutside}>
-          {outsideColors.map(color => (
-            <option>{color}</option>
-          ))}
-        </datalist>
-      </div>
-      <div className="form-inline">
-        <label>Kolor wewnętrzny</label>
-        <input
-          className="form-control"
-          list="insideColors"
-          name="colorInside"
-          onChange={handleChange}
-          value={editedProduction.colorInside}
-        />
-        <datalist
-          id="insideColors"
-          onChange={handleChange}
-          value={editedProduction.colorInside}>
-          {insideColors.map(color => (
-            <option>{color}</option>
-          ))}
-        </datalist>
-      </div>
-      <div className="form-inline">
-        <label>Rdzeń</label>
-        <input
-          className="form-control"
-          list="cores"
-          name="core"
-          onChange={handleChange}
-          value={editedProduction.core}
-        />
-        <datalist
-          id="cores"
-          name="core"
-          onChange={handleChange}
-          value={editedProduction.core}>
-          {panelCores.map(core => (
-            <option>{core}</option>
-          ))}
-        </datalist>
-      </div>
-      <div className="form-inline">
-        <label>Grubość rdzenia</label>
-        <input
-          className="form-control"
-          list="thicknessList"
-          name="thickness"
-          onChange={handleChangeFloat}
-          value={editedProduction.thickness}
-        />
-        <datalist
-          id="thicknessList"
-          onChange={handleChange}
-          value={editedProduction.thickness}>
-          {panelThicknesses.map(thickness => (
-            <option>{thickness}</option>
-          ))}
-        </datalist>
-      </div>
-      <div className="form-inline">
-        <label>
-          m<sup>2</sup>
-        </label>
-        <input
-          className="form-control"
-          name="m2"
-          onChange={handleChangeFloat}
-          value={editedProduction.m2}
-        />
-      </div>
-      <div className="form-inline">
-        <label>Handlowiec</label>
-        <input
-          className="form-control"
-          name="csa"
-          list="csaList"
-          onChange={handleChange}
-          value={editedProduction.csa}
-        />
-        <datalist
-          id="csaList"
-          onChange={handleChange}
-          value={editedProduction.thickness}>
-          {cSAgents.map(csa => (
-            <option>{csa}</option>
-          ))}
-        </datalist>
-      </div>
-      <div className="form-inline">
-        <span>Zatwierdź</span>
-        <ConfirmButton type="submit" />
+    </div>
+    {twoFieldsInRow(
+      {
+        label: 'Typ płyty',
+        name: 'type',
+        value: editedProduction.type,
+        handler: handleChange,
+        datalistArr: panelTypes
+      },
+      {
+        label: 'Rdzeń',
+        name: 'core',
+        value: editedProduction.core,
+        handler: handleChange,
+        datalistArr: panelCores
+      }
+    )}
+    {twoFieldsInRow(
+      {
+        label: 'Kolor zewnętrzny',
+        name: 'colorOutside',
+        value: editedProduction.colorOutside,
+        handler: handleChange,
+        datalistArr: outsideColors
+      },
+      {
+        label: 'Kolor wewnętrzny',
+        name: 'colorInside',
+        value: editedProduction.colorInside,
+        handler: handleChange,
+        datalistArr: insideColors
+      }
+    )}
+    {twoFieldsInRow(
+      {
+        label: 'Grubość',
+        name: 'thickness',
+        value: editedProduction.thickness,
+        handler: handleChangeFloat,
+        datalistArr: panelThicknesses
+      },
+      {
+        label: 'm2',
+        name: 'm2',
+        value: editedProduction.m2,
+        handler: handleChangeFloat
+      }
+    )}
+    <div className="form-group row">
+      <div className="offset-4 col-8">
+        <button name="submit" type="submit" className="btn btn-success">
+          Zatwierdź zmiany
+        </button>
       </div>
     </div>
   </form>

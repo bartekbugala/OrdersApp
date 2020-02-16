@@ -40,7 +40,7 @@ export const panelCores = ['St', 'Wm', 'XPS', 'PUR'];
 export const cSAgents = ['BB', 'B', 'S'];
 const otherCovers = ['PERF', 'NR', 'STAND'];
 export const insideColors = [
-  'BIALY',
+  'BIAŁY',
   '9002',
   '9010',
   '9016',
