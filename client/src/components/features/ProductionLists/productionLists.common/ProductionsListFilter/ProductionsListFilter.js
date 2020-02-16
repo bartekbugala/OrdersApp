@@ -71,10 +71,14 @@ class ProductionsListFilter extends React.Component {
     } = this;
     const { startDate, dateFilterParams } = this.props;
     return (
-      <form onSubmit={handleFormFilter} autoComplete="off">
+      <form
+        onSubmit={handleFormFilter}
+        autoComplete="off"
+        className="form-group">
         {`Filtr według dat: od `}
         <DatePicker
           allowSameDay="true"
+          className="form-control"
           startDate={startDate}
           name="from"
           selected={dateFilterParams.startDateFilter}
@@ -90,6 +94,7 @@ class ProductionsListFilter extends React.Component {
         <DatePicker
           startDate={startDate}
           allowSameDay="true"
+          className="form-control"
           name="to"
           selected={dateFilterParams.endDateFilter}
           onSelect={handleEndDateSelect}
