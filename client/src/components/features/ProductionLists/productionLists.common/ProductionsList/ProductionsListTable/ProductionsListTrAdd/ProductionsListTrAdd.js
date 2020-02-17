@@ -1,10 +1,18 @@
 import React from 'react';
 import AddRowButton from '../../../../../../common/Buttons/AddRowButton/AddRowButton';
 import DatePicker from 'react-datepicker';
+import {
+  outsideColors,
+  insideColors,
+  cSAgents,
+  panelTypes,
+  panelCores,
+  panelThicknesses
+} from '../../../../../../../redux/initValues';
 import 'react-datepicker/dist/react-datepicker.css';
 import './ProductionsListTrAdd.scss';
 
-const tdClass = 'td-class form-td';
+const tdClass = 'td-class form-td rm-arrows';
 
 const ProductionsListTrAdd = ({
   startDate,
@@ -44,7 +52,7 @@ const ProductionsListTrAdd = ({
         dateFormat="dd.MM.yy"
       />
     </td>
-    <td className={`${tdClass} rm-arrows`}>
+    <td className={`${tdClass} `}>
       <input
         name="productionTerm"
         onChange={handleChangeInt}
@@ -59,7 +67,7 @@ const ProductionsListTrAdd = ({
         onChange={handleCheckBoxChange}
       />
     </td>
-    <td className={`${tdClass} rm-arrows`}>
+    <td className={`${tdClass}`}>
       <input
         list="types"
         name="type"
@@ -77,7 +85,7 @@ const ProductionsListTrAdd = ({
         <option value="SP">SP</option>
       </datalist>
     </td>
-    <td className={`${tdClass} rm-arrows`}>
+    <td className={`${tdClass}`}>
       <input
         list="outsideColors"
         name="colorOutside"
@@ -103,7 +111,7 @@ const ProductionsListTrAdd = ({
         <option>STAND</option>
       </datalist>
     </td>
-    <td className={`${tdClass} rm-arrows`}>
+    <td className={`${tdClass}`}>
       <input
         list="insideColors"
         name="colorInside"
@@ -125,7 +133,7 @@ const ProductionsListTrAdd = ({
         <option>STAND</option>
       </datalist>
     </td>
-    <td className={`${tdClass} rm-arrows`}>
+    <td className={`${tdClass}`}>
       <input
         list="cores"
         name="core"
@@ -143,7 +151,7 @@ const ProductionsListTrAdd = ({
         <option>PUR</option>
       </datalist>
     </td>
-    <td className={`${tdClass} rm-arrows`}>
+    <td className={`${tdClass}`}>
       <input
         list="thicknessList"
         name="thickness"
@@ -170,7 +178,7 @@ const ProductionsListTrAdd = ({
         <option>250</option>
       </datalist>
     </td>
-    <td className={`${tdClass} rm-arrows`}>
+    <td className={`${tdClass}`}>
       <input
         name="m2"
         onChange={handleChangeFloat}
