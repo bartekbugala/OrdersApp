@@ -48,7 +48,11 @@ export const insideColors = [
   ...otherCovers
 ];
 export const outsideColors = [
-  ...insideColors,
+  'BIAŁY',
+  '9002',
+  '9010',
+  '9016',
+  '9006',
   '7035',
   '7024',
   '1015',

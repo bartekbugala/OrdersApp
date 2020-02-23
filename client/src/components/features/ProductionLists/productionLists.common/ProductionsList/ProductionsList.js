@@ -80,12 +80,12 @@ const ProductionsList = ({
               )}
             </td>
             <td className={`${tdClass} short-column`}>{production.type}</td>
-            <td className={`${tdClass}`}>{production.colorOutside}</td>
-            <td className={`${tdClass}`}>{production.colorInside}</td>
             <td className={`${tdClass} short-column`}>{production.core}</td>
             <td className={`${tdClass} short-column`}>
               {production.thickness}
             </td>
+            <td className={`${tdClass}`}>{production.colorOutside}</td>
+            <td className={`${tdClass}`}>{production.colorInside}</td>
 
             <td className={`${tdClass}`}>{production.m2}</td>
             <td className={`${tdClass}`}>
