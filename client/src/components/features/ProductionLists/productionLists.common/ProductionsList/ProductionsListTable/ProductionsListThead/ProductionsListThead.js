@@ -72,24 +72,6 @@ const ProductionsListThead = ({ sortColumn }) => {
           role="button"
           onClick={e => {
             e.preventDefault();
-            sortColumn('colorOutside', 'string');
-          }}>
-          <IoMdColorPalette />
-        </th>
-        <th
-          className={`${thClass}`}
-          role="button"
-          onClick={e => {
-            e.preventDefault();
-            sortColumn('colorInside', 'string');
-          }}>
-          <IoIosColorPalette />
-        </th>
-        <th
-          className={`${thClass}`}
-          role="button"
-          onClick={e => {
-            e.preventDefault();
             sortColumn('core', 'string');
           }}>
           <MdLayers />
@@ -103,6 +85,25 @@ const ProductionsListThead = ({ sortColumn }) => {
           }}>
           <AiOutlineColumnHeight />
         </th>
+        <th
+          className={`${thClass}`}
+          role="button"
+          onClick={e => {
+            e.preventDefault();
+            sortColumn('colorOutside', 'string');
+          }}>
+          <IoMdColorPalette />
+        </th>
+        <th
+          className={`${thClass}`}
+          role="button"
+          onClick={e => {
+            e.preventDefault();
+            sortColumn('colorInside', 'string');
+          }}>
+          <IoIosColorPalette />
+        </th>
+
         <th
           className={`${thClass}`}
           role="button"

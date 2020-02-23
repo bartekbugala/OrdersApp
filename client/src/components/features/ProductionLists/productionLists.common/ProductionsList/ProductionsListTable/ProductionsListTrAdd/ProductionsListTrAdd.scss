@@ -5,13 +5,23 @@
     -webkit-appearance: none;
     margin: 0;
   }
-
   /* Firefox */
   input[type='number'] {
     -moz-appearance: textfield;
+  }
+  input {
+    height: 100%;
+    margin: 12px;
+  }
+  input[type='checkbox'] {
+    height: 25px;
+    margin-top: 6px;
   }
 
   input::-webkit-calendar-picker-indicator {
     display: none;
   }
+}
+.form-td {
+  padding: 1px !important;
 }

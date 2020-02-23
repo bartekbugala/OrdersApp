@@ -1,62 +1,43 @@
 // REACT MUST BE IN SCOPE (JSX util)
 import React from 'react';
 
-let arr1 = [
-  {
-    name: 'orderNumber',
-    handler: handleChange,
-    value: newProduction.orderNumber || ''
-  },
-  {
-    name: 'clientName',
-    handler: handleChange,
-    value: newProduction.clientName || ''
-  }
-];
-let arr2 = [
-  {
-    name: 'productionTerm',
-    handler: handleChangeInt,
-    value: newProduction.productionTerm || ''
-  },
-  {
-    name: 'finalPayment',
-    type: 'checkbox',
-    handler: handleCheckBoxChange,
-    value: newProduction.finalPayment || false
-  },
-  {
-    name: 'type',
-    handler: handleChange,
-    value: newProduction.orderNumber || ''
-  },
-  {
-    name: 'orderNumber',
-    handler: handleChange,
-    value: newProduction.orderNumber || ''
-  }
-];
-
 export function createTableRowCells(dataForInputsArray, tdClass) {
-  dataForInputsArray.map((el, ind) =>
-    tableFormField(ind, tdClass, el.name, el.value, el.handler, el.datalistArr)
-  );
+  return dataForInputsArray.map((el, index) => {
+    if (el.disabled === true) {
+      return (
+        <td className={tdClass}>
+          <input disabled />
+        </td>
+      );
+    }
+    return tableFormField(
+      tdClass,
+      el.name,
+      el.handler,
+      el.value,
+      index,
+      el.type,
+      el.list
+    );
+  });
 }
 
 export function tableFormField(
-  key,
   tdClass,
   name,
-  value,
   handler,
+  value,
+  key,
+  type = '',
   datalistArr = null
 ) {
   return (
     <td key={`${key}`} className={`${tdClass}`}>
       <input
+        className={`form-control`}
         id={`${name}`}
         name={`${name}`}
-        className={`form-control`}
+        type={`${type}`}
         onChange={handler}
         onDoubleClick={e => {
           if (e.target.value !== null) {
